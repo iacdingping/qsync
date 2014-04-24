@@ -1,80 +1,242 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.iac</groupId>
-	<artifactId>qianchengguoji</artifactId>
-	<version>0.0.1</version>
-	<description>前程国际海关接口</description>
+	<groupId>com.openteach</groupId>
+	<artifactId>qsync</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>qsync</name>
+	<url></url>
 
+	<modules>
+		<module>qsync-api</module>
+		<module>qsync-service</module>
+		<module>qsync-task</module>
+	</modules>
+  
 	<properties>
-		<!-- Plugin的属性定义 -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jdk.version>1.6</jdk.version>
-		<jfinal.version>1.6</jfinal.version>
-		<mysql.version>5.1.30</mysql.version>
-		<slf4j.version>1.7.5</slf4j.version>
-		<logback.version>1.0.13</logback.version>
+    	<java.version>1.6</java.version>
+		<java.encoding>UTF-8</java.encoding>
+		<org.springframework.version>3.0.5.RELEASE</org.springframework.version>
+		<ibatis.version>2.3.0</ibatis.version>
+		<jetty.version>6.1.22</jetty.version>
+		<ibatis.version>2.3.0</ibatis.version>
+		<lucene-analyzers.version>3.0.3</lucene-analyzers.version>
+		<lucene-collation.version>3.0.3</lucene-collation.version>
+		<lucene-core.version>3.0.3</lucene-core.version>
+		<quartz.version>1.7.3</quartz.version>
+		<exml.version>7.0</exml.version>
+		<rsslibj.version>1.0RC2</rsslibj.version>
+		<util.version>1.0-SNAPSHOT</util.version>
+		<icache.version>1.0-SNAPSHOT</icache.version>
+		<commons-lang.version>2.2</commons-lang.version>
+		<commons-io.version>1.4</commons-io.version>
+		<commons-fileupload.version>1.2.2</commons-fileupload.version>
+		<lucene.version>3.5.0</lucene.version>
+		<lucene-analyzers.version>3.5.0</lucene-analyzers.version>
+		<json-lib.version>2.4</json-lib.version>
+		<groovy-all.version>1.6.4</groovy-all.version>
+		<antlr.version>3.1.3</antlr.version>
+		<dom4j.version>1.6.1</dom4j.version>
+		<org.json.version>20090211</org.json.version>
+		<commons-pool.version>1.6</commons-pool.version>
+		<commons-dbcp.version>20030825.184428</commons-dbcp.version>
+		<mysql-connector-java.version>5.1.24</mysql-connector-java.version>
+		<asm-all.version>3.0</asm-all.version>
+		<cglib.version>3.0</cglib.version>
+		<velocity.version>1.6.2</velocity.version>
+		<servlet-api.version>2.4</servlet-api.version>
+		<sox.version>0.0.1-SNAPSHOT</sox.version>
+		<xstream.version>1.2</xstream.version>
+		<jaxb-impl.version>2.2.6</jaxb-impl.version>
+		<downloadSources>true</downloadSources>
 	</properties>
-
-	<dependencies>
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysql.version}</version>
-		</dependency>
-		
-		<!-- LOGGING begin -->
-			<!-- slf4j -->
+  
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.8.2</version>
+				<scope>test</scope>
+			</dependency>
+			
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>qsync-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>qsync-service</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>qsync-task</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			
+			<!-- Log Start -->
+			<dependency>
+				<groupId>commons-logging</groupId>
+				<artifactId>commons-logging</artifactId>
+				<version>1.1.1</version>
+			</dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
-				<version>${slf4j.version}</version>
+				<version>1.4.3</version>
 			</dependency>
-
-			<!-- logback -->
-			<dependency>
-				<groupId>ch.qos.logback</groupId>
-				<artifactId>logback-classic</artifactId>
-				<version>${logback.version}</version>
-			</dependency>
-
-			<!-- 代码直接调用log4j会被桥接到slf4j -->
 			<dependency>
 				<groupId>org.slf4j</groupId>
-				<artifactId>log4j-over-slf4j</artifactId>
-				<version>${slf4j.version}</version>
-				<scope>runtime</scope>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>1.4.3</version>
 			</dependency>
-
-			<!-- 代码直接调用common-logging会被桥接到slf4j -->
 			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>jcl-over-slf4j</artifactId>
-				<version>${slf4j.version}</version>
-				<scope>runtime</scope>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>1.2.12</version>
 			</dependency>
-
-			<!-- 代码直接调用java.util.logging会被桥接到slf4j -->
+			<!-- Log End -->
+			
 			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>jul-to-slf4j</artifactId>
-				<version>${slf4j.version}</version>
-				<scope>runtime</scope>
+				<groupId>commons-lang</groupId>
+				<artifactId>commons-lang</artifactId>
+				<version>${commons-lang.version}</version>
 			</dependency>
-
-			<!-- log4jdbc -->
+			
 			<dependency>
-				<groupId>com.googlecode.log4jdbc</groupId>
-				<artifactId>log4jdbc</artifactId>
-				<version>1.2</version>
-				<scope>runtime</scope>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>${commons-io.version}</version>
 			</dependency>
-			<!-- LOGGING end -->
-
+			
 			<dependency>
-				<groupId>c3p0</groupId>
-				<artifactId>c3p0</artifactId>
-				<version>0.9.1.2</version>
+				<groupId>commons-pool</groupId>
+				<artifactId>commons-pool</artifactId>
+				<version>${commons-pool.version}</version>
 			</dependency>
-	</dependencies>
-</project>
+            
+			<dependency>
+				<groupId>commons-dbcp</groupId>
+				<artifactId>commons-dbcp</artifactId>
+				<version>${commons-dbcp.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql-connector-java.version}</version>
+			</dependency>
+            
+			<dependency>  
+	    		<groupId>net.sf.json-lib</groupId>  
+	    		<artifactId>json-lib</artifactId>  
+	    		<version>${json-lib.version}</version>  
+	    		<classifier>jdk15</classifier>
+			</dependency>
+			
+			<dependency>
+				<groupId>com.sun.xml.bind</groupId>
+				<artifactId>jaxb-impl</artifactId>
+				<version>${jaxb-impl.version}</version>
+			</dependency>
+			
+			<!-- Spring Start-->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-beans</artifactId>
+				<version>${org.springframework.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${org.springframework.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-orm</artifactId>
+				<version>${org.springframework.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-jdbc</artifactId>
+				<version>${org.springframework.version}</version>
+			</dependency>
+	        <dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context-support</artifactId>
+				<version>${org.springframework.version}</version>
+			</dependency>
+	        <dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc</artifactId>
+				<version>${org.springframework.version}</version>
+			</dependency>
+			
+	        <dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-test</artifactId>
+				<version>${org.springframework.version}</version>
+			</dependency>
+			<!-- Spring End-->
+			
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>servlet-api</artifactId>
+				<version>${servlet-api.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			
+            <dependency>
+	    		<groupId>org.apache.velocity</groupId>
+	    		<artifactId>velocity</artifactId>
+	    		<version>${velocity.version}</version>
+			</dependency>
+			
+		</dependencies>
+	</dependencyManagement>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>${java.encoding}</encoding>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
+        		<artifactId>maven-source-plugin</artifactId>
+        		<version>2.1.2</version>
+        		<executions>
+          			<execution>
+            				<id>attach-sources</id>
+            				<phase>verify</phase>
+            				<goals>
+              					<goal>jar-no-fork</goal>
+            				</goals>
+          			</execution>
+        		</executions>
+      		</plugin>
+		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+			</resource>
+		</resources>
+  </build>
+</project> 
