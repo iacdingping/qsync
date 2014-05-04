@@ -1,4 +1,4 @@
-package com.openteach.qsync.api.goods;
+package com.openteach.qsync.api.goods.request;
 
 import java.util.Date;
 

@@ -1,4 +1,4 @@
-package com.openteach.qsync.api.logistics;
+package com.openteach.qsync.api;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

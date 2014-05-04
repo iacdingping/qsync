@@ -1,10 +1,11 @@
-package com.openteach.qsync.api.logistics;
+package com.openteach.qsync.api.waybill.response;
 
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 
 import com.openteach.qsync.api.BaseBody;
+import com.openteach.qsync.api.JkfResult;
 
 /**
  * 
@@ -17,13 +18,13 @@ public class Body extends BaseBody {
 	 * 
 	 */
 	@XmlElement(required = true)
-	private List<WayBill> wayBillList;
+	private List<JkfResult> list;
 
-	public List<WayBill> getWayBillList() {
-		return wayBillList;
+	public List<JkfResult> getList() {
+		return list;
 	}
 
-	public void setWayBillList(List<WayBill> wayBillList) {
-		this.wayBillList = wayBillList;
+	public void setList(List<JkfResult> list) {
+		this.list = list;
 	}
 }

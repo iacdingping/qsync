@@ -11,17 +11,20 @@ import javax.xml.bind.annotation.XmlType;
  *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "head")
-public class BaseHead {
+@XmlType(name = "jkfResult")
+public class JkfResultDetail {
 
-	public static final String IMPORTBILL = "IMPORTBILL";
-	
-	public static final String LOGISTICS_INFO = "LOGISTICS_INFO";
-	
-	public static final String IMPORT_COMPANY = "IMPORT_COMPANY";
-	
-	public static final String CHECKRESULT = "CHECKRESULT";
-	
+	/**
+	 * 
+	 */
 	@XmlElement(required = true)
-	private String businessType;
+	private String resultInfo;
+
+	public String getResultInfo() {
+		return resultInfo;
+	}
+
+	public void setResultInfo(String resultInfo) {
+		this.resultInfo = resultInfo;
+	}
 }

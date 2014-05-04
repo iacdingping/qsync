@@ -1,9 +1,11 @@
-package com.openteach.qsync.api.logistics;
+package com.openteach.qsync.api.waybill.request;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+
+import com.openteach.qsync.api.JkfSign;
 
 /**
  * 

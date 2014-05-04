@@ -1,4 +1,4 @@
-package com.openteach.qsync.api.logistics;
+package com.openteach.qsync.api.waybill.request;
 
 import java.util.Date;
 
