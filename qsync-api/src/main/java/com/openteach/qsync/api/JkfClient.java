@@ -7,7 +7,7 @@ import com.openteach.qsync.api.exception.ApiException;
  * @author rqq
  *
  */
-public class CustomsClient {
+public interface JkfClient {
 
 	/**
 	 * 
@@ -35,17 +35,12 @@ public class CustomsClient {
 	 * @return
 	 * @throws ApiException
 	 */
-	public XmlResponse syncRequest(XmlRequest request) throws ApiException {
-		// TODO
-		return null;
-	}
+	public XmlResponse syncRequest(XmlRequest request) throws ApiException;
 	
 	/**
 	 * 
 	 * @param request
 	 * @param callback
 	 */
-	public void asyncRequest(XmlRequest request, Callback callback) {
-		
-	}
+	public void asyncRequest(XmlRequest request, Callback callback);
 }

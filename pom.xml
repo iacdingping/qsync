@@ -50,6 +50,7 @@
 		<sox.version>0.0.1-SNAPSHOT</sox.version>
 		<xstream.version>1.2</xstream.version>
 		<jaxb-impl.version>2.2.6</jaxb-impl.version>
+		<commons-net.version>2.0</commons-net.version>
 		<downloadSources>true</downloadSources>
 	</properties>
   
@@ -111,6 +112,12 @@
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
 				<version>${commons-io.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>commons-net</groupId>
+				<artifactId>commons-net</artifactId>
+				<version>${commons-net.version}</version>
 			</dependency>
 			
 			<dependency>
