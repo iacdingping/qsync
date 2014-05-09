@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.openteach.qsync.core.order.OrderDao">
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="order-Order-columns">
+	    <![CDATA[
+		`id` as `id`, `code` as `code`, `appraise` as `appraise`, `content` as `content`, `ordertime` as `ordertime`, `remark` as `remark`, `gift` as `gift`, `amount` as `amount`, `cutamount` as `cutamount`, `invoicetype` as `invoicetype`, `invoicecontent` as `invoicecontent`, `iscoupon` as `iscoupon`, `paytime` as `paytime`, `onlinepay` as `onlinepay`, `return_status` as `returnStatus`, `pay_status` as `payStatus`, `pay_type` as `payType`, `trans_price` as `transPrice`, `is_big_order` as `isBigOrder`, `is_package` as `isPackage`, `status` as `status`, `source` as `source`, `replacement` as `replacement`, `isuserevaluate` as `isuserevaluate`, `isshopevaluate` as `isshopevaluate`, `member` as `member`, `shop_id` as `shopId`, `creatoradmin` as `creatoradmin`, `modifieradmin` as `modifieradmin`, `createdatetime` as `createdatetime`, `updatedatetime` as `updatedatetime`, `ordertransport` as `ordertransport`, `statement_id` as `statementId`, `isstatemented` as `isstatemented`, `ccgroup_id` as `ccgroupId`, `ordertype` as `ordertype`, `autocanceltime` as `autocanceltime`, `cancelsentdtime` as `cancelsentdtime`, `yesnumber` as `yesnumber`, `nonumber` as `nonumber`, `commodity_id` as `commodityId`, `shopcontent` as `shopcontent`, `starlevel` as `starlevel`, `caneltime` as `caneltime`, `shouldpaymoney` as `shouldpaymoney`, `iscanfinal` as `iscanfinal`, `payfreighttime` as `payfreighttime`, `totalamout` as `totalamout`, `isfreight` as `isfreight`, `payfreight` as `payfreight`, `transportation_id` as `transportationId`, `transportationcompany_id` as `transportationcompanyId`, `transportnumber` as `transportnumber`, `transportremark` as `transportremark`
+	    ]]>
+	</sql>	
+
+	<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+	<insert id="save" useGeneratedKeys="true" keyProperty="id">
+    <![CDATA[
+        INSERT INTO cc_kata_kplus_order (
+        `id`, `code`, `appraise`, `content`, `ordertime`, `remark`, `gift`, `amount`, `cutamount`, `invoicetype`, `invoicecontent`, `iscoupon`, `paytime`, `onlinepay`, `return_status`, `pay_status`, `pay_type`, `trans_price`, `is_big_order`, `is_package`, `status`, `source`, `replacement`, `isuserevaluate`, `isshopevaluate`, `member`, `shop_id`, `creatoradmin`, `modifieradmin`, `createdatetime`, `updatedatetime`, `ordertransport`, `statement_id`, `isstatemented`, `ccgroup_id`, `ordertype`, `autocanceltime`, `cancelsentdtime`, `yesnumber`, `nonumber`, `commodity_id`, `shopcontent`, `starlevel`, `caneltime`, `shouldpaymoney`, `iscanfinal`, `payfreighttime`, `totalamout`, `isfreight`, `payfreight`, `transportation_id`, `transportationcompany_id`, `transportnumber`, `transportremark`
+        ) VALUES (
+        #{id}, #{code}, #{appraise}, #{content}, #{ordertime}, #{remark}, #{gift}, #{amount}, #{cutamount}, #{invoicetype}, #{invoicecontent}, #{iscoupon}, #{paytime}, #{onlinepay}, #{returnStatus}, #{payStatus}, #{payType}, #{transPrice}, #{isBigOrder}, #{isPackage}, #{status}, #{source}, #{replacement}, #{isuserevaluate}, #{isshopevaluate}, #{member}, #{shopId}, #{creatoradmin}, #{modifieradmin}, #{createdatetime}, #{updatedatetime}, #{ordertransport}, #{statementId}, #{isstatemented}, #{ccgroupId}, #{ordertype}, #{autocanceltime}, #{cancelsentdtime}, #{yesnumber}, #{nonumber}, #{commodityId}, #{shopcontent}, #{starlevel}, #{caneltime}, #{shouldpaymoney}, #{iscanfinal}, #{payfreighttime}, #{totalamout}, #{isfreight}, #{payfreight}, #{transportationId}, #{transportationcompanyId}, #{transportnumber}, #{transportremark}        
+        )
+    ]]>
+		<!--	
+			oracle: order="BEFORE" SELECT sequenceName.nextval AS ID FROM DUAL 
+			DB2: order="BEFORE"" values nextval for sequenceName
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="userId">
+			SELECT sequenceName.nextval AS ID FROM DUAL 
+        </selectKey>
+		-->
+	</insert>
+    
+	<update id="update">
+    <![CDATA[
+        UPDATE cc_kata_kplus_order SET
+	        `code` = #{code} , `appraise` = #{appraise} , `content` = #{content} , `ordertime` = #{ordertime} , `remark` = #{remark} , `gift` = #{gift} , `amount` = #{amount} , `cutamount` = #{cutamount} , `invoicetype` = #{invoicetype} , `invoicecontent` = #{invoicecontent} , `iscoupon` = #{iscoupon} , `paytime` = #{paytime} , `onlinepay` = #{onlinepay} , `return_status` = #{returnStatus} , `pay_status` = #{payStatus} , `pay_type` = #{payType} , `trans_price` = #{transPrice} , `is_big_order` = #{isBigOrder} , `is_package` = #{isPackage} , `status` = #{status} , `source` = #{source} , `replacement` = #{replacement} , `isuserevaluate` = #{isuserevaluate} , `isshopevaluate` = #{isshopevaluate} , `member` = #{member} , `shop_id` = #{shopId} , `creatoradmin` = #{creatoradmin} , `modifieradmin` = #{modifieradmin} , `createdatetime` = #{createdatetime} , `updatedatetime` = #{updatedatetime} , `ordertransport` = #{ordertransport} , `statement_id` = #{statementId} , `isstatemented` = #{isstatemented} , `ccgroup_id` = #{ccgroupId} , `ordertype` = #{ordertype} , `autocanceltime` = #{autocanceltime} , `cancelsentdtime` = #{cancelsentdtime} , `yesnumber` = #{yesnumber} , `nonumber` = #{nonumber} , `commodity_id` = #{commodityId} , `shopcontent` = #{shopcontent} , `starlevel` = #{starlevel} , `caneltime` = #{caneltime} , `shouldpaymoney` = #{shouldpaymoney} , `iscanfinal` = #{iscanfinal} , `payfreighttime` = #{payfreighttime} , `totalamout` = #{totalamout} , `isfreight` = #{isfreight} , `payfreight` = #{payfreight} , `transportation_id` = #{transportationId} , `transportationcompany_id` = #{transportationcompanyId} , `transportnumber` = #{transportnumber} , `transportremark` = #{transportremark}  
+        WHERE 
+        	id = #{id}  	        
+    ]]>
+	</update>
+
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM cc_kata_kplus_order WHERE
+        `id` = #{id} 
+    ]]>
+    </delete>
+    
+    <select id="getById" resultType="Order">
+		SELECT <include refid="order-Order-columns" />
+	    <![CDATA[
+		    FROM cc_kata_kplus_order 
+	        WHERE 
+		        `id` = #{id} 
+	    ]]>
+	</select>
+	
+	<sql id="Order-where">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+	       <if test="id">
+				AND `id` = #{id}
+			</if>
+	       <if test="code">
+				AND `code` = #{code}
+			</if>
+	       <if test="appraise">
+				AND `appraise` = #{appraise}
+			</if>
+	       <if test="content">
+				AND `content` = #{content}
+			</if>
+	       <if test="ordertimeBegin != null">
+				AND `ordertime` >= #{ordertimeBegin}
+		   </if>
+		   <if test="ordertimeEnd != null">
+				AND `ordertime` &lt;= #{ordertimeEnd}
+		   </if>
+	       <if test="remark">
+				AND `remark` = #{remark}
+			</if>
+	       <if test="gift">
+				AND `gift` = #{gift}
+			</if>
+	       <if test="amount">
+				AND `amount` = #{amount}
+			</if>
+	       <if test="cutamount">
+				AND `cutamount` = #{cutamount}
+			</if>
+	       <if test="invoicetype">
+				AND `invoicetype` = #{invoicetype}
+			</if>
+	       <if test="invoicecontent">
+				AND `invoicecontent` = #{invoicecontent}
+			</if>
+	       <if test="iscoupon">
+				AND `iscoupon` = #{iscoupon}
+			</if>
+	       <if test="paytimeBegin != null">
+				AND `paytime` >= #{paytimeBegin}
+		   </if>
+		   <if test="paytimeEnd != null">
+				AND `paytime` &lt;= #{paytimeEnd}
+		   </if>
+	       <if test="onlinepay">
+				AND `onlinepay` = #{onlinepay}
+			</if>
+	       <if test="returnStatus">
+				AND `return_status` = #{returnStatus}
+			</if>
+	       <if test="payStatus">
+				AND `pay_status` = #{payStatus}
+			</if>
+	       <if test="payType">
+				AND `pay_type` = #{payType}
+			</if>
+	       <if test="transPrice">
+				AND `trans_price` = #{transPrice}
+			</if>
+	       <if test="isBigOrder">
+				AND `is_big_order` = #{isBigOrder}
+			</if>
+	       <if test="isPackage">
+				AND `is_package` = #{isPackage}
+			</if>
+	       <if test="status">
+				AND `status` = #{status}
+			</if>
+	       <if test="source">
+				AND `source` = #{source}
+			</if>
+	       <if test="replacement">
+				AND `replacement` = #{replacement}
+			</if>
+	       <if test="isuserevaluate">
+				AND `isuserevaluate` = #{isuserevaluate}
+			</if>
+	       <if test="isshopevaluate">
+				AND `isshopevaluate` = #{isshopevaluate}
+			</if>
+	       <if test="member">
+				AND `member` = #{member}
+			</if>
+	       <if test="shopId">
+				AND `shop_id` = #{shopId}
+			</if>
+	       <if test="creatoradmin">
+				AND `creatoradmin` = #{creatoradmin}
+			</if>
+	       <if test="modifieradmin">
+				AND `modifieradmin` = #{modifieradmin}
+			</if>
+	       <if test="createdatetimeBegin != null">
+				AND `createdatetime` >= #{createdatetimeBegin}
+		   </if>
+		   <if test="createdatetimeEnd != null">
+				AND `createdatetime` &lt;= #{createdatetimeEnd}
+		   </if>
+	       <if test="updatedatetimeBegin != null">
+				AND `updatedatetime` >= #{updatedatetimeBegin}
+		   </if>
+		   <if test="updatedatetimeEnd != null">
+				AND `updatedatetime` &lt;= #{updatedatetimeEnd}
+		   </if>
+	       <if test="ordertransport">
+				AND `ordertransport` = #{ordertransport}
+			</if>
+	       <if test="statementId">
+				AND `statement_id` = #{statementId}
+			</if>
+	       <if test="isstatemented">
+				AND `isstatemented` = #{isstatemented}
+			</if>
+	       <if test="ccgroupId">
+				AND `ccgroup_id` = #{ccgroupId}
+			</if>
+	       <if test="ordertype">
+				AND `ordertype` = #{ordertype}
+			</if>
+	       <if test="autocanceltimeBegin != null">
+				AND `autocanceltime` >= #{autocanceltimeBegin}
+		   </if>
+		   <if test="autocanceltimeEnd != null">
+				AND `autocanceltime` &lt;= #{autocanceltimeEnd}
+		   </if>
+	       <if test="cancelsentdtimeBegin != null">
+				AND `cancelsentdtime` >= #{cancelsentdtimeBegin}
+		   </if>
+		   <if test="cancelsentdtimeEnd != null">
+				AND `cancelsentdtime` &lt;= #{cancelsentdtimeEnd}
+		   </if>
+	       <if test="yesnumber">
+				AND `yesnumber` = #{yesnumber}
+			</if>
+	       <if test="nonumber">
+				AND `nonumber` = #{nonumber}
+			</if>
+	       <if test="commodityId">
+				AND `commodity_id` = #{commodityId}
+			</if>
+	       <if test="shopcontent">
+				AND `shopcontent` = #{shopcontent}
+			</if>
+	       <if test="starlevel">
+				AND `starlevel` = #{starlevel}
+			</if>
+	       <if test="caneltime">
+				AND `caneltime` = #{caneltime}
+			</if>
+	       <if test="shouldpaymoney">
+				AND `shouldpaymoney` = #{shouldpaymoney}
+			</if>
+	       <if test="iscanfinal">
+				AND `iscanfinal` = #{iscanfinal}
+			</if>
+	       <if test="payfreighttimeBegin != null">
+				AND `payfreighttime` >= #{payfreighttimeBegin}
+		   </if>
+		   <if test="payfreighttimeEnd != null">
+				AND `payfreighttime` &lt;= #{payfreighttimeEnd}
+		   </if>
+	       <if test="totalamout">
+				AND `totalamout` = #{totalamout}
+			</if>
+	       <if test="isfreight">
+				AND `isfreight` = #{isfreight}
+			</if>
+	       <if test="payfreight">
+				AND `payfreight` = #{payfreight}
+			</if>
+	       <if test="transportationId">
+				AND `transportation_id` = #{transportationId}
+			</if>
+	       <if test="transportationcompanyId">
+				AND `transportationcompany_id` = #{transportationcompanyId}
+			</if>
+	       <if test="transportnumber">
+				AND `transportnumber` = #{transportnumber}
+			</if>
+	       <if test="transportremark">
+				AND `transportremark` = #{transportremark}
+			</if>
+		</where>
+	</sql>
+		
+    <select id="count" resultType="long">
+        SELECT count(*) FROM cc_kata_kplus_order 
+		<include refid="Order-where"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="findPage" resultType="Order">
+    	SELECT <include refid="order-Order-columns" />
+	    FROM cc_kata_kplus_order 
+		<include refid="Order-where"/>
+		
+		<if test="sortColumns != null">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	
+	<select id="list" resultType="Order">
+    	SELECT <include refid="order-Order-columns" />
+	    FROM cc_kata_kplus_order 
+		<include refid="Order-where"/>
+		
+		<if test="sortColumns != null">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+
+	
+</mapper>
+

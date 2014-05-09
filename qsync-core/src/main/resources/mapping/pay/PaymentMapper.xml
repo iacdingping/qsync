@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.openteach.qsync.core.pay.PaymentDao">
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="pay-Payment-columns">
+	    <![CDATA[
+		`id` as `id`, `payerid` as `payerid`, `payerstatus` as `payerstatus`, `amount` as `amount`, `stalutation` as `stalutation`, `paytime` as `paytime`, `type` as `type`, `order_id` as `orderId`, `member_id` as `memberId`, `creatoradmin` as `creatoradmin`
+	    ]]>
+	</sql>	
+
+	<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+	<insert id="save" useGeneratedKeys="true" keyProperty="id">
+    <![CDATA[
+        INSERT INTO kata_kplus_payment (
+        `id`, `payerid`, `payerstatus`, `amount`, `stalutation`, `paytime`, `type`, `order_id`, `member_id`, `creatoradmin`
+        ) VALUES (
+        #{id}, #{payerid}, #{payerstatus}, #{amount}, #{stalutation}, #{paytime}, #{type}, #{orderId}, #{memberId}, #{creatoradmin}        
+        )
+    ]]>
+		<!--	
+			oracle: order="BEFORE" SELECT sequenceName.nextval AS ID FROM DUAL 
+			DB2: order="BEFORE"" values nextval for sequenceName
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="userId">
+			SELECT sequenceName.nextval AS ID FROM DUAL 
+        </selectKey>
+		-->
+	</insert>
+    
+	<update id="update">
+    <![CDATA[
+        UPDATE kata_kplus_payment SET
+	        `payerid` = #{payerid} , `payerstatus` = #{payerstatus} , `amount` = #{amount} , `stalutation` = #{stalutation} , `paytime` = #{paytime} , `type` = #{type} , `order_id` = #{orderId} , `member_id` = #{memberId} , `creatoradmin` = #{creatoradmin}  
+        WHERE 
+        	id = #{id}  	        
+    ]]>
+	</update>
+
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM kata_kplus_payment WHERE
+        `id` = #{id} 
+    ]]>
+    </delete>
+    
+    <select id="getById" resultType="Payment">
+		SELECT <include refid="pay-Payment-columns" />
+	    <![CDATA[
+		    FROM kata_kplus_payment 
+	        WHERE 
+		        `id` = #{id} 
+	    ]]>
+	</select>
+	
+	<sql id="Payment-where">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+	       <if test="id">
+				AND `id` = #{id}
+			</if>
+	       <if test="payerid">
+				AND `payerid` = #{payerid}
+			</if>
+	       <if test="payerstatus">
+				AND `payerstatus` = #{payerstatus}
+			</if>
+	       <if test="amount">
+				AND `amount` = #{amount}
+			</if>
+	       <if test="stalutation">
+				AND `stalutation` = #{stalutation}
+			</if>
+	       <if test="paytimeBegin != null">
+				AND `paytime` >= #{paytimeBegin}
+		   </if>
+		   <if test="paytimeEnd != null">
+				AND `paytime` &lt;= #{paytimeEnd}
+		   </if>
+	       <if test="type">
+				AND `type` = #{type}
+			</if>
+	       <if test="orderId">
+				AND `order_id` = #{orderId}
+			</if>
+	       <if test="memberId">
+				AND `member_id` = #{memberId}
+			</if>
+	       <if test="creatoradmin">
+				AND `creatoradmin` = #{creatoradmin}
+			</if>
+		</where>
+	</sql>
+		
+    <select id="count" resultType="long">
+        SELECT count(*) FROM kata_kplus_payment 
+		<include refid="Payment-where"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="findPage" resultType="Payment">
+    	SELECT <include refid="pay-Payment-columns" />
+	    FROM kata_kplus_payment 
+		<include refid="Payment-where"/>
+		
+		<if test="sortColumns != null">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	
+	<select id="list" resultType="Payment">
+    	SELECT <include refid="pay-Payment-columns" />
+	    FROM kata_kplus_payment 
+		<include refid="Payment-where"/>
+		
+		<if test="sortColumns != null">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+
+	
+</mapper>
+
