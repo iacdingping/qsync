@@ -1,18 +1,15 @@
 package com.openteach.qsync.core.info;
 
-import com.openteach.qsync.core.info.Member;
-import com.openteach.qsync.core.info.MemberDao;
-import com.openteach.qsync.core.info.MemberManager;
-import com.openteach.qsync.core.info.MemberQuery;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-
-import static org.junit.Assert.*;
+import java.util.List;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springside.modules.test.spring.SpringTransactionalTestCase;
+
+import com.openteach.qsync.core.SpringTransactionalTestCase;
 
 /**
  *
@@ -21,7 +18,6 @@ import org.springside.modules.test.spring.SpringTransactionalTestCase;
  * @since 1.0
  * */
 @DirtiesContext
-@ContextConfiguration(locations = { "classpath:spring/applicationContext-dao.xml" })
 public class MemberDaoTest extends SpringTransactionalTestCase{
 	@Autowired
 	private MemberDao memberDao;
@@ -53,7 +49,7 @@ public class MemberDaoTest extends SpringTransactionalTestCase{
 		/** status */
 		member.setStatus(1);
 		/** leftamount */
-		member.setLeftamount(1);
+		member.setLeftamount(1.0);
 		/** regtime */
 		member.setRegtime(new java.util.Date());
 		/** truename */
@@ -63,7 +59,7 @@ public class MemberDaoTest extends SpringTransactionalTestCase{
 		/** telephone */
 		member.setTelephone("1");
 		/** payamount */
-		member.setPayamount(1);
+		member.setPayamount(1.0);
 		/** score */
 		member.setScore(1);
 		/** lastlogtime */
@@ -275,7 +271,7 @@ public class MemberDaoTest extends SpringTransactionalTestCase{
 		/** status */
 		member.setStatus(2);
 		/** leftamount */
-		member.setLeftamount(2);
+		member.setLeftamount(2.0);
 		/** regtime */
 		member.setRegtime(new java.util.Date());
 		/** truename */
@@ -285,7 +281,7 @@ public class MemberDaoTest extends SpringTransactionalTestCase{
 		/** telephone */
 		member.setTelephone("2");
 		/** payamount */
-		member.setPayamount(2);
+		member.setPayamount(2.0);
 		/** score */
 		member.setScore(2);
 		/** lastlogtime */

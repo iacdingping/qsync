@@ -54,6 +54,8 @@ public class TransportCommodity {
      * skuId       db_column: sku_id 
      */	
 	private java.lang.Long skuId;
+	
+	private Commsku commskuObject;
     /**
      * isreturn       db_column: isreturn 
      */	
@@ -116,6 +118,12 @@ public class TransportCommodity {
 	}
 	public java.lang.Long getSkuId() {
 		return this.skuId;
+	}
+	public Commsku getCommskuObject() {
+		return commskuObject;
+	}
+	public void setCommskuObject(Commsku commskuObject) {
+		this.commskuObject = commskuObject;
 	}
 	public void setIsreturn(java.lang.Integer value) {
 		this.isreturn = value;

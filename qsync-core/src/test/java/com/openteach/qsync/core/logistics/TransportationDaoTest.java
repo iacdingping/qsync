@@ -1,18 +1,16 @@
 package com.openteach.qsync.core.logistics;
 
-import com.openteach.qsync.core.logistics.Transportation;
-import com.openteach.qsync.core.logistics.TransportationDao;
-import com.openteach.qsync.core.logistics.TransportationManager;
-import com.openteach.qsync.core.logistics.TransportationQuery;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-
-import static org.junit.Assert.*;
+import java.util.List;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springside.modules.test.spring.SpringTransactionalTestCase;
+
+import com.openteach.qsync.core.SpringTransactionalTestCase;
 
 /**
  *

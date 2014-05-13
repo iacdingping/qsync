@@ -1,5 +1,9 @@
 package com.openteach.qsync.core.order;
 
+import java.util.List;
+
+import com.openteach.qsync.core.goods.TransportCommodity;
+
 /**
  *
  * @author dingp email:dingp@51box.cn
@@ -44,6 +48,9 @@ public class OrderTransport {
      * id       db_column: id 
      */	
 	private java.lang.Long id;
+	
+	private java.util.List<TransportCommodity> transportCommoditiyList;
+	
     /**
      * code       db_column: code 
      */	
@@ -164,6 +171,13 @@ public class OrderTransport {
 	}
 	public java.lang.Long getId() {
 		return this.id;
+	}
+	public java.util.List<TransportCommodity> getTransportCommoditiyList() {
+		return transportCommoditiyList;
+	}
+	public void setTransportCommoditiyList(
+			java.util.List<TransportCommodity> transportCommoditiyList) {
+		this.transportCommoditiyList = transportCommoditiyList;
 	}
 	public void setCode(java.lang.String value) {
 		this.code = value;

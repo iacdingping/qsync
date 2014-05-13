@@ -24,4 +24,11 @@ public class BaseHead {
 	
 	@XmlElement(required = true)
 	private String businessType;
+	
+	public String getBusinessType() {
+		return businessType;
+	}
+	public void setBusinessType(String businessType) {
+		this.businessType = businessType;
+	}
 }
