@@ -8,7 +8,6 @@ import java.util.List;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
 
 import com.openteach.qsync.core.SpringTransactionalTestCase;
 
@@ -19,7 +18,6 @@ import com.openteach.qsync.core.SpringTransactionalTestCase;
  * @since 1.0
  * */
 @DirtiesContext
-@ContextConfiguration(locations = { "classpath:spring/applicationContext-dao.xml" })
 public class CommodityDaoTest extends SpringTransactionalTestCase{
 	@Autowired
 	private CommodityDao commodityDao;

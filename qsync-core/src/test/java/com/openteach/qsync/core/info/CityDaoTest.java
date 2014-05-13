@@ -1,14 +1,13 @@
 package com.openteach.qsync.core.info;
 
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+
+import java.util.List;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
 
 import com.openteach.qsync.core.SpringTransactionalTestCase;
 
@@ -19,7 +18,6 @@ import com.openteach.qsync.core.SpringTransactionalTestCase;
  * @since 1.0
  * */
 @DirtiesContext
-@ContextConfiguration(locations = { "classpath:applicationContext.xml.xml" })
 public class CityDaoTest extends SpringTransactionalTestCase{
 	@Autowired
 	private CityDao cityDao;

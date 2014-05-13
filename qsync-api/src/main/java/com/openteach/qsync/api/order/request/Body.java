@@ -18,4 +18,12 @@ public class Body extends BaseBody {
 	 */
 	@XmlElement(required = true)
 	private List<OrderInfo> orderInfoList;
+
+	public List<OrderInfo> getOrderInfoList() {
+		return orderInfoList;
+	}
+
+	public void setOrderInfoList(List<OrderInfo> orderInfoList) {
+		this.orderInfoList = orderInfoList;
+	}
 }

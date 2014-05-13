@@ -5,6 +5,9 @@
 
 package com.openteach.qsync.core.order;
 
+import com.openteach.qsync.core.info.Member;
+import com.openteach.qsync.core.logistics.Transportation;
+
 
 
 /**
@@ -178,6 +181,7 @@ public class Order {
      * member       db_column: member 
      */	
 	private java.lang.Long member;
+	private Member MemberObject;
     /**
      * shopId       db_column: shop_id 
      */	
@@ -202,6 +206,7 @@ public class Order {
      * ordertransport       db_column: ordertransport 
      */	
 	private java.lang.Long ordertransport;
+	private OrderTransport orderTransportObject;
     /**
      * statementId       db_column: statement_id 
      */	
@@ -278,6 +283,7 @@ public class Order {
      * transportationId       db_column: transportation_id 
      */	
 	private java.lang.Long transportationId;
+	private Transportation transportationObject;
     /**
      * transportationcompanyId       db_column: transportationcompany_id 
      */	
@@ -457,6 +463,12 @@ public class Order {
 	public java.lang.Long getMember() {
 		return this.member;
 	}
+	public Member getMemberObject() {
+		return MemberObject;
+	}
+	public void setMemberObject(Member memberObject) {
+		MemberObject = memberObject;
+	}
 	public void setShopId(java.lang.Long value) {
 		this.shopId = value;
 	}
@@ -492,6 +504,12 @@ public class Order {
 	}
 	public java.lang.Long getOrdertransport() {
 		return this.ordertransport;
+	}
+	public OrderTransport getOrderTransportObject() {
+		return orderTransportObject;
+	}
+	public void setOrderTransportObject(OrderTransport orderTransportObject) {
+		this.orderTransportObject = orderTransportObject;
 	}
 	public void setStatementId(java.lang.Long value) {
 		this.statementId = value;
@@ -606,6 +624,12 @@ public class Order {
 	}
 	public java.lang.Long getTransportationId() {
 		return this.transportationId;
+	}
+	public Transportation getTransportationObject() {
+		return transportationObject;
+	}
+	public void setTransportationObject(Transportation transportationObject) {
+		this.transportationObject = transportationObject;
 	}
 	public void setTransportationcompanyId(java.lang.Long value) {
 		this.transportationcompanyId = value;

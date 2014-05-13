@@ -2,25 +2,22 @@ package com.openteach.qsync.service.declare.scheduler;
 
 import java.util.List;
 
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.openteach.qsync.core.OrderStatus;
+import com.openteach.qsync.api.XmlRequest;
+import com.openteach.qsync.api.order.request.OrderInfo;
 import com.openteach.qsync.core.order.Order;
-import com.openteach.qsync.core.order.OrderManager;
-import com.openteach.qsync.core.order.OrderQuery;
+import com.openteach.qsync.service.declare.AssembleService;
 
 @Component
-public class TaskDispatcher implements InitializingBean {
+public class TaskDispatcher {
 
 	@Autowired
-	private OrderManager orderManager;
-	
-	private OrderQuery orderQuery;
+	private AssembleService assembleService;
 	
 	public void scan() {
-		List<Order> orders = orderManager.list(orderQuery);
+		List<Order> orders = assembleService.listOrders();
 		for(Order order : orders) {
 			pushTask(order);
 		}
@@ -53,11 +50,4 @@ public class TaskDispatcher implements InitializingBean {
 		
 	}
 
-
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		orderQuery = new OrderQuery();
-		orderQuery.setStatus(OrderStatus.DELIVERED.ordinal());
-		orderQuery.setPageSize(10L);
-	}
 }
