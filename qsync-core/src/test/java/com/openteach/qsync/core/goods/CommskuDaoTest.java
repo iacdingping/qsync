@@ -1,18 +1,16 @@
 package com.openteach.qsync.core.goods;
 
-import com.openteach.qsync.core.goods.Commsku;
-import com.openteach.qsync.core.goods.CommskuDao;
-import com.openteach.qsync.core.goods.CommskuManager;
-import com.openteach.qsync.core.goods.CommskuQuery;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-
-import static org.junit.Assert.*;
+import java.util.List;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springside.modules.test.spring.SpringTransactionalTestCase;
+
+import com.openteach.qsync.core.SpringTransactionalTestCase;
 
 /**
  *
@@ -59,13 +57,13 @@ public class CommskuDaoTest extends SpringTransactionalTestCase{
 		/** sellnum */
 		commsku.setSellnum(1);
 		/** costprice */
-		commsku.setCostprice(1);
+		commsku.setCostprice(1.0);
 		/** originalprice */
-		commsku.setOriginalprice(1);
+		commsku.setOriginalprice(1.0);
 		/** saleprice */
-		commsku.setSaleprice(1);
+		commsku.setSaleprice(1.0);
 		/** buyprice */
-		commsku.setBuyprice(1);
+		commsku.setBuyprice(1.0);
 		/** score */
 		commsku.setScore(1);
 		/** listorder */
@@ -155,13 +153,13 @@ public class CommskuDaoTest extends SpringTransactionalTestCase{
 		/** sellnum */
 		commsku.setSellnum(2);
 		/** costprice */
-		commsku.setCostprice(2);
+		commsku.setCostprice(2.0);
 		/** originalprice */
-		commsku.setOriginalprice(2);
+		commsku.setOriginalprice(2.0);
 		/** saleprice */
-		commsku.setSaleprice(2);
+		commsku.setSaleprice(2.0);
 		/** buyprice */
-		commsku.setBuyprice(2);
+		commsku.setBuyprice(2.0);
 		/** score */
 		commsku.setScore(2);
 		/** listorder */

@@ -49,7 +49,7 @@ public class OrderTransport {
      */	
 	private java.lang.Long id;
 	
-	private java.util.List<TransportCommodity> transportCommoditiyList;
+	private java.util.List<TransportCommodity> transportCommodityList;
 	
     /**
      * code       db_column: code 
@@ -172,12 +172,12 @@ public class OrderTransport {
 	public java.lang.Long getId() {
 		return this.id;
 	}
-	public java.util.List<TransportCommodity> getTransportCommoditiyList() {
-		return transportCommoditiyList;
+	public java.util.List<TransportCommodity> getTransportCommodityList() {
+		return transportCommodityList;
 	}
-	public void setTransportCommoditiyList(
-			java.util.List<TransportCommodity> transportCommoditiyList) {
-		this.transportCommoditiyList = transportCommoditiyList;
+	public void setTransportCommodityList(
+			java.util.List<TransportCommodity> transportCommodityList) {
+		this.transportCommodityList = transportCommodityList;
 	}
 	public void setCode(java.lang.String value) {
 		this.code = value;

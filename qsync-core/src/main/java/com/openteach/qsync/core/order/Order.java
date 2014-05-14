@@ -7,6 +7,7 @@ package com.openteach.qsync.core.order;
 
 import com.openteach.qsync.core.info.Member;
 import com.openteach.qsync.core.logistics.Transportation;
+import com.openteach.qsync.core.logistics.Transportationcompany;
 
 
 
@@ -288,6 +289,8 @@ public class Order {
      * transportationcompanyId       db_column: transportationcompany_id 
      */	
 	private java.lang.Long transportationcompanyId;
+	
+	private Transportationcompany transportationcompanyObject;
     /**
      * transportnumber       db_column: transportnumber 
      */	
@@ -297,7 +300,8 @@ public class Order {
      */	
 	private java.lang.String transportremark;
 	//columns END
-
+	private Integer totalGoodsCount;
+	private Double totalGoodsWeight;
 	public Order(){
 	}
 
@@ -637,6 +641,13 @@ public class Order {
 	public java.lang.Long getTransportationcompanyId() {
 		return this.transportationcompanyId;
 	}
+	public Transportationcompany getTransportationcompanyObject() {
+		return transportationcompanyObject;
+	}
+	public void setTransportationcompanyObject(
+			Transportationcompany transportationcompanyObject) {
+		this.transportationcompanyObject = transportationcompanyObject;
+	}
 	public void setTransportnumber(java.lang.String value) {
 		this.transportnumber = value;
 	}
@@ -648,6 +659,18 @@ public class Order {
 	}
 	public java.lang.String getTransportremark() {
 		return this.transportremark;
+	}
+	public Integer getTotalGoodsCount() {
+		return totalGoodsCount;
+	}
+	public void setTotalGoodsCount(Integer totalGoodsCount) {
+		this.totalGoodsCount = totalGoodsCount;
+	}
+	public Double getTotalGoodsWeight() {
+		return totalGoodsWeight;
+	}
+	public void setTotalGoodsWeight(Double totalGoodsWeight) {
+		this.totalGoodsWeight = totalGoodsWeight;
 	}
 }
 

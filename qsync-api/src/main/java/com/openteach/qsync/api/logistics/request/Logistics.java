@@ -27,4 +27,20 @@ public class Logistics {
 	 */
 	@XmlElement(required = true)
 	private JkfLogisticsInfo jkfLogisticsInfo;
+
+	public JkfSign getJkfSign() {
+		return jkfSign;
+	}
+
+	public void setJkfSign(JkfSign jkfSign) {
+		this.jkfSign = jkfSign;
+	}
+
+	public JkfLogisticsInfo getJkfLogisticsInfo() {
+		return jkfLogisticsInfo;
+	}
+
+	public void setJkfLogisticsInfo(JkfLogisticsInfo jkfLogisticsInfo) {
+		this.jkfLogisticsInfo = jkfLogisticsInfo;
+	}
 }

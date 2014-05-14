@@ -26,6 +26,7 @@ public class ConfigService {
 	//币制
 	@Value("${declare.currency}")
 	private String declareCurrency;
+	
 	public String getDeclareCompanyCode() {
 		return declareCompanyCode;
 	}

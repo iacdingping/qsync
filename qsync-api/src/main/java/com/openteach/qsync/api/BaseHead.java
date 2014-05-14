@@ -16,11 +16,15 @@ public class BaseHead {
 
 	public static final String IMPORTBILL = "IMPORTBILL";
 	
+	public static final String IMPORTORDER = "IMPORTORDER";
+	
 	public static final String LOGISTICS_INFO = "LOGISTICS_INFO";
 	
 	public static final String IMPORT_COMPANY = "IMPORT_COMPANY";
 	
 	public static final String CHECKRESULT = "CHECKRESULT";
+	
+	public static final String PERSONAL_GOODS_DECLAR = "PERSONAL_GOODS_DECLAR";
 	
 	@XmlElement(required = true)
 	private String businessType;

@@ -1,5 +1,7 @@
 package com.openteach.qsync.api.goods.request;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -32,7 +34,7 @@ public class GoodsDeclarModule {
 	 * 
 	 */
 	@XmlElement(required = true)
-	private GoodsDeclarDetail goodsDeclarDetails;
+	private List<GoodsDeclarDetail> goodsDeclarDetails;
 
 	public JkfSign getJkfSign() {
 		return jkfSign;
@@ -50,11 +52,12 @@ public class GoodsDeclarModule {
 		this.goodsDeclar = goodsDeclar;
 	}
 
-	public GoodsDeclarDetail getGoodsDeclarDetails() {
+	public List<GoodsDeclarDetail> getGoodsDeclarDetails() {
 		return goodsDeclarDetails;
 	}
 
-	public void setGoodsDeclarDetails(GoodsDeclarDetail goodsDeclarDetails) {
+	public void setGoodsDeclarDetails(List<GoodsDeclarDetail> goodsDeclarDetails) {
 		this.goodsDeclarDetails = goodsDeclarDetails;
 	}
+
 }

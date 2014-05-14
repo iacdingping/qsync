@@ -1,6 +1,7 @@
 package com.openteach.qsync.service.declare;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -11,6 +12,11 @@ import org.springframework.stereotype.Service;
 import com.openteach.qsync.api.BaseHead;
 import com.openteach.qsync.api.JkfSign;
 import com.openteach.qsync.api.XmlRequest;
+import com.openteach.qsync.api.goods.request.GoodsDeclar;
+import com.openteach.qsync.api.goods.request.GoodsDeclarDetail;
+import com.openteach.qsync.api.goods.request.GoodsDeclarModule;
+import com.openteach.qsync.api.logistics.request.JkfLogisticsInfo;
+import com.openteach.qsync.api.logistics.request.Logistics;
 import com.openteach.qsync.api.order.request.JkfGoodsPurchaser;
 import com.openteach.qsync.api.order.request.JkfOrderDetail;
 import com.openteach.qsync.api.order.request.JkfOrderImportHead;
@@ -25,6 +31,8 @@ import com.openteach.qsync.core.goods.TransportCommodity;
 import com.openteach.qsync.core.goods.TransportCommodityManager;
 import com.openteach.qsync.core.info.Member;
 import com.openteach.qsync.core.info.MemberManager;
+import com.openteach.qsync.core.logistics.Transportationcompany;
+import com.openteach.qsync.core.logistics.TransportationcompanyManager;
 import com.openteach.qsync.core.order.Order;
 import com.openteach.qsync.core.order.OrderManager;
 import com.openteach.qsync.core.order.OrderQuery;
@@ -48,6 +56,7 @@ public class AssembleService implements InitializingBean {
 	@Autowired private OrderTransportManager orderTransportManager;
 	@Autowired private TransportCommodityManager transportCommodityManager;
 	@Autowired private CommskuManager commskuManager;
+	@Autowired private TransportationcompanyManager transportationcompanyManager;
 	
 	private JkfSign jkfSign;
 	private BaseHead head;
@@ -60,13 +69,23 @@ public class AssembleService implements InitializingBean {
 			Member member = memberManager.getById(order.getMember());
 			order.setMemberObject(member);
 			
+			Transportationcompany transportationcompany = transportationcompanyManager.getById(order.getTransportationcompanyId());
+			order.setTransportationcompanyObject(transportationcompany);
+			
 			OrderTransport orderTransport = orderTransportManager.getById(order.getOrdertransport());
 			List<TransportCommodity> transportCommoditiyList = transportCommodityManager.getByOrderTransport(order.getOrdertransport());
+			int totalGoodsCount = 0;
+			double totalGoodsWeight = 0.0;
 			for(TransportCommodity tc : transportCommoditiyList) {
 				Commsku commsku = commskuManager.getByIdMappedCommodity(tc.getSkuId());
 				tc.setCommskuObject(commsku);
+				//计算总件数与总重量
+				totalGoodsCount += tc.getDelivernum().intValue();
+				totalGoodsWeight += tc.getDelivernum().intValue() * tc.getCommskuObject().getCommodity().getWeight().doubleValue();
 			}
-			orderTransport.setTransportCommoditiyList(transportCommoditiyList);
+			order.setTotalGoodsCount(totalGoodsCount);
+			order.setTotalGoodsWeight(totalGoodsWeight);
+			orderTransport.setTransportCommodityList(transportCommoditiyList);
 			order.setOrderTransportObject(orderTransport);
 			
 		}
@@ -105,7 +124,7 @@ public class AssembleService implements InitializingBean {
 		jkfOrderImportHead.setConsignee(order.getOrderTransportObject().getFirstname() + " " + order.getOrderTransportObject().getLastname());
 		jkfOrderImportHead.setConsigneeAddress(StringUtils.defaultIfEmpty(
 				order.getOrderTransportObject().getAddress1(), order.getOrderTransportObject().getAddress2()));
-		jkfOrderImportHead.setTotalCount(order.getCutamount() == null ? 1 : order.getCutamount().intValue());
+		jkfOrderImportHead.setTotalCount(order.getTotalGoodsCount());
 		jkfOrderImportHead.setPostMode(postMode);	//transportaion.type
 		jkfOrderImportHead.setSalerCountry();		//order_transport.addressorCountry
 		jkfOrderImportHead.setAddressorName();	//order_transport.addressorName
@@ -144,6 +163,7 @@ public class AssembleService implements InitializingBean {
 		jkfGoodsPurchaser.setAddress(order.getMemberObject().getAddress());
 		orderInfo.setJkfGoodsPurchaser(jkfGoodsPurchaser);
 		
+		head.setBusinessType(BaseHead.IMPORTORDER);
 		request.setHead(head);
 		request.setBody(body);
 		return request;
@@ -157,7 +177,22 @@ public class AssembleService implements InitializingBean {
 	public XmlRequest getLogisticsXmlRequest(Order order) {
 		XmlRequest request = new XmlRequest();
 		com.openteach.qsync.api.logistics.request.Body body = new com.openteach.qsync.api.logistics.request.Body();
+		Logistics logistics = new Logistics();
+		JkfLogisticsInfo jkfLogisticsInfo = new JkfLogisticsInfo();
+		jkfLogisticsInfo.setLogisticsCompanyNo(order.getTransportationcompanyObject().getCode());
+		jkfLogisticsInfo.setLogisticsCompanyName(order.getTransportationcompanyObject().getName());
+		jkfLogisticsInfo.setLogisticsWaybillNo(order.getTransportnumber());
+		jkfLogisticsInfo.setLogisticsTraceState(logisticsTraceState);	// cc_kata_kplus_order.logistics_state
+		jkfLogisticsInfo.setWeight(order.getTotalGoodsWeight());
+		jkfLogisticsInfo.setPieceNumber(order.getTotalGoodsCount());
+		jkfLogisticsInfo.setHandleTimeStr(order.getOrdertime());
+		jkfLogisticsInfo.setStationCode(stationCode);//cc_kata_kplus_order.station_code
+		jkfLogisticsInfo.setLicensePlateNumber(licensePlateNumber); //cc_kata_kplus_order.license_plate_number
+		logistics.setJkfLogisticsInfo(jkfLogisticsInfo);
+		logistics.setJkfSign(jkfSign);
+		body.setLogisticsList(Arrays.asList(logistics));
 		
+		head.setBusinessType(BaseHead.LOGISTICS_INFO);
 		request.setHead(head);
 		request.setBody(body);
 		return request;
@@ -171,7 +206,18 @@ public class AssembleService implements InitializingBean {
 	public XmlRequest getGoodsXmlRequest(Order order) {
 		XmlRequest request = new XmlRequest();
 		com.openteach.qsync.api.goods.request.Body body = new com.openteach.qsync.api.goods.request.Body();
+		GoodsDeclarModule goodsDeclarModule = new GoodsDeclarModule();
+		goodsDeclarModule.setJkfSign(jkfSign);
 		
+		GoodsDeclar goodsDeclar = new GoodsDeclar();
+		goodsDeclarModule.setGoodsDeclar(goodsDeclar);
+		
+		List<GoodsDeclarDetail> goodsDeclarDetails = new ArrayList<GoodsDeclarDetail>();
+		goodsDeclarModule.setGoodsDeclarDetails(goodsDeclarDetails);
+		
+		body.setGoodsDeclarModuleList(Arrays.asList(goodsDeclarModule));
+		
+		head.setBusinessType(BaseHead.PERSONAL_GOODS_DECLAR);
 		request.setHead(head);
 		request.setBody(body);
 		return request;
@@ -186,6 +232,7 @@ public class AssembleService implements InitializingBean {
 		XmlRequest request = new XmlRequest();
 		com.openteach.qsync.api.waybill.request.Body body = new com.openteach.qsync.api.waybill.request.Body();
 		
+		head.setBusinessType(BaseHead.IMPORTBILL);
 		request.setHead(head);
 		request.setBody(body);
 		return request;
@@ -217,7 +264,7 @@ public class AssembleService implements InitializingBean {
 		jkfSign.setCompanyCode(configService.getDeclareCompanyCode());
 		jkfSign.setDeclareType(configService.getDeclareType());
 		
-		head.setBusinessType(configService.getDeclareBusinessType());
+		head = new BaseHead();
 		
 		orderQuery = new OrderQuery();
 		orderQuery.setStatus(OrderStatus.DELIVERED.ordinal());
