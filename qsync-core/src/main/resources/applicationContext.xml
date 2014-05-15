@@ -47,7 +47,7 @@
 	<!-- <aop:aspectj-autoproxy proxy-target-class="true"/> -->
 	
 	<!-- production环境 -->
- 	<beans profile="production">
+ 	<beans profile="test">
  		<context:property-placeholder ignore-unresolvable="true"
 			location="classpath*:/application.production.properties,
 				classpath*:/override.production.properties" />	

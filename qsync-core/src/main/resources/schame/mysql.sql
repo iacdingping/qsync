@@ -33,3 +33,16 @@ ALTER TABLE `cc_kata_kplus_commodity` ADD `unit` VARCHAR(50) COMMENT '申报计�
 
 ALTER TABLE `kata_kplus_member` ADD `certificates_type` VARCHAR(50) COMMENT '证件类型 01:身份证（试点期间只能是身份证） 02:护照 03:其他';
 ALTER TABLE `kata_kplus_member` ADD `certificates` VARCHAR(50) COMMENT '证件号码';
+
+CREATE TABLE `cc_sync_taks` (
+	`id` BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
+	`generator` VARCHAR(32) NOT NULL,
+	`type` VARCHAR(16) NOT NULL,
+	`status` VARCHAR(16) NOT NULL,
+	`xml_request` TEXT NOT NULL,
+	`xml_response` TEXT,
+	`exception` TEXT,
+	`gmt_create` DATETIME,
+	`gmt_modified` DATETIME
+) ENGINE=INNODB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='申报任务';
+
