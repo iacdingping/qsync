@@ -75,6 +75,7 @@ public class JkfClientOverFtp implements JkfClient {
 	private ConcurrentHashMap<String, PendingRequest> pendingRequests;
 	
 	private int bufferSize = DEFAULT_BUFFER_SIZE;
+	
 	/**
 	 * 
 	 */
@@ -117,7 +118,7 @@ public class JkfClientOverFtp implements JkfClient {
 	}
 	
 	@Override
-	public XmlResponse syncRequest(XmlRequest request) throws ApiException {
+	public XmlResponse sync(XmlRequest request) throws ApiException {
 		PendingRequest pr = null;
 		try {
 			pr = pendingRequest(request, null);
@@ -143,7 +144,12 @@ public class JkfClientOverFtp implements JkfClient {
 	}
 
 	@Override
-	public void asyncRequest(XmlRequest request, Callback callback) {
+	public void async(XmlRequest request, Callback callback) {
+		async(request, callback, null);
+	}
+	
+	@Override
+	public void async(XmlRequest request, Callback callback, Object context) {
 		
 	}
 

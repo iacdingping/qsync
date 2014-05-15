@@ -19,14 +19,16 @@ public interface JkfClient {
 		/**
 		 * 
 		 * @param response
+		 * @param context
 		 */
-		void onSucceed(XmlResponse response);
+		void onSucceed(XmlResponse response, Object context);
 		
 		/**
 		 * 
 		 * @param exception
+		 * @param context
 		 */
-		void onFailed(ApiException exception);
+		void onFailed(ApiException exception, Object context);
 	}
 	
 	/**
@@ -35,12 +37,20 @@ public interface JkfClient {
 	 * @return
 	 * @throws ApiException
 	 */
-	public XmlResponse syncRequest(XmlRequest request) throws ApiException;
+	XmlResponse sync(XmlRequest request) throws ApiException;
 	
 	/**
 	 * 
 	 * @param request
 	 * @param callback
 	 */
-	public void asyncRequest(XmlRequest request, Callback callback);
+	void async(XmlRequest request, Callback callback);
+	
+	/**
+	 * 
+	 * @param request
+	 * @param callback
+	 * @param context
+	 */
+	void async(XmlRequest request, Callback callback, Object context);
 }

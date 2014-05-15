@@ -2,6 +2,9 @@ package com.openteach.qsync.api;
 
 import static org.junit.Assert.fail;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Arrays;
 
 import org.junit.After;
@@ -47,12 +50,36 @@ public class JkfClientOverFtpTest {
 		body.setImportCompanyList(Arrays.asList(im));
 		XmlRequest request = new XmlRequest();
 		request.setBody(body);
-		XmlResponse response = jkfClient.syncRequest(request);
+		XmlResponse response = jkfClient.sync(request);
 		System.out.println(JaxbUtils.convertToXml(response));
 	}
 
 	@Test
 	public void testAsyncRequest() {
 		fail("Not yet implemented");
+	}
+	
+	@Test
+	public void testDump() throws IOException {
+		StringBuilder sb = new StringBuilder();
+		String line = null;
+		String[] fileds = null;
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("/home/sihai/mtop-dump.log"));
+			while(null != (line = reader.readLine())) {
+				sb.append(line);
+				fileds = line.split("\\,\\^");
+				
+				System.out.println("-------------------------------------------------------------");
+				for(String f : fileds) {
+					System.out.println(f);
+				}
+			}
+		} finally {
+			if(null != reader) {
+				reader.close();
+			}
+		}
 	}
 }

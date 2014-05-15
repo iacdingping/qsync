@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.openteach.qsync.task.db.TaskDAO">
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="task-columns">
+	    <![CDATA[
+			`id` AS `id`, 
+			`generator` AS `generator`, 
+			`type` AS `type`, 
+			`status` AS `status`, 
+			`xml_request` AS `xml_request`, 
+			`xml_response` AS `xml_response`, 
+			`exception` AS `exception`, 
+			`gmt_create` AS `gmt_create`, 
+			`gmt_modified` AS `gmt_modified`
+		]]>
+	</sql>
+
+	<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+	<insert id="save" useGeneratedKeys="true" keyProperty="id">
+	    <![CDATA[
+	        INSERT INTO cc_sync_task (
+	        	`id`,
+	        	`generator`,
+	        	`type`,
+	        	`status`
+	        	`xml_request`,
+	        	`xml_response`,
+	        	`exception`,
+	        	`gmt_create`,
+	        	`gmt_modified`
+	        ) VALUES (
+	        	#{id},
+	        	#{generator},
+	        	#{type},
+	        	#{status},
+	        	#{xmlRequest},
+	        	#{xmlResponse},
+	        	#{exception},
+	        	#{gmtCreate},
+	        	#{gmtModified}
+	        )
+	    ]]>
+	</insert>
+    
+	<update id="update">
+    <![CDATA[
+        UPDATE cc_sync_task SET
+        	`status` = #{status},
+        	`xml_response` = #{xmlResponse}
+        	`exception` = #{exception}
+        	`gmt_modified` = #{gmt_modified}
+        WHERE 
+        	`id` = #{id}  	        
+    ]]>
+	</update>
+
+	<!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="query" resultType="Task">
+        SELECT
+        	 <include refid="task-columns" />
+        FROM 
+        	cc_sync_task
+        WHERE
+        	id % #denominator# = #{mode}
+        	status IN
+		    <foreach item="item" index="index" collection="statusList" 
+                    open="(" separator="," close=")">
+                   #{item}
+            </foreach>
+    </select>
+</mapper>
