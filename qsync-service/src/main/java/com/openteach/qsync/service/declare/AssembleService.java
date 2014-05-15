@@ -21,6 +21,8 @@ import com.openteach.qsync.api.order.request.JkfGoodsPurchaser;
 import com.openteach.qsync.api.order.request.JkfOrderDetail;
 import com.openteach.qsync.api.order.request.JkfOrderImportHead;
 import com.openteach.qsync.api.order.request.OrderInfo;
+import com.openteach.qsync.api.waybill.request.WayBill;
+import com.openteach.qsync.api.waybill.request.WayBillImportDto;
 import com.openteach.qsync.core.ConfigService;
 import com.openteach.qsync.core.OrderStatus;
 import com.openteach.qsync.core.declare.DeclarePayType;
@@ -135,7 +137,7 @@ public class AssembleService implements InitializingBean {
 		orderInfo.setJkfOrderImportHead(jkfOrderImportHead);
 		
 		List<JkfOrderDetail> jkfOrderDetailList = new ArrayList<JkfOrderDetail>();
-		List<TransportCommodity> transportCommoditiyList = order.getOrderTransportObject().getTransportCommoditiyList();
+		List<TransportCommodity> transportCommoditiyList = order.getOrderTransportObject().getTransportCommodityList();
 		for(int i=0; i<transportCommoditiyList.size(); i++) {
 			TransportCommodity tc = transportCommoditiyList.get(i);
 			Commsku commsku = tc.getCommskuObject();
@@ -198,6 +200,8 @@ public class AssembleService implements InitializingBean {
 		return request;
 	}
 	
+	private final static long BASE_ID = 10000000000000L;
+	
 	/**
 	 * 获取个人物品报关报文
 	 * @param order
@@ -211,9 +215,82 @@ public class AssembleService implements InitializingBean {
 		
 		GoodsDeclar goodsDeclar = new GoodsDeclar();
 		goodsDeclarModule.setGoodsDeclar(goodsDeclar);
+		goodsDeclar.setAccountBookNo(System.currentTimeMillis() + "");	//???账册编号
+		goodsDeclar.setInOutFlag("I");
+		goodsDeclar.setPreEntryNumber(configService.getDeclareRecordNo() + (BASE_ID + order.getId()));
+		goodsDeclar.setImportType(configService.getDeclareType());
+		goodsDeclar.setInOutDatStr(order.getOrdertime());
+		goodsDeclar.setInOutPortNumber(configService.getDeclareInOutPortNumber());
+		goodsDeclar.setArrivedPort(configService.getDeclareArrivedPort());
+		goodsDeclar.setTransportTool(order.getTransportationObject().getName());
+		goodsDeclar.setTransportToolFltNo();	//cc_kata_kplus_transportation.tool_flt_no
+		goodsDeclar.setTransportTypeCode();	//cc_kata_kplus_transportation.type_code
+		goodsDeclar.setDeclareCompanyType(configService.getDeclareCompanyType());
+		goodsDeclar.setDeclareCompanyCode(configService.getDeclareCompanyCode());
+		goodsDeclar.setDeclareCompanyName(configService.getDeclareCompanyName());
+		goodsDeclar.setEeBusinessCompanyCode(configService.getDeclareCompanyCode());
+		goodsDeclar.setEeBusinessCompanyName(configService.getDeclareCompanyName());
+		goodsDeclar.setOrderNumber(order.getCode());
+		goodsDeclar.setSubCarriageNo("");
+		goodsDeclar.setFromCountry(fromCountry);	//cc_kata_kplus_transportation.from_country
+		goodsDeclar.setPieceNumber(order.getTotalGoodsCount());
+		goodsDeclar.setRoughWeight(order.getTotalGoodsWeight());
+		goodsDeclar.setNetWeight(order.getTotalGoodsWeight());
+		goodsDeclar.setPackType(packType);	//cc_kata_kplus_transportation.pack_type
+		goodsDeclar.setRemark("");
+		goodsDeclar.setDeclarePortCode(configService.getDeclareInOutPortNumber());
+		goodsDeclar.setEnteringPerson("9999");
+		goodsDeclar.setEnteringCompanyName("9999");
+		goodsDeclar.setDeclarantCode("");
+		goodsDeclar.setGoodsYardCode(configService.getDeclareArrivedPort());
+		goodsDeclar.setSender();	// cc_kata_kplus_order_transport.addressor_name
+		goodsDeclar.setReceiver(order.getOrderTransportObject().getCongsignee());	
+		goodsDeclar.setSenderCountry(senderCountry);  //cc_kata_kplus_order_transport.addressor_country
+		goodsDeclar.setSenderCity(senderCity);	//cc_kata_kplus_order_transport.addressor_city
+		goodsDeclar.setReceiverPapersNo(order.getMemberObject().);	//kata_kplus_member.certificates_type
+		goodsDeclar.setReceiverPapersNo(receiverPapersNo);	//kata_kplus_member.certificates
+		goodsDeclar.setWorth(order.getTotalamout());
+		goodsDeclar.setCurrency(configService.getDeclareCurrency());
+		
+		List<TransportCommodity> transportCommoditiyList = order.getOrderTransportObject().getTransportCommodityList();
+		StringBuilder sb = new StringBuilder();
+		for(int i=0; i<=transportCommoditiyList.size() && i<=3; i++) {
+			TransportCommodity tc = transportCommoditiyList.get(i);
+			Commsku commsku = tc.getCommskuObject();
+			sb.append(commsku.getName()).append("，");
+		}
+		if(sb.length() > 0) 
+			sb.deleteCharAt(sb.length() - 1);
+		goodsDeclar.setMajorGoodsName(sb.toString());
+		goodsDeclar.setInternalAreaCompanyName(configService.getDeclareInternalAreaCompanyName());
+		goodsDeclar.setInternalAreaCompanyNo(configService.getDeclareInternalAreaCompanyNo());
+		goodsDeclar.setApplicationFormNo(applicationFormNo);	//cc_kata_kplus_transportation.application_form_no
+		goodsDeclar.setIsAuthorize((byte)0);
 		
 		List<GoodsDeclarDetail> goodsDeclarDetails = new ArrayList<GoodsDeclarDetail>();
 		goodsDeclarModule.setGoodsDeclarDetails(goodsDeclarDetails);
+		for(int i=0; i<=transportCommoditiyList.size() && i<=3; i++) {
+			TransportCommodity tc = transportCommoditiyList.get(i);
+			Commsku commsku = tc.getCommskuObject();
+			GoodsDeclarDetail cdd = new GoodsDeclarDetail();
+			cdd.setGoodsOrder(i);
+			cdd.setMailTaxNo(mailTaxNo);	//cc_kata_kplus_commodity.tariff
+			cdd.setGoodsItemNo(i+ ""); // ???????? 待确定
+			cdd.setGoodsName(commsku.getName());
+			cdd.setGoodsSpecification(goodsSpecification);	//cc_kata_kplus_commodity.specification
+			cdd.setProductionMarketingCountry(productionMarketingCountry);	//cc_kata_kplus_commodity.sales_country
+			cdd.setBargainCurrency(configService.getDeclareCurrency());
+			cdd.setBargainTotalPrices(tc.getPrice() * tc.getDelivernum());
+			cdd.setDeclarePrice(tc.getPrice());
+			cdd.setDeclareTotalPrices(tc.getPrice() * tc.getDelivernum());
+			cdd.setPurpose("");
+			cdd.setDeclareCount(tc.getDelivernum());
+			cdd.setDeclareMeasureUnit(declareMeasureUnit);	//cc_kata_kplus_commodity.unit
+			cdd.setGoodsRoughWeight(commsku.getCommodity().getWeight());
+			cdd.setFirstUnit(firstUnit);	//cc_kata_kplus_commodity.unit_desc
+			cdd.setFirstCount(tc.getDelivernum());
+			goodsDeclarDetails.add(cdd);
+		}
 		
 		body.setGoodsDeclarModuleList(Arrays.asList(goodsDeclarModule));
 		
@@ -231,6 +308,38 @@ public class AssembleService implements InitializingBean {
 	public XmlRequest getWaybillXmlRequest(Order order) {
 		XmlRequest request = new XmlRequest();
 		com.openteach.qsync.api.waybill.request.Body body = new com.openteach.qsync.api.waybill.request.Body();
+		
+		WayBill wayBill = new WayBill();
+		wayBill.setJkfSign(jkfSign);
+		
+		WayBillImportDto dto = new WayBillImportDto();
+		dto.setWayBillNo(order.getTransportnumber());
+		dto.setTotalWayBill(order.getOrderTransportObject().getWaybillnumber());
+		dto.setPackageNo(order.getTotalGoodsCount());
+		dto.setWeight(order.getTotalGoodsWeight());
+		dto.setNetWeight(order.getTotalGoodsWeight());
+		List<TransportCommodity> transportCommoditiyList = order.getOrderTransportObject().getTransportCommodityList();
+		StringBuilder sb = new StringBuilder();
+		for(int i=0; i<=transportCommoditiyList.size() && i<=3; i++) {
+			TransportCommodity tc = transportCommoditiyList.get(i);
+			Commsku commsku = tc.getCommskuObject();
+			sb.append(commsku.getName()).append("，");
+		}
+		if(sb.length() > 0) 
+			sb.deleteCharAt(sb.length() - 1);
+		dto.setGoodsName(sb.toString());
+		dto.setSendArea();	//cc_kata_kplus_order_transport.addressor_country + addressor_city
+		dto.setConsigneeArea(order.getOrderTransportObject().getAddress1());
+		dto.setConsigneeAddress(order.getOrderTransportObject().getAddress1());
+		dto.setConsignee(order.getOrderTransportObject().getFirstname() + " " + order.getOrderTransportObject().getLastname());
+		dto.setConsigneeTel(order.getOrderTransportObject().getPhonenumber());
+		dto.setZipCode();	//cc_kata_kplus_order_transport.zip_code
+		dto.setCustomsCode(configService.getDeclareCustomsCode());
+		dto.setWorth(order.getTotalamout());
+		dto.setImportDateString(order.getOrdertime());
+		dto.setCurrCode(configService.getDeclareCurrency());
+		
+		body.setWayBillList(Arrays.asList(wayBill));
 		
 		head.setBusinessType(BaseHead.IMPORTBILL);
 		request.setHead(head);

@@ -33,3 +33,7 @@ ALTER TABLE `cc_kata_kplus_commodity` ADD `unit` VARCHAR(50) COMMENT '申报计�
 
 ALTER TABLE `kata_kplus_member` ADD `certificates_type` VARCHAR(50) COMMENT '证件类型 01:身份证（试点期间只能是身份证） 02:护照 03:其他';
 ALTER TABLE `kata_kplus_member` ADD `certificates` VARCHAR(50) COMMENT '证件号码';
+
+ALTER TABLE `cc_kata_kplus_order` ADD `logistics_state` INT(5) COMMENT '物流跟踪状态 10 启运 20 抵港 30 到货 40 离开 50 签收';
+ALTER TABLE `cc_kata_kplus_order` ADD `station_code` VARCHAR(20) COMMENT '场站代码';
+ALTER TABLE `cc_kata_kplus_order` ADD `license_plate_number` VARCHAR(10) COMMENT '车牌号码';

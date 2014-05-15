@@ -59,7 +59,7 @@ public class WayBillImportDto {
 	private double worth;
 	
 	@XmlElement(required = true)
-	private double currCode;
+	private String currCode;
 	
 	@XmlElement(required = true)
 	private Date importDateString;
@@ -176,11 +176,11 @@ public class WayBillImportDto {
 		this.worth = worth;
 	}
 
-	public double getCurrCode() {
+	public String getCurrCode() {
 		return currCode;
 	}
 
-	public void setCurrCode(double currCode) {
+	public void setCurrCode(String currCode) {
 		this.currCode = currCode;
 	}
 

@@ -26,6 +26,23 @@ public class ConfigService {
 	//币制
 	@Value("${declare.currency}")
 	private String declareCurrency;
+	//进出口岸代码
+	@Value("${declare.inOutPortNumber}")
+	private String declareInOutPortNumber;
+	//进出口岸代码
+	@Value("${declare.arrivedPort}")
+	private String declareArrivedPort;
+	@Value("${declare.companyType}")
+	private String declareCompanyType;
+	//区内企业编码 保税进口必填 填报仓储企业编码
+	@Value("${declare.internalAreaCompanyNo}")
+	private String declareInternalAreaCompanyNo;
+	//区内企业编码 保税进口必填 填报仓储企业名称
+	@Value("${declare.internalAreaCompanyName}")
+	private String declareInternalAreaCompanyName;
+	//关区代码
+	@Value("${declare.customsCode}")
+	private String declareCustomsCode;
 	
 	public String getDeclareCompanyCode() {
 		return declareCompanyCode;
@@ -68,5 +85,42 @@ public class ConfigService {
 	}
 	public void setDeclareCurrency(String declareCurrency) {
 		this.declareCurrency = declareCurrency;
+	}
+	public String getDeclareInOutPortNumber() {
+		return declareInOutPortNumber;
+	}
+	public void setDeclareInOutPortNumber(String declareInOutPortNumber) {
+		this.declareInOutPortNumber = declareInOutPortNumber;
+	}
+	public String getDeclareArrivedPort() {
+		return declareArrivedPort;
+	}
+	public void setDeclareArrivedPort(String declareArrivedPort) {
+		this.declareArrivedPort = declareArrivedPort;
+	}
+	public String getDeclareCompanyType() {
+		return declareCompanyType;
+	}
+	public void setDeclareCompanyType(String declareCompanyType) {
+		this.declareCompanyType = declareCompanyType;
+	}
+	public String getDeclareInternalAreaCompanyNo() {
+		return declareInternalAreaCompanyNo;
+	}
+	public void setDeclareInternalAreaCompanyNo(String declareInternalAreaCompanyNo) {
+		this.declareInternalAreaCompanyNo = declareInternalAreaCompanyNo;
+	}
+	public String getDeclareInternalAreaCompanyName() {
+		return declareInternalAreaCompanyName;
+	}
+	public void setDeclareInternalAreaCompanyName(
+			String declareInternalAreaCompanyName) {
+		this.declareInternalAreaCompanyName = declareInternalAreaCompanyName;
+	}
+	public String getDeclareCustomsCode() {
+		return declareCustomsCode;
+	}
+	public void setDeclareCustomsCode(String declareCustomsCode) {
+		this.declareCustomsCode = declareCustomsCode;
 	}
 }
