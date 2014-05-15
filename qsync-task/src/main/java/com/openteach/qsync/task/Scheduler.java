@@ -1,11 +1,12 @@
 package com.openteach.qsync.task;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.openteach.qcity.qsync.common.lifecycle.AbstractLifeCycle;
 import com.openteach.qsync.api.JkfClient;
 import com.openteach.qsync.service.declare.AssembleService;
 import com.openteach.qsync.task.db.TaskDAO;
@@ -19,7 +20,7 @@ import com.openteach.qsync.task.impl.SingleThreadTaskGenerator;
  *
  */
 @Service
-public class Scheduler extends AbstractLifeCycle {
+public class Scheduler {
 
 	@Resource
 	private TaskDAO taskDAO;
@@ -54,10 +55,8 @@ public class Scheduler extends AbstractLifeCycle {
 	 */
 	private TaskConsumer consumer;
 
-	@Override
+	@PostConstruct
 	public void initialize() {
-		super.initialize();
-		
 		//
 		this.storage = new TaskStorageOverDatabase();
 		((TaskStorageOverDatabase)this.storage).setTaskDAO(this.taskDAO);
@@ -76,19 +75,13 @@ public class Scheduler extends AbstractLifeCycle {
 		((MultiThreadTaskConsumer)this.consumer).setJkfClient(this.jkfClient);
 		((MultiThreadTaskConsumer)this.consumer).setStorage(this.storage);
 		this.consumer.initialize();
-	}
-
-	@Override
-	public void start() {
-		super.start();
 		
 		this.generator.start();
 		this.consumer.start();
 	}
 
-	@Override
+	@PreDestroy
 	public void shutdown() {
-		super.shutdown();
 		this.generator.shutdown();
 		this.consumer.shutdown();
 	}
