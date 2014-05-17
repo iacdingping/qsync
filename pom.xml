@@ -9,11 +9,12 @@
 	<url></url>
 
 	<modules>
+		<module>qsync-util</module>
+		<module>qsync-common</module>
 		<module>qsync-api</module>
 		<module>qsync-service</module>
 		<module>qsync-task</module>
 		<module>qsync-core</module>
-		<module>qsync-util</module>
 	</modules>
   
 	<properties>
@@ -57,10 +58,21 @@
 		<junit.version>4.11</junit.version>
 		<mockito.version>1.9.5</mockito.version>
 		<powermock.version>1.5.1</powermock.version>
+		<oval.version>1.84</oval.version>
 	</properties>
   
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>qsync-util</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>qsync-common</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>qsync-api</artifactId>
@@ -79,11 +91,6 @@
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>qsync-core</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>${project.groupId}</groupId>
-				<artifactId>qsync-util</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			
@@ -138,6 +145,12 @@
 				<groupId>commons-dbcp</groupId>
 				<artifactId>commons-dbcp</artifactId>
 				<version>${commons-dbcp.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>net.sf.oval</groupId>
+				<artifactId>oval</artifactId>
+				<version>${oval.version}</version>
 			</dependency>
 			
 			<dependency>

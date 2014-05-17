@@ -19,6 +19,8 @@ import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.parser.ParserInitializationException;
 import org.apache.commons.net.io.CopyStreamException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import com.openteach.qsync.api.exception.ApiException;
 import com.openteach.qsync.api.utils.JaxbUtils;
@@ -28,6 +30,7 @@ import com.openteach.qsync.api.utils.JaxbUtils;
  * @author sihai
  *
  */
+@Service
 public class JkfClientOverFtp implements JkfClient {
 	
 	public static final int DEFAULT_COUNT = 4;
@@ -38,35 +41,45 @@ public class JkfClientOverFtp implements JkfClient {
 	
 	private static final Log logger = LogFactory.getLog(JkfClientOverFtp.class);
 
-	private String requestIp;
+	@Value("{sync.customs.pusher.ftp.server}")
+	private String pusherFtpServer;
 	
-	private int requestPort;
+	@Value("{sync.customs.pusher.ftp.port}")
+	private int pusherFtpPort;
 	
-	private String requestUsername;
+	@Value("{sync.customs.pusher.ftp.username}")
+	private String pusherFtpUsername;
 	
-	private String requestPassword;
+	@Value("{sync.customs.pusher.ftp.password}")
+	private String pusherFtpPassword;
 	
-	private String responseIp;
+	@Value("{sync.customs.puller.ftp.server}")
+	private String pullerFtpServer;
 	
-	private int responsePort;
+	@Value("{sync.customs.puller.ftp.port}")
+	private int pullerFtpPort;
 	
-	private String responseUsername;
+	@Value("{sync.customs.puller.ftp.username}")
+	private String pullerFtpUsername;
 	
-	private String responsePassword;
+	@Value("{sync.customs.puller.ftp.password}")
+	private String pullerFtpPassword;
 	
 	/**
 	 * 
 	 */
-	private int requesterCount = DEFAULT_COUNT;
+	@Value("{sync.customs.pusher.count}")
+	private int pusherCount = DEFAULT_COUNT;
 	
 	/**
 	 * 
 	 */
-	private int responserCount = DEFAULT_COUNT;
+	@Value("{sync.customs.puller.count}")
+	private int pullerCount = DEFAULT_COUNT;
 	
-	private Requester[] requesters;
+	private Pusher[] pushers;
 	
-	private Responser[] responsers;
+	private Puller[] pullers;
 	
 	private static String PREFIX;
 	
@@ -75,6 +88,7 @@ public class JkfClientOverFtp implements JkfClient {
 	private ConcurrentHashMap<String, PendingRequest> pendingRequests;
 	
 	private int bufferSize = DEFAULT_BUFFER_SIZE;
+	
 	/**
 	 * 
 	 */
@@ -88,8 +102,8 @@ public class JkfClientOverFtp implements JkfClient {
 			// 
 			buffer = new ArrayBlockingQueue<PendingRequest>(bufferSize);
 			
-			initializeRequesters();
-			initializeResponsers();
+			initializePushers();
+			initializePullers();
 			
 			try {
 				InetAddress address = InetAddress.getLocalHost();
@@ -110,25 +124,15 @@ public class JkfClientOverFtp implements JkfClient {
 	 */
 	public void release() {
 		// TODO 优雅的停下来
-		releaseRequesters();
-		releaseResponsers();
+		releasePushers();
+		releasePullers();
 		buffer.clear();
 		pendingRequests.clear();
 	}
 	
 	@Override
-	public XmlResponse syncRequest(XmlRequest request) throws ApiException {
-		PendingRequest pr = null;
-		try {
-			pr = pendingRequest(request, null);
-		} catch (InterruptedException e) {
-			// 清理
-			buffer.remove(pr);
-			pendingRequests.remove(pr.responseFileName);
-			// 
-			Thread.currentThread().interrupt();
-			throw new ApiException(e);
-		}
+	public XmlResponse sync(XmlRequest request) throws ApiException {
+		PendingRequest pr = this.pendingRequest(request, null, null);
 		// 同步等待
 		synchronized(pr) {
 			//
@@ -143,63 +147,72 @@ public class JkfClientOverFtp implements JkfClient {
 	}
 
 	@Override
-	public void asyncRequest(XmlRequest request, Callback callback) {
-		
-	}
-
-	public void setRequestIp(String requestIp) {
-		this.requestIp = requestIp;
-	}
-
-	public void setRequestPort(int requestPort) {
-		this.requestPort = requestPort;
-	}
-
-	public void setRequestUsername(String requestUsername) {
-		this.requestUsername = requestUsername;
-	}
-
-	public void setRequestPassword(String requestPassword) {
-		this.requestPassword = requestPassword;
-	}
-
-	public void setResponseIp(String responseIp) {
-		this.responseIp = responseIp;
-	}
-
-	public void setResponsePort(int responsePort) {
-		this.responsePort = responsePort;
-	}
-
-	public void setResponseUsername(String responseUsername) {
-		this.responseUsername = responseUsername;
-	}
-
-	public void setResponsePassword(String responsePassword) {
-		this.responsePassword = responsePassword;
+	public void async(XmlRequest request, Callback callback) {
+		async(request, callback, null);
 	}
 	
-	public void setResponserCount(int responserCount) {
-		this.responserCount = responserCount;
-	}
-
-	public void setRequesterCount(int requesterCount) {
-		this.requesterCount = requesterCount;
+	@Override
+	public void async(XmlRequest request, Callback callback, Object context) {
+		try {
+			this.pendingRequest(request, callback, context);
+		} catch (ApiException e) {
+			callback.onFailed(e, context);
+		}
 	}
 	
 	public void setBufferSize(int bufferSize) {
 		this.bufferSize = bufferSize;
 	}
 	
+	public void setPusherFtpServer(String pusherFtpServer) {
+		this.pusherFtpServer = pusherFtpServer;
+	}
+
+	public void setPusherFtpPort(int pusherFtpPort) {
+		this.pusherFtpPort = pusherFtpPort;
+	}
+
+	public void setPusherFtpUsername(String pusherFtpUsername) {
+		this.pusherFtpUsername = pusherFtpUsername;
+	}
+
+	public void setPusherFtpPassword(String pusherFtpPassword) {
+		this.pusherFtpPassword = pusherFtpPassword;
+	}
+
+	public void setPullerFtpServer(String pullerFtpServer) {
+		this.pullerFtpServer = pullerFtpServer;
+	}
+
+	public void setPullerFtpPort(int pullerFtpPort) {
+		this.pullerFtpPort = pullerFtpPort;
+	}
+
+	public void setPullerFtpUsername(String pullerFtpUsername) {
+		this.pullerFtpUsername = pullerFtpUsername;
+	}
+
+	public void setPullerFtpPassword(String pullerFtpPassword) {
+		this.pullerFtpPassword = pullerFtpPassword;
+	}
+
+	public void setPusherCount(int pusherCount) {
+		this.pusherCount = pusherCount;
+	}
+
+	public void setPullerCount(int pullerCount) {
+		this.pullerCount = pullerCount;
+	}
+	
 	/**
 	 * 
 	 * @throws IOException
 	 */
-	private void initializeRequesters() throws IOException {
-		requesters = new Requester[requesterCount];
-		for(int i = 0; i < requesterCount; i++) {
-			requesters[i] = new Requester(i, requestIp, requestPort, requestUsername, requestPassword);
-			requesters[i].start();
+	private void initializePushers() throws IOException {
+		pushers = new Pusher[pusherCount];
+		for(int i = 0; i < pusherCount; i++) {
+			pushers[i] = new Pusher(i, pullerFtpServer, pusherFtpPort, pusherFtpUsername, pusherFtpPassword);
+			pushers[i].start();
 		}
 	}
 	
@@ -207,20 +220,20 @@ public class JkfClientOverFtp implements JkfClient {
 	 * 
 	 * @throws IOException
 	 */
-	private void initializeResponsers() throws IOException {
-		responsers = new Responser[responserCount];
-		for(int i = 0; i < responserCount; i++) {
-			responsers[i] = new Responser(i, responseIp, responsePort, responseUsername, responsePassword);
-			responsers[i].start();
+	private void initializePullers() throws IOException {
+		pullers = new Puller[pullerCount];
+		for(int i = 0; i < pullerCount; i++) {
+			pullers[i] = new Puller(i, pullerFtpServer, pullerFtpPort, pullerFtpUsername, pullerFtpPassword);
+			pullers[i].start();
 		}
 	}
 	
 	/**
 	 * 
 	 */
-	private void releaseRequesters() {
-		if(null != requesters) {
-			for(Requester r : requesters) {
+	private void releasePushers() {
+		if(null != pushers) {
+			for(Pusher r : pushers) {
 				r.stop();
 			}
 		}
@@ -229,9 +242,9 @@ public class JkfClientOverFtp implements JkfClient {
 	/**
 	 * 
 	 */
-	private void releaseResponsers() {
-		if(null != responsers) {
-			for(Responser r : responsers) {
+	private void releasePullers() {
+		if(null != pullers) {
+			for(Puller r : pullers) {
 				r.stop();
 			}
 		}
@@ -261,15 +274,28 @@ public class JkfClientOverFtp implements JkfClient {
 	 * 
 	 * @param request
 	 * @param callback
+	 * @param context
 	 * @return
+	 * @throws ApiException
 	 */
-	private PendingRequest pendingRequest(XmlRequest request, Callback callback) throws InterruptedException {
+	private PendingRequest pendingRequest(XmlRequest request, Callback callback, Object context) throws ApiException {
+				
 		String sequence = generateSequence();
 		String requestFileName = generateRequestFileName(sequence);
 		String responseFileName = generateReponseFileName(sequence);
-		PendingRequest pr = new PendingRequest(request, sequence, requestFileName, responseFileName);
-		buffer.put(pr);
-		return pr;
+		PendingRequest pr = new PendingRequest(request, sequence, requestFileName, responseFileName, callback, context);
+		
+		try {
+			buffer.put(pr);
+			return pr;
+		} catch (InterruptedException e) {
+			// 清理
+			buffer.remove(pr);
+			pendingRequests.remove(pr.responseFileName);
+			// 
+			Thread.currentThread().interrupt();
+			throw new ApiException(e);
+		}
 	}
 	
 	/**
@@ -303,7 +329,7 @@ public class JkfClientOverFtp implements JkfClient {
 	 * @author sihai
 	 *
 	 */
-	private class Requester {
+	private class Pusher {
 		
 		private int no;
 		
@@ -316,7 +342,7 @@ public class JkfClientOverFtp implements JkfClient {
 		
 		private Thread thread;
 		
-		public Requester(int no, String ip, int port, String username, String password) {
+		public Pusher(int no, String ip, int port, String username, String password) {
 			this.no = no;
 			this.ip = ip;
 			this.port = port;
@@ -410,7 +436,7 @@ public class JkfClientOverFtp implements JkfClient {
 	 * @author sihai
 	 *
 	 */
-	private class Responser {
+	private class Puller {
 		
 		private int no;
 		
@@ -423,7 +449,7 @@ public class JkfClientOverFtp implements JkfClient {
 		
 		private Thread thread;
 		
-		public Responser(int no, String ip, int port, String username, String password) {
+		public Puller(int no, String ip, int port, String username, String password) {
 			this.no = no;
 			this.ip = ip;
 			this.port = port;
@@ -452,7 +478,7 @@ public class JkfClientOverFtp implements JkfClient {
 								}
 								String xml = getAndDeleteFile(f.getName());
 								pr.response = JaxbUtils.converyToJavaBean(xml, XmlResponse.class);
-								pr.notifyCompleted();
+								pr.completed();
 							}
 						} catch (FTPConnectionClosedException e) {
 							// 重新初始化ftp呗
@@ -535,6 +561,9 @@ public class JkfClientOverFtp implements JkfClient {
 		
 		XmlResponse response;
 		
+		private Callback callback;
+		private Object context;
+		
 		/**
 		 * 
 		 * @param request
@@ -543,10 +572,25 @@ public class JkfClientOverFtp implements JkfClient {
 		 * @param responseFileName
 		 */
 		public PendingRequest(XmlRequest request, String sequence, String requestFileName, String responseFileName) {
+			this(request, sequence, requestFileName, responseFileName, null, null);
+		}
+		
+		/**
+		 * 
+		 * @param request
+		 * @param sequence
+		 * @param requestFileName
+		 * @param responseFileName
+		 * @param callback
+		 * @param context
+		 */
+		public PendingRequest(XmlRequest request, String sequence, String requestFileName, String responseFileName, Callback callback, Object context) {
 			this.request = request;
 			this.sequence = sequence;
 			this.requestFileName = requestFileName;
 			this.responseFileName = responseFileName;
+			this.callback = callback;
+			this.context = context;
 		}
 		
 		/**
@@ -554,13 +598,25 @@ public class JkfClientOverFtp implements JkfClient {
 		 * @return
 		 */
 		public InputStream getInputStream() {
-			return new ByteArrayInputStream("Hi HahA".getBytes()/*request.toXml().getBytes()*/);
+			return new ByteArrayInputStream(request.toXml().getBytes());
 		}
 		
 		/**
 		 * 
 		 */
-		public synchronized void notifyCompleted() {
+		public void completed() {
+			if(null != callback) {
+				// async
+				callback.onSucceed(response, context);
+			} else {
+				notifyCompleted();
+			}
+		}
+		
+		/**
+		 * 
+		 */
+		private synchronized void notifyCompleted() {
 			this.notifyAll();
 		}
 	}

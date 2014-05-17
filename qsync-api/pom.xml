@@ -34,6 +34,11 @@
 			<artifactId>commons-net</artifactId>
 		</dependency>
 		
+		<dependency>
+			<groupId>net.sf.oval</groupId>
+			<artifactId>oval</artifactId>
+		</dependency>
+		
 		<!-- Log Start -->
 		<dependency>
 			<groupId>commons-logging</groupId>
@@ -56,6 +61,11 @@
 		<dependency>
 			<groupId>com.sun.xml.bind</groupId>
 			<artifactId>jaxb-impl</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
 		</dependency>
         
 	  </dependencies>

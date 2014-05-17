@@ -2,6 +2,9 @@ package com.openteach.qsync.api;
 
 import static org.junit.Assert.fail;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Arrays;
 
 import org.junit.After;
@@ -19,17 +22,17 @@ public class JkfClientOverFtpTest {
 	@Before
 	public void initialize() {
 		jkfClient = new JkfClientOverFtp();
-		jkfClient.setRequesterCount(JkfClientOverFtp.DEFAULT_COUNT);
-		jkfClient.setResponserCount(JkfClientOverFtp.DEFAULT_COUNT);
+		jkfClient.setPusherCount(JkfClientOverFtp.DEFAULT_COUNT);
+		jkfClient.setPullerCount(JkfClientOverFtp.DEFAULT_COUNT);
 		jkfClient.setBufferSize(JkfClientOverFtp.DEFAULT_BUFFER_SIZE);
-		jkfClient.setRequestIp("60.191.76.84");
-		jkfClient.setRequestPort(21);
-		jkfClient.setRequestUsername("newyork_pub");
-		jkfClient.setRequestPassword("newyork_pub");
-		jkfClient.setResponseIp("60.191.76.84");
-		jkfClient.setResponsePort(21);
-		jkfClient.setResponseUsername("newyork_PT14050401");
-		jkfClient.setResponsePassword("123456");
+		jkfClient.setPusherFtpServer("60.191.76.84");
+		jkfClient.setPusherFtpPort(21);
+		jkfClient.setPusherFtpUsername("newyork_pub");
+		jkfClient.setPusherFtpPassword("newyork_pub");
+		jkfClient.setPullerFtpServer("60.191.76.84");
+		jkfClient.setPullerFtpPort(21);
+		jkfClient.setPullerFtpUsername("newyork_PT14050401");
+		jkfClient.setPullerFtpPassword("123456");
 		jkfClient.initialize();
 	}
 	
@@ -47,12 +50,36 @@ public class JkfClientOverFtpTest {
 		body.setImportCompanyList(Arrays.asList(im));
 		XmlRequest request = new XmlRequest();
 		request.setBody(body);
-		XmlResponse response = jkfClient.syncRequest(request);
+		XmlResponse response = jkfClient.sync(request);
 		System.out.println(JaxbUtils.convertToXml(response));
 	}
 
 	@Test
 	public void testAsyncRequest() {
 		fail("Not yet implemented");
+	}
+	
+	@Test
+	public void testDump() throws IOException {
+		StringBuilder sb = new StringBuilder();
+		String line = null;
+		String[] fileds = null;
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new FileReader("/home/sihai/mtop-dump.log"));
+			while(null != (line = reader.readLine())) {
+				sb.append(line);
+				fileds = line.split("\\,\\^");
+				
+				System.out.println("-------------------------------------------------------------");
+				for(String f : fileds) {
+					System.out.println(f);
+				}
+			}
+		} finally {
+			if(null != reader) {
+				reader.close();
+			}
+		}
 	}
 }

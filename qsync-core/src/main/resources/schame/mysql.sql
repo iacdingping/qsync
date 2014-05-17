@@ -37,3 +37,16 @@ ALTER TABLE `kata_kplus_member` ADD `certificates` VARCHAR(50) COMMENT '证件�
 ALTER TABLE `cc_kata_kplus_order` ADD `logistics_state` INT(5) COMMENT '物流跟踪状态 10 启运 20 抵港 30 到货 40 离开 50 签收';
 ALTER TABLE `cc_kata_kplus_order` ADD `station_code` VARCHAR(20) COMMENT '场站代码';
 ALTER TABLE `cc_kata_kplus_order` ADD `license_plate_number` VARCHAR(10) COMMENT '车牌号码';
+
+CREATE TABLE `cc_sync_taks` (
+	`id` BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
+	`generator` VARCHAR(32) NOT NULL,
+	`type` VARCHAR(16) NOT NULL,
+	`status` VARCHAR(16) NOT NULL,
+	`xml_request` TEXT NOT NULL,
+	`xml_response` TEXT,
+	`exception` TEXT,
+	`gmt_create` DATETIME,
+	`gmt_modified` DATETIME
+) ENGINE=INNODB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='申报任务';
+

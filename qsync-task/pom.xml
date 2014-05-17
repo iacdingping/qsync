@@ -21,6 +21,16 @@
 		
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>qsync-util</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>qsync-common</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>qsync-api</artifactId>
 		</dependency>
 		
