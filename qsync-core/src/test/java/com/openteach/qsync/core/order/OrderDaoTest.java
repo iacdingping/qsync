@@ -10,6 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 
 import com.openteach.qsync.core.SpringTransactionalTestCase;
+import com.openteach.qsync.core.dao.order.OrderDao;
+import com.openteach.qsync.core.entity.order.Order;
+import com.openteach.qsync.core.query.order.OrderQuery;
+import com.openteach.qsync.util.common.DateUtil;
 
 /**
  *
@@ -21,7 +25,7 @@ import com.openteach.qsync.core.SpringTransactionalTestCase;
 public class OrderDaoTest extends SpringTransactionalTestCase{
 	@Autowired
 	private OrderDao orderDao;
-
+	
 	/**
 	 * 注意只能单个库测试
 	 * 因为对删除使用到count方法计数进行对比
@@ -49,9 +53,7 @@ public class OrderDaoTest extends SpringTransactionalTestCase{
 		/** gift */
 		order.setGift("1");
 		/** amount */
-		order.setAmount(1.0);
 		/** cutamount */
-		order.setCutamount(1.0);
 		/** invoicetype */
 		order.setInvoicetype(1);
 		/** invoicecontent */
@@ -69,7 +71,6 @@ public class OrderDaoTest extends SpringTransactionalTestCase{
 		/** payType */
 		order.setPayType(1);
 		/** transPrice */
-		order.setTransPrice(1.0);
 		/** isBigOrder */
 		order.setIsBigOrder("1");
 		/** isPackage */
@@ -123,13 +124,11 @@ public class OrderDaoTest extends SpringTransactionalTestCase{
 		/** caneltime */
 		order.setCaneltime("1");
 		/** shouldpaymoney */
-		order.setShouldpaymoney(1.0);
 		/** iscanfinal */
 		order.setIscanfinal("1");
 		/** payfreighttime */
 		order.setPayfreighttime(new java.util.Date());
 		/** totalamout */
-		order.setTotalamout(1.0);
 		/** isfreight */
 		order.setIsfreight("1");
 		/** payfreight */
@@ -142,67 +141,94 @@ public class OrderDaoTest extends SpringTransactionalTestCase{
 		order.setTransportnumber("1");
 		/** transportremark */
 		order.setTransportremark("1");
+		/** 物流跟踪状态 10 启运 20 抵港 30 到货 40 离开 50 签收 */
+		order.setLogisticsState(1);
+		/** 场站代码 */
+		order.setStationCode("1");
+		/** 车牌号码 */
+		order.setLicensePlateNumber("1");
+		/** 支付类型 01:银行卡支付 02:余额支付 03:其他 */
+		order.setDeclarePayType("1");
+		/** 支付公司编码 */
+		order.setPayCompanyCode("1");
+		/** 支付单号 */
+		order.setPayNumber("1");
+		/** 订单税款 */
 		
 		orderDao.save(order);
 		long saveRows = orderDao.count(query);
 		assertEquals(startRows + 1, saveRows);
 		
-		Order OrderQueried = orderDao.getById(order.getId());
-		assertNotNull("查询错误", OrderQueried);
-		assertEquals(OrderQueried.getId(), order.getId());
-		assertEquals(OrderQueried.getCode(), order.getCode());
-		assertEquals(OrderQueried.getAppraise(), order.getAppraise());
-		assertEquals(OrderQueried.getContent(), order.getContent());
-		assertEquals(OrderQueried.getOrdertime(), order.getOrdertime());
-		assertEquals(OrderQueried.getRemark(), order.getRemark());
-		assertEquals(OrderQueried.getGift(), order.getGift());
-		assertEquals(OrderQueried.getAmount(), order.getAmount());
-		assertEquals(OrderQueried.getCutamount(), order.getCutamount());
-		assertEquals(OrderQueried.getInvoicetype(), order.getInvoicetype());
-		assertEquals(OrderQueried.getInvoicecontent(), order.getInvoicecontent());
-		assertEquals(OrderQueried.getIscoupon(), order.getIscoupon());
-		assertEquals(OrderQueried.getPaytime(), order.getPaytime());
-		assertEquals(OrderQueried.getOnlinepay(), order.getOnlinepay());
-		assertEquals(OrderQueried.getReturnStatus(), order.getReturnStatus());
-		assertEquals(OrderQueried.getPayStatus(), order.getPayStatus());
-		assertEquals(OrderQueried.getPayType(), order.getPayType());
-		assertEquals(OrderQueried.getTransPrice(), order.getTransPrice());
-		assertEquals(OrderQueried.getIsBigOrder(), order.getIsBigOrder());
-		assertEquals(OrderQueried.getIsPackage(), order.getIsPackage());
-		assertEquals(OrderQueried.getStatus(), order.getStatus());
-		assertEquals(OrderQueried.getSource(), order.getSource());
-		assertEquals(OrderQueried.getReplacement(), order.getReplacement());
-		assertEquals(OrderQueried.getIsuserevaluate(), order.getIsuserevaluate());
-		assertEquals(OrderQueried.getIsshopevaluate(), order.getIsshopevaluate());
-		assertEquals(OrderQueried.getMember(), order.getMember());
-		assertEquals(OrderQueried.getShopId(), order.getShopId());
-		assertEquals(OrderQueried.getCreatoradmin(), order.getCreatoradmin());
-		assertEquals(OrderQueried.getModifieradmin(), order.getModifieradmin());
-		assertEquals(OrderQueried.getCreatedatetime(), order.getCreatedatetime());
-		assertEquals(OrderQueried.getUpdatedatetime(), order.getUpdatedatetime());
-		assertEquals(OrderQueried.getOrdertransport(), order.getOrdertransport());
-		assertEquals(OrderQueried.getStatementId(), order.getStatementId());
-		assertEquals(OrderQueried.getIsstatemented(), order.getIsstatemented());
-		assertEquals(OrderQueried.getCcgroupId(), order.getCcgroupId());
-		assertEquals(OrderQueried.getOrdertype(), order.getOrdertype());
-		assertEquals(OrderQueried.getAutocanceltime(), order.getAutocanceltime());
-		assertEquals(OrderQueried.getCancelsentdtime(), order.getCancelsentdtime());
-		assertEquals(OrderQueried.getYesnumber(), order.getYesnumber());
-		assertEquals(OrderQueried.getNonumber(), order.getNonumber());
-		assertEquals(OrderQueried.getCommodityId(), order.getCommodityId());
-		assertEquals(OrderQueried.getShopcontent(), order.getShopcontent());
-		assertEquals(OrderQueried.getStarlevel(), order.getStarlevel());
-		assertEquals(OrderQueried.getCaneltime(), order.getCaneltime());
-		assertEquals(OrderQueried.getShouldpaymoney(), order.getShouldpaymoney());
-		assertEquals(OrderQueried.getIscanfinal(), order.getIscanfinal());
-		assertEquals(OrderQueried.getPayfreighttime(), order.getPayfreighttime());
-		assertEquals(OrderQueried.getTotalamout(), order.getTotalamout());
-		assertEquals(OrderQueried.getIsfreight(), order.getIsfreight());
-		assertEquals(OrderQueried.getPayfreight(), order.getPayfreight());
-		assertEquals(OrderQueried.getTransportationId(), order.getTransportationId());
-		assertEquals(OrderQueried.getTransportationcompanyId(), order.getTransportationcompanyId());
-		assertEquals(OrderQueried.getTransportnumber(), order.getTransportnumber());
-		assertEquals(OrderQueried.getTransportremark(), order.getTransportremark());
+		Order orderQueried = orderDao.getById(order.getId());
+		assertNotNull("查询错误", orderQueried);
+			assertEquals(orderQueried.getId(), order.getId());
+			assertEquals(orderQueried.getCode(), order.getCode());
+			assertEquals(orderQueried.getAppraise(), order.getAppraise());
+			assertEquals(orderQueried.getContent(), order.getContent());
+			assertEquals(DateUtil.format(orderQueried.getOrdertime(), "yyyy-mm-dd HH:MM"), 
+				DateUtil.format(order.getOrdertime(), "yyyy-mm-dd HH:MM"));
+			assertEquals(orderQueried.getRemark(), order.getRemark());
+			assertEquals(orderQueried.getGift(), order.getGift());
+			assertEquals(orderQueried.getAmount(), order.getAmount());
+			assertEquals(orderQueried.getCutamount(), order.getCutamount());
+			assertEquals(orderQueried.getInvoicetype(), order.getInvoicetype());
+			assertEquals(orderQueried.getInvoicecontent(), order.getInvoicecontent());
+			assertEquals(orderQueried.getIscoupon(), order.getIscoupon());
+			assertEquals(DateUtil.format(orderQueried.getPaytime(), "yyyy-mm-dd HH:MM"), 
+				DateUtil.format(order.getPaytime(), "yyyy-mm-dd HH:MM"));
+			assertEquals(orderQueried.getOnlinepay(), order.getOnlinepay());
+			assertEquals(orderQueried.getReturnStatus(), order.getReturnStatus());
+			assertEquals(orderQueried.getPayStatus(), order.getPayStatus());
+			assertEquals(orderQueried.getPayType(), order.getPayType());
+			assertEquals(orderQueried.getTransPrice(), order.getTransPrice());
+			assertEquals(orderQueried.getIsBigOrder(), order.getIsBigOrder());
+			assertEquals(orderQueried.getIsPackage(), order.getIsPackage());
+			assertEquals(orderQueried.getStatus(), order.getStatus());
+			assertEquals(orderQueried.getSource(), order.getSource());
+			assertEquals(orderQueried.getReplacement(), order.getReplacement());
+			assertEquals(orderQueried.getIsuserevaluate(), order.getIsuserevaluate());
+			assertEquals(orderQueried.getIsshopevaluate(), order.getIsshopevaluate());
+			assertEquals(orderQueried.getMember(), order.getMember());
+			assertEquals(orderQueried.getShopId(), order.getShopId());
+			assertEquals(orderQueried.getCreatoradmin(), order.getCreatoradmin());
+			assertEquals(orderQueried.getModifieradmin(), order.getModifieradmin());
+			assertEquals(DateUtil.format(orderQueried.getCreatedatetime(), "yyyy-mm-dd HH:MM"), 
+				DateUtil.format(order.getCreatedatetime(), "yyyy-mm-dd HH:MM"));
+			assertEquals(DateUtil.format(orderQueried.getUpdatedatetime(), "yyyy-mm-dd HH:MM"), 
+				DateUtil.format(order.getUpdatedatetime(), "yyyy-mm-dd HH:MM"));
+			assertEquals(orderQueried.getOrdertransport(), order.getOrdertransport());
+			assertEquals(orderQueried.getStatementId(), order.getStatementId());
+			assertEquals(orderQueried.getIsstatemented(), order.getIsstatemented());
+			assertEquals(orderQueried.getCcgroupId(), order.getCcgroupId());
+			assertEquals(orderQueried.getOrdertype(), order.getOrdertype());
+			assertEquals(DateUtil.format(orderQueried.getAutocanceltime(), "yyyy-mm-dd HH:MM"), 
+				DateUtil.format(order.getAutocanceltime(), "yyyy-mm-dd HH:MM"));
+			assertEquals(DateUtil.format(orderQueried.getCancelsentdtime(), "yyyy-mm-dd HH:MM"), 
+				DateUtil.format(order.getCancelsentdtime(), "yyyy-mm-dd HH:MM"));
+			assertEquals(orderQueried.getYesnumber(), order.getYesnumber());
+			assertEquals(orderQueried.getNonumber(), order.getNonumber());
+			assertEquals(orderQueried.getCommodityId(), order.getCommodityId());
+			assertEquals(orderQueried.getShopcontent(), order.getShopcontent());
+			assertEquals(orderQueried.getStarlevel(), order.getStarlevel());
+			assertEquals(orderQueried.getCaneltime(), order.getCaneltime());
+			assertEquals(orderQueried.getShouldpaymoney(), order.getShouldpaymoney());
+			assertEquals(orderQueried.getIscanfinal(), order.getIscanfinal());
+			assertEquals(DateUtil.format(orderQueried.getPayfreighttime(), "yyyy-mm-dd HH:MM"), 
+				DateUtil.format(order.getPayfreighttime(), "yyyy-mm-dd HH:MM"));
+			assertEquals(orderQueried.getTotalamout(), order.getTotalamout());
+			assertEquals(orderQueried.getIsfreight(), order.getIsfreight());
+			assertEquals(orderQueried.getPayfreight(), order.getPayfreight());
+			assertEquals(orderQueried.getTransportationId(), order.getTransportationId());
+			assertEquals(orderQueried.getTransportationcompanyId(), order.getTransportationcompanyId());
+			assertEquals(orderQueried.getTransportnumber(), order.getTransportnumber());
+			assertEquals(orderQueried.getTransportremark(), order.getTransportremark());
+			assertEquals(orderQueried.getLogisticsState(), order.getLogisticsState());
+			assertEquals(orderQueried.getStationCode(), order.getStationCode());
+			assertEquals(orderQueried.getLicensePlateNumber(), order.getLicensePlateNumber());
+			assertEquals(orderQueried.getDeclarePayType(), order.getDeclarePayType());
+			assertEquals(orderQueried.getPayCompanyCode(), order.getPayCompanyCode());
+			assertEquals(orderQueried.getPayNumber(), order.getPayNumber());
+			assertEquals(orderQueried.getOrderTaxAmount(), order.getOrderTaxAmount());
 		
 		/** code */
 		order.setCode("2");
@@ -217,9 +243,7 @@ public class OrderDaoTest extends SpringTransactionalTestCase{
 		/** gift */
 		order.setGift("2");
 		/** amount */
-		order.setAmount(2.0);
 		/** cutamount */
-		order.setCutamount(2.0);
 		/** invoicetype */
 		order.setInvoicetype(2);
 		/** invoicecontent */
@@ -237,7 +261,6 @@ public class OrderDaoTest extends SpringTransactionalTestCase{
 		/** payType */
 		order.setPayType(2);
 		/** transPrice */
-		order.setTransPrice(2.0);
 		/** isBigOrder */
 		order.setIsBigOrder("2");
 		/** isPackage */
@@ -291,13 +314,11 @@ public class OrderDaoTest extends SpringTransactionalTestCase{
 		/** caneltime */
 		order.setCaneltime("2");
 		/** shouldpaymoney */
-		order.setShouldpaymoney(2.0);
 		/** iscanfinal */
 		order.setIscanfinal("2");
 		/** payfreighttime */
 		order.setPayfreighttime(new java.util.Date());
 		/** totalamout */
-		order.setTotalamout(2.0);
 		/** isfreight */
 		order.setIsfreight("2");
 		/** payfreight */
@@ -310,13 +331,27 @@ public class OrderDaoTest extends SpringTransactionalTestCase{
 		order.setTransportnumber("2");
 		/** transportremark */
 		order.setTransportremark("2");
+		/** 物流跟踪状态 10 启运 20 抵港 30 到货 40 离开 50 签收 */
+		order.setLogisticsState(2);
+		/** 场站代码 */
+		order.setStationCode("2");
+		/** 车牌号码 */
+		order.setLicensePlateNumber("2");
+		/** 支付类型 01:银行卡支付 02:余额支付 03:其他 */
+		order.setDeclarePayType("2");
+		/** 支付公司编码 */
+		order.setPayCompanyCode("2");
+		/** 支付单号 */
+		order.setPayNumber("2");
+		/** 订单税款 */
 		
 		orderDao.update(order);
 		Order orderUpdated = orderDao.getById(order.getId());
 		assertEquals(orderUpdated.getCode(), order.getCode());
 		assertEquals(orderUpdated.getAppraise(), order.getAppraise());
 		assertEquals(orderUpdated.getContent(), order.getContent());
-		assertEquals(orderUpdated.getOrdertime(), order.getOrdertime());
+		assertEquals(DateUtil.format(orderUpdated.getOrdertime(), "yyyy-mm-dd HH:MM"), 
+			DateUtil.format(orderUpdated.getOrdertime(), "yyyy-mm-dd HH:MM"));
 		assertEquals(orderUpdated.getRemark(), order.getRemark());
 		assertEquals(orderUpdated.getGift(), order.getGift());
 		assertEquals(orderUpdated.getAmount(), order.getAmount());
@@ -324,7 +359,8 @@ public class OrderDaoTest extends SpringTransactionalTestCase{
 		assertEquals(orderUpdated.getInvoicetype(), order.getInvoicetype());
 		assertEquals(orderUpdated.getInvoicecontent(), order.getInvoicecontent());
 		assertEquals(orderUpdated.getIscoupon(), order.getIscoupon());
-		assertEquals(orderUpdated.getPaytime(), order.getPaytime());
+		assertEquals(DateUtil.format(orderUpdated.getPaytime(), "yyyy-mm-dd HH:MM"), 
+			DateUtil.format(orderUpdated.getPaytime(), "yyyy-mm-dd HH:MM"));
 		assertEquals(orderUpdated.getOnlinepay(), order.getOnlinepay());
 		assertEquals(orderUpdated.getReturnStatus(), order.getReturnStatus());
 		assertEquals(orderUpdated.getPayStatus(), order.getPayStatus());
@@ -341,15 +377,19 @@ public class OrderDaoTest extends SpringTransactionalTestCase{
 		assertEquals(orderUpdated.getShopId(), order.getShopId());
 		assertEquals(orderUpdated.getCreatoradmin(), order.getCreatoradmin());
 		assertEquals(orderUpdated.getModifieradmin(), order.getModifieradmin());
-		assertEquals(orderUpdated.getCreatedatetime(), order.getCreatedatetime());
-		assertEquals(orderUpdated.getUpdatedatetime(), order.getUpdatedatetime());
+		assertEquals(DateUtil.format(orderUpdated.getCreatedatetime(), "yyyy-mm-dd HH:MM"), 
+			DateUtil.format(orderUpdated.getCreatedatetime(), "yyyy-mm-dd HH:MM"));
+		assertEquals(DateUtil.format(orderUpdated.getUpdatedatetime(), "yyyy-mm-dd HH:MM"), 
+			DateUtil.format(orderUpdated.getUpdatedatetime(), "yyyy-mm-dd HH:MM"));
 		assertEquals(orderUpdated.getOrdertransport(), order.getOrdertransport());
 		assertEquals(orderUpdated.getStatementId(), order.getStatementId());
 		assertEquals(orderUpdated.getIsstatemented(), order.getIsstatemented());
 		assertEquals(orderUpdated.getCcgroupId(), order.getCcgroupId());
 		assertEquals(orderUpdated.getOrdertype(), order.getOrdertype());
-		assertEquals(orderUpdated.getAutocanceltime(), order.getAutocanceltime());
-		assertEquals(orderUpdated.getCancelsentdtime(), order.getCancelsentdtime());
+		assertEquals(DateUtil.format(orderUpdated.getAutocanceltime(), "yyyy-mm-dd HH:MM"), 
+			DateUtil.format(orderUpdated.getAutocanceltime(), "yyyy-mm-dd HH:MM"));
+		assertEquals(DateUtil.format(orderUpdated.getCancelsentdtime(), "yyyy-mm-dd HH:MM"), 
+			DateUtil.format(orderUpdated.getCancelsentdtime(), "yyyy-mm-dd HH:MM"));
 		assertEquals(orderUpdated.getYesnumber(), order.getYesnumber());
 		assertEquals(orderUpdated.getNonumber(), order.getNonumber());
 		assertEquals(orderUpdated.getCommodityId(), order.getCommodityId());
@@ -358,7 +398,8 @@ public class OrderDaoTest extends SpringTransactionalTestCase{
 		assertEquals(orderUpdated.getCaneltime(), order.getCaneltime());
 		assertEquals(orderUpdated.getShouldpaymoney(), order.getShouldpaymoney());
 		assertEquals(orderUpdated.getIscanfinal(), order.getIscanfinal());
-		assertEquals(orderUpdated.getPayfreighttime(), order.getPayfreighttime());
+		assertEquals(DateUtil.format(orderUpdated.getPayfreighttime(), "yyyy-mm-dd HH:MM"), 
+			DateUtil.format(orderUpdated.getPayfreighttime(), "yyyy-mm-dd HH:MM"));
 		assertEquals(orderUpdated.getTotalamout(), order.getTotalamout());
 		assertEquals(orderUpdated.getIsfreight(), order.getIsfreight());
 		assertEquals(orderUpdated.getPayfreight(), order.getPayfreight());
@@ -366,6 +407,13 @@ public class OrderDaoTest extends SpringTransactionalTestCase{
 		assertEquals(orderUpdated.getTransportationcompanyId(), order.getTransportationcompanyId());
 		assertEquals(orderUpdated.getTransportnumber(), order.getTransportnumber());
 		assertEquals(orderUpdated.getTransportremark(), order.getTransportremark());
+		assertEquals(orderUpdated.getLogisticsState(), order.getLogisticsState());
+		assertEquals(orderUpdated.getStationCode(), order.getStationCode());
+		assertEquals(orderUpdated.getLicensePlateNumber(), order.getLicensePlateNumber());
+		assertEquals(orderUpdated.getDeclarePayType(), order.getDeclarePayType());
+		assertEquals(orderUpdated.getPayCompanyCode(), order.getPayCompanyCode());
+		assertEquals(orderUpdated.getPayNumber(), order.getPayNumber());
+		assertEquals(orderUpdated.getOrderTaxAmount(), order.getOrderTaxAmount());
 		
 		//delete
 		orderDao.deleteById(order.getId());

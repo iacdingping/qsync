@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.openteach</groupId>
 	<artifactId>qsync</artifactId>
@@ -16,10 +16,10 @@
 		<module>qsync-task</module>
 		<module>qsync-core</module>
 	</modules>
-  
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    	<java.version>1.6</java.version>
+		<java.version>1.6</java.version>
 		<java.encoding>UTF-8</java.encoding>
 		<org.springframework.version>3.2.4.RELEASE</org.springframework.version>
 		<ibatis.version>2.3.0</ibatis.version>
@@ -45,6 +45,7 @@
 		<org.json.version>20090211</org.json.version>
 		<commons-pool.version>1.6</commons-pool.version>
 		<commons-dbcp.version>20030825.184428</commons-dbcp.version>
+		<tomcat-jdbc.version>7.0.53</tomcat-jdbc.version>
 		<mysql-connector-java.version>5.1.24</mysql-connector-java.version>
 		<asm-all.version>3.0</asm-all.version>
 		<cglib.version>3.0</cglib.version>
@@ -59,8 +60,10 @@
 		<mockito.version>1.9.5</mockito.version>
 		<powermock.version>1.5.1</powermock.version>
 		<oval.version>1.84</oval.version>
+		<slf4j.version>1.7.7</slf4j.version>
+		<logback.version>1.1.2</logback.version>
 	</properties>
-  
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -93,73 +96,102 @@
 				<artifactId>qsync-core</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-			
-			<!-- Log Start -->
-			<dependency>
-				<groupId>commons-logging</groupId>
-				<artifactId>commons-logging</artifactId>
-				<version>1.1.1</version>
-			</dependency>
+
+			<!-- LOGGING begin -->
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
-				<version>1.4.3</version>
+				<version>${slf4j.version}</version>
 			</dependency>
+
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-classic</artifactId>
+				<version>${logback.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+
+			<!-- 代码直接调用log4j会被桥接到slf4j -->
 			<dependency>
 				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-log4j12</artifactId>
-				<version>1.4.3</version>
+				<artifactId>log4j-over-slf4j</artifactId>
+				<version>${slf4j.version}</version>
+				<scope>runtime</scope>
 			</dependency>
+			<!-- 代码直接调用common-logging会被桥接到slf4j -->
 			<dependency>
-				<groupId>log4j</groupId>
-				<artifactId>log4j</artifactId>
-				<version>1.2.12</version>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jcl-over-slf4j</artifactId>
+				<version>${slf4j.version}</version>
+				<scope>runtime</scope>
 			</dependency>
-			<!-- Log End -->
-			
+			<!-- 代码直接调用java.util.logging会被桥接到slf4j -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jul-to-slf4j</artifactId>
+				<version>${slf4j.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>com.googlecode.log4jdbc</groupId>
+				<artifactId>log4jdbc</artifactId>
+				<version>1.2</version>
+				<scope>runtime</scope>
+			</dependency>
+			<!-- LOGGING end -->
+
 			<dependency>
 				<groupId>commons-lang</groupId>
 				<artifactId>commons-lang</artifactId>
 				<version>${commons-lang.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
 				<version>${commons-io.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>commons-net</groupId>
 				<artifactId>commons-net</artifactId>
 				<version>${commons-net.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>commons-pool</groupId>
 				<artifactId>commons-pool</artifactId>
 				<version>${commons-pool.version}</version>
 			</dependency>
-            
+
 			<dependency>
 				<groupId>commons-dbcp</groupId>
 				<artifactId>commons-dbcp</artifactId>
 				<version>${commons-dbcp.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>net.sf.oval</groupId>
 				<artifactId>oval</artifactId>
 				<version>${oval.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>mysql</groupId>
 				<artifactId>mysql-connector-java</artifactId>
 				<version>${mysql-connector-java.version}</version>
 			</dependency>
-            
-            <!-- mybatis -->
+
+			<!-- connection pool -->
+			<dependency>
+				<groupId>org.apache.tomcat</groupId>
+				<artifactId>tomcat-jdbc</artifactId>
+				<version>${tomcat-jdbc.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+
+			<!-- mybatis -->
 			<dependency>
 				<groupId>org.mybatis</groupId>
 				<artifactId>mybatis</artifactId>
@@ -170,21 +202,21 @@
 				<artifactId>mybatis-spring</artifactId>
 				<version>1.2.0</version>
 			</dependency>
-            
-			<dependency>  
-	    		<groupId>net.sf.json-lib</groupId>  
-	    		<artifactId>json-lib</artifactId>  
-	    		<version>${json-lib.version}</version>  
-	    		<classifier>jdk15</classifier>
+
+			<dependency>
+				<groupId>net.sf.json-lib</groupId>
+				<artifactId>json-lib</artifactId>
+				<version>${json-lib.version}</version>
+				<classifier>jdk15</classifier>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>com.sun.xml.bind</groupId>
 				<artifactId>jaxb-impl</artifactId>
 				<version>${jaxb-impl.version}</version>
 			</dependency>
-			
-			<!-- Spring Start-->
+
+			<!-- Spring Start -->
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-beans</artifactId>
@@ -205,12 +237,12 @@
 				<artifactId>spring-jdbc</artifactId>
 				<version>${org.springframework.version}</version>
 			</dependency>
-	        <dependency>
+			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-context-support</artifactId>
 				<version>${org.springframework.version}</version>
 			</dependency>
-			
+
 			<!-- spring mvc -->
 			<dependency>
 				<groupId>org.springframework</groupId>
@@ -222,12 +254,12 @@
 				<artifactId>spring-webmvc</artifactId>
 				<version>${org.springframework.version}</version>
 			</dependency>
-	        <dependency>
+			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-webmvc</artifactId>
 				<version>${org.springframework.version}</version>
 			</dependency>
-			
+
 			<!-- aop/tx -->
 			<dependency>
 				<groupId>org.springframework</groupId>
@@ -250,27 +282,27 @@
 				<artifactId>spring-tx</artifactId>
 				<version>${org.springframework.version}</version>
 			</dependency>
-			
-	        <dependency>
+
+			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-test</artifactId>
 				<version>${org.springframework.version}</version>
 			</dependency>
-			<!-- Spring End-->
-			
+			<!-- Spring End -->
+
 			<dependency>
 				<groupId>javax.servlet</groupId>
 				<artifactId>servlet-api</artifactId>
 				<version>${servlet-api.version}</version>
 				<scope>provided</scope>
 			</dependency>
-			
-            <dependency>
-	    		<groupId>org.apache.velocity</groupId>
-	    		<artifactId>velocity</artifactId>
-	    		<version>${velocity.version}</version>
+
+			<dependency>
+				<groupId>org.apache.velocity</groupId>
+				<artifactId>velocity</artifactId>
+				<version>${velocity.version}</version>
 			</dependency>
-			
+
 			<!-- TEST begin -->
 			<!-- junit -->
 			<dependency>
@@ -316,21 +348,21 @@
 					<encoding>${java.encoding}</encoding>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
-        		<groupId>org.apache.maven.plugins</groupId>
-        		<artifactId>maven-source-plugin</artifactId>
-        		<version>2.1.2</version>
-        		<executions>
-          			<execution>
-            				<id>attach-sources</id>
-            				<phase>verify</phase>
-            				<goals>
-              					<goal>jar-no-fork</goal>
-            				</goals>
-          			</execution>
-        		</executions>
-      		</plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.1.2</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 		<resources>
 			<resource>
@@ -346,5 +378,5 @@
 				</includes>
 			</resource>
 		</resources>
-  </build>
+	</build>
 </project> 

@@ -25,21 +25,23 @@ import com.openteach.qsync.api.waybill.request.WayBill;
 import com.openteach.qsync.api.waybill.request.WayBillImportDto;
 import com.openteach.qsync.core.ConfigService;
 import com.openteach.qsync.core.OrderStatus;
-import com.openteach.qsync.core.declare.DeclarePayType;
-import com.openteach.qsync.core.declare.DeclarePayTypeManager;
-import com.openteach.qsync.core.goods.Commsku;
-import com.openteach.qsync.core.goods.CommskuManager;
-import com.openteach.qsync.core.goods.TransportCommodity;
-import com.openteach.qsync.core.goods.TransportCommodityManager;
-import com.openteach.qsync.core.info.Member;
-import com.openteach.qsync.core.info.MemberManager;
-import com.openteach.qsync.core.logistics.Transportationcompany;
-import com.openteach.qsync.core.logistics.TransportationcompanyManager;
-import com.openteach.qsync.core.order.Order;
-import com.openteach.qsync.core.order.OrderManager;
-import com.openteach.qsync.core.order.OrderQuery;
-import com.openteach.qsync.core.order.OrderTransport;
-import com.openteach.qsync.core.order.OrderTransportManager;
+import com.openteach.qsync.core.entity.goods.Commsku;
+import com.openteach.qsync.core.entity.info.Country;
+import com.openteach.qsync.core.entity.info.Member;
+import com.openteach.qsync.core.entity.logistics.TransportCommodity;
+import com.openteach.qsync.core.entity.logistics.Transportation;
+import com.openteach.qsync.core.entity.logistics.Transportationcompany;
+import com.openteach.qsync.core.entity.order.Order;
+import com.openteach.qsync.core.entity.order.OrderTransport;
+import com.openteach.qsync.core.manager.goods.CommskuManager;
+import com.openteach.qsync.core.manager.info.CountryManager;
+import com.openteach.qsync.core.manager.info.MemberManager;
+import com.openteach.qsync.core.manager.logistics.TransportCommodityManager;
+import com.openteach.qsync.core.manager.logistics.TransportationManager;
+import com.openteach.qsync.core.manager.logistics.TransportationcompanyManager;
+import com.openteach.qsync.core.manager.order.OrderManager;
+import com.openteach.qsync.core.manager.order.OrderTransportManager;
+import com.openteach.qsync.core.query.order.OrderQuery;
 import com.openteach.qsync.util.common.DateUtil;
 
 /**
@@ -54,10 +56,11 @@ public class AssembleService implements InitializingBean {
 	@Autowired private ConfigService configService;
 	@Autowired private OrderManager orderManager;
 	@Autowired private MemberManager memberManager;
-	@Autowired private DeclarePayTypeManager declarePayTypeManager;
+	@Autowired private CountryManager countryManager;
 	@Autowired private OrderTransportManager orderTransportManager;
 	@Autowired private TransportCommodityManager transportCommodityManager;
 	@Autowired private CommskuManager commskuManager;
+	@Autowired private TransportationManager transportationManager;
 	@Autowired private TransportationcompanyManager transportationcompanyManager;
 	
 	private JkfSign jkfSign;
@@ -71,23 +74,25 @@ public class AssembleService implements InitializingBean {
 			Member member = memberManager.getById(order.getMember());
 			order.setMemberObject(member);
 			
+			Transportation transportation = transportationManager.getById(order.getTransportationId());
+			order.setTransportationObject(transportation);
 			Transportationcompany transportationcompany = transportationcompanyManager.getById(order.getTransportationcompanyId());
 			order.setTransportationcompanyObject(transportationcompany);
 			
 			OrderTransport orderTransport = orderTransportManager.getById(order.getOrdertransport());
-			List<TransportCommodity> transportCommoditiyList = transportCommodityManager.getByOrderTransport(order.getOrdertransport());
+			List<TransportCommodity> transportCommodityList = transportCommodityManager.listByOrderTransport(order.getOrdertransport());
 			int totalGoodsCount = 0;
 			double totalGoodsWeight = 0.0;
-			for(TransportCommodity tc : transportCommoditiyList) {
+			for(TransportCommodity tc : transportCommodityList) {
 				Commsku commsku = commskuManager.getByIdMappedCommodity(tc.getSkuId());
 				tc.setCommskuObject(commsku);
 				//计算总件数与总重量
 				totalGoodsCount += tc.getDelivernum().intValue();
-				totalGoodsWeight += tc.getDelivernum().intValue() * tc.getCommskuObject().getCommodity().getWeight().doubleValue();
+				totalGoodsWeight += tc.getDelivernum().intValue() * tc.getCommskuObject().getCommodityObject().getWeight().doubleValue();
 			}
 			order.setTotalGoodsCount(totalGoodsCount);
 			order.setTotalGoodsWeight(totalGoodsWeight);
-			orderTransport.setTransportCommodityList(transportCommoditiyList);
+			orderTransport.setTransportCommodityList(transportCommodityList);;
 			order.setOrderTransportObject(orderTransport);
 			
 		}
@@ -108,32 +113,32 @@ public class AssembleService implements InitializingBean {
 		jkfOrderImportHead.setCompanyName(configService.getDeclareCompanyName());
 		jkfOrderImportHead.setCompanyCode(configService.getDeclareCompanyCode());
 		jkfOrderImportHead.setIeFlag("I");
-		DeclarePayType declarePayType = declarePayTypeManager.getDeclarePayType(order.getOnlinepay());
-		jkfOrderImportHead.setPayType(declarePayType.getDeclarePayType());
-		jkfOrderImportHead.setPayCompanyCode(declarePayType.getPlatformPayCompanyCode());
-		jkfOrderImportHead.setPayNumber();
+		jkfOrderImportHead.setPayType(order.getDeclarePayType());	//cc_kata_kplus_order.declare_pay_type
+		jkfOrderImportHead.setPayCompanyCode(order.getPayCompanyCode());		//cc_kata_kplus_order.pay_company_code
+		jkfOrderImportHead.setPayNumber(order.getPayNumber());	//cc_kata_kplus_order.pay_number
 		jkfOrderImportHead.setTotalAmount(order.getAmount());
 		jkfOrderImportHead.setOrderNo(order.getCode());
-		jkfOrderImportHead.setOrderTaxAmount();
+		jkfOrderImportHead.setOrderTaxAmount(order.getOrderTaxAmount());	//cc_kata_kplus_order.order_tax_amount
 		jkfOrderImportHead.setFeeAmount(order.getTransPrice());
 		jkfOrderImportHead.seteCommerceCode(configService.getDeclareRecordNo());
 		jkfOrderImportHead.seteCommerceName(configService.getDeclareCompanyName());
 		jkfOrderImportHead.setTradeTime(DateUtil.format(order.getOrdertime()));
 		jkfOrderImportHead.setCurrCode(configService.getDeclareCurrency());
 		jkfOrderImportHead.setTotalAmount(order.getAmount() + order.getTransPrice());
-		jkfOrderImportHead.setConsigneeEmail();
+		jkfOrderImportHead.setConsigneeEmail(order.getOrderTransportObject().getConsigneeEmail());	//cc_kata_kplus_order_transport.consignee_email
 		jkfOrderImportHead.setConsigneeTel(order.getOrderTransportObject().getPhonenumber());
 		jkfOrderImportHead.setConsignee(order.getOrderTransportObject().getFirstname() + " " + order.getOrderTransportObject().getLastname());
 		jkfOrderImportHead.setConsigneeAddress(StringUtils.defaultIfEmpty(
 				order.getOrderTransportObject().getAddress1(), order.getOrderTransportObject().getAddress2()));
 		jkfOrderImportHead.setTotalCount(order.getTotalGoodsCount());
-		jkfOrderImportHead.setPostMode(postMode);	//transportaion.type
-		jkfOrderImportHead.setSalerCountry();		//order_transport.addressorCountry
-		jkfOrderImportHead.setAddressorName();	//order_transport.addressorName
+		jkfOrderImportHead.setPostMode(order.getTransportationObject().getType().toString());	//transportaion.type
+		Country country = countryManager.getById(order.getOrderTransportObject().getAddressorCountry());
+		jkfOrderImportHead.setSalerCountry(country.getCountryCode());		//order_transport.addressorCountry
+		jkfOrderImportHead.setAddressorName(order.getOrderTransportObject().getAddressorName());	//order_transport.addressorName
 		jkfOrderImportHead.setPurchaserId(order.getMemberObject().getId().toString());
-		jkfOrderImportHead.setLogisCompanyName(logisCompanyName);	//cc_kata_kplus_transportationcompany.name
-		jkfOrderImportHead.setLogisCompanyCode(logisCompanyCode);	//cc_kata_kplus_transportationcompany.code
-		jkfOrderImportHead.setZipCode(zipCode);	//cc_kata_kplus_transportationcompany.zip_code
+		jkfOrderImportHead.setLogisCompanyName(order.getTransportationcompanyObject().getName());	//cc_kata_kplus_transportationcompany.name
+		jkfOrderImportHead.setLogisCompanyCode(order.getTransportationcompanyObject().getCode());	//cc_kata_kplus_transportationcompany.code
+		jkfOrderImportHead.setZipCode(order.getTransportationcompanyObject().getZipCode());	//??? cc_kata_kplus_transportationcompany.zip_code 
 		orderInfo.setJkfOrderImportHead(jkfOrderImportHead);
 		
 		List<JkfOrderDetail> jkfOrderDetailList = new ArrayList<JkfOrderDetail>();
@@ -144,13 +149,14 @@ public class AssembleService implements InitializingBean {
 			JkfOrderDetail jkfOrderDetail = new JkfOrderDetail();
 			jkfOrderDetail.setGoodsOrder(i);
 			jkfOrderDetail.setGoodsName(commsku.getName());
-			jkfOrderDetail.setGoodsNo(goodsNo);	//cc_kata_kplus_commodity.tariff
-			jkfOrderDetail.setGoodsModel(commsku.getCommodity().getItemcode());
-			jkfOrderDetail.setCountryCode(countryCode);	//cc_kata_kplus_commodity.sales_country
+			jkfOrderDetail.setGoodsNo(commsku.getCommodityObject().getTariff());	//cc_kata_kplus_commodity.tariff
+			jkfOrderDetail.setGoodsModel(commsku.getCommodityObject().getItemcode());
+			Country country2 = countryManager.getById(commsku.getCommodityObject().getSalesCountry());
+			jkfOrderDetail.setCountryCode(country2.getCountryCode());	//cc_kata_kplus_commodity.sales_country
 			jkfOrderDetail.setUnitPrice(tc.getPrice());
 			jkfOrderDetail.setGoodsCount(tc.getDelivernum().doubleValue());
-			jkfOrderDetail.setGoodsUnit(goodsUnit);	//cc_kata_kplus_commodity.unit
-			jkfOrderDetail.setWeight(commsku.getCommodity().getWeight().doubleValue());
+			jkfOrderDetail.setGoodsUnit(commsku.getCommodityObject().getUnit());	//cc_kata_kplus_commodity.unit
+			jkfOrderDetail.setWeight(commsku.getCommodityObject().getWeight().doubleValue());
 			jkfOrderDetailList.add(jkfOrderDetail);
 		}
 		orderInfo.setJkfOrderDetailList(jkfOrderDetailList);
@@ -160,8 +166,8 @@ public class AssembleService implements InitializingBean {
 		jkfGoodsPurchaser.setName(order.getMemberObject().getTruename());
 		jkfGoodsPurchaser.setEmail(order.getMemberObject().getEmail());
 		jkfGoodsPurchaser.setTelNumber(StringUtils.defaultIfEmpty(order.getMemberObject().getHandphone(), order.getMemberObject().getPhonenumber()));
-		jkfGoodsPurchaser.setPaperType();	//kata_kplus_member.certificates_type
-		jkfGoodsPurchaser.setPaperNumber();	//kata_kplus_member.certificates
+		jkfGoodsPurchaser.setPaperType(order.getMemberObject().getCertificatesType());	//kata_kplus_member.certificates_type
+		jkfGoodsPurchaser.setPaperNumber(order.getMemberObject().getCertificates());	//kata_kplus_member.certificates
 		jkfGoodsPurchaser.setAddress(order.getMemberObject().getAddress());
 		orderInfo.setJkfGoodsPurchaser(jkfGoodsPurchaser);
 		
@@ -184,12 +190,12 @@ public class AssembleService implements InitializingBean {
 		jkfLogisticsInfo.setLogisticsCompanyNo(order.getTransportationcompanyObject().getCode());
 		jkfLogisticsInfo.setLogisticsCompanyName(order.getTransportationcompanyObject().getName());
 		jkfLogisticsInfo.setLogisticsWaybillNo(order.getTransportnumber());
-		jkfLogisticsInfo.setLogisticsTraceState(logisticsTraceState);	// cc_kata_kplus_order.logistics_state
+		jkfLogisticsInfo.setLogisticsTraceState(order.getLogisticsState());	// cc_kata_kplus_order.logistics_state
 		jkfLogisticsInfo.setWeight(order.getTotalGoodsWeight());
 		jkfLogisticsInfo.setPieceNumber(order.getTotalGoodsCount());
 		jkfLogisticsInfo.setHandleTimeStr(order.getOrdertime());
-		jkfLogisticsInfo.setStationCode(stationCode);//cc_kata_kplus_order.station_code
-		jkfLogisticsInfo.setLicensePlateNumber(licensePlateNumber); //cc_kata_kplus_order.license_plate_number
+		jkfLogisticsInfo.setStationCode(order.getStationCode());//cc_kata_kplus_order.station_code
+		jkfLogisticsInfo.setLicensePlateNumber(order.getLicensePlateNumber()); //cc_kata_kplus_order.license_plate_number
 		logistics.setJkfLogisticsInfo(jkfLogisticsInfo);
 		logistics.setJkfSign(jkfSign);
 		body.setLogisticsList(Arrays.asList(logistics));
@@ -215,7 +221,7 @@ public class AssembleService implements InitializingBean {
 		
 		GoodsDeclar goodsDeclar = new GoodsDeclar();
 		goodsDeclarModule.setGoodsDeclar(goodsDeclar);
-		goodsDeclar.setAccountBookNo(System.currentTimeMillis() + "");	//???账册编号
+		goodsDeclar.setAccountBookNo(configService.getDeclareAccountBookNo());	//账册编号 由仓储企业提供
 		goodsDeclar.setInOutFlag("I");
 		goodsDeclar.setPreEntryNumber(configService.getDeclareRecordNo() + (BASE_ID + order.getId()));
 		goodsDeclar.setImportType(configService.getDeclareType());
@@ -223,8 +229,8 @@ public class AssembleService implements InitializingBean {
 		goodsDeclar.setInOutPortNumber(configService.getDeclareInOutPortNumber());
 		goodsDeclar.setArrivedPort(configService.getDeclareArrivedPort());
 		goodsDeclar.setTransportTool(order.getTransportationObject().getName());
-		goodsDeclar.setTransportToolFltNo();	//cc_kata_kplus_transportation.tool_flt_no
-		goodsDeclar.setTransportTypeCode();	//cc_kata_kplus_transportation.type_code
+		goodsDeclar.setTransportToolFltNo(order.getTransportationObject().getToolFltNo());	//cc_kata_kplus_transportation.tool_flt_no
+		goodsDeclar.setTransportTypeCode(order.getTransportationObject().getTypeCode());	//cc_kata_kplus_transportation.type_code
 		goodsDeclar.setDeclareCompanyType(configService.getDeclareCompanyType());
 		goodsDeclar.setDeclareCompanyCode(configService.getDeclareCompanyCode());
 		goodsDeclar.setDeclareCompanyName(configService.getDeclareCompanyName());
@@ -232,23 +238,25 @@ public class AssembleService implements InitializingBean {
 		goodsDeclar.setEeBusinessCompanyName(configService.getDeclareCompanyName());
 		goodsDeclar.setOrderNumber(order.getCode());
 		goodsDeclar.setSubCarriageNo("");
-		goodsDeclar.setFromCountry(fromCountry);	//cc_kata_kplus_transportation.from_country
+		Country fromCountry = countryManager.getById(order.getTransportationObject().getFromCountry());
+		goodsDeclar.setFromCountry(fromCountry.getCountryCode());	//cc_kata_kplus_transportation.from_country
 		goodsDeclar.setPieceNumber(order.getTotalGoodsCount());
 		goodsDeclar.setRoughWeight(order.getTotalGoodsWeight());
 		goodsDeclar.setNetWeight(order.getTotalGoodsWeight());
-		goodsDeclar.setPackType(packType);	//cc_kata_kplus_transportation.pack_type
+		goodsDeclar.setPackType(order.getTransportationObject().getPackType());	//cc_kata_kplus_transportation.pack_type
 		goodsDeclar.setRemark("");
 		goodsDeclar.setDeclarePortCode(configService.getDeclareInOutPortNumber());
 		goodsDeclar.setEnteringPerson("9999");
 		goodsDeclar.setEnteringCompanyName("9999");
 		goodsDeclar.setDeclarantCode("");
 		goodsDeclar.setGoodsYardCode(configService.getDeclareArrivedPort());
-		goodsDeclar.setSender();	// cc_kata_kplus_order_transport.addressor_name
-		goodsDeclar.setReceiver(order.getOrderTransportObject().getCongsignee());	
-		goodsDeclar.setSenderCountry(senderCountry);  //cc_kata_kplus_order_transport.addressor_country
-		goodsDeclar.setSenderCity(senderCity);	//cc_kata_kplus_order_transport.addressor_city
-		goodsDeclar.setReceiverPapersNo(order.getMemberObject().);	//kata_kplus_member.certificates_type
-		goodsDeclar.setReceiverPapersNo(receiverPapersNo);	//kata_kplus_member.certificates
+		goodsDeclar.setSender(order.getOrderTransportObject().getAddressorName());	// cc_kata_kplus_order_transport.addressor_name
+		goodsDeclar.setReceiver(order.getOrderTransportObject().getCongsignee());
+		Country senderCountry = countryManager.getById(order.getOrderTransportObject().getAddressorCountry());
+		goodsDeclar.setSenderCountry(senderCountry.getCountryCode());  //cc_kata_kplus_order_transport.addressor_country
+		goodsDeclar.setSenderCity(order.getOrderTransportObject().getAddressorCity());	//cc_kata_kplus_order_transport.addressor_city
+		goodsDeclar.setReceiverPapersNo(order.getMemberObject().getCertificatesType());	//???kata_kplus_member.certificates_type
+		goodsDeclar.setReceiverPapersNo(order.getMemberObject().getCertificates());	//???kata_kplus_member.certificates
 		goodsDeclar.setWorth(order.getTotalamout());
 		goodsDeclar.setCurrency(configService.getDeclareCurrency());
 		
@@ -264,7 +272,7 @@ public class AssembleService implements InitializingBean {
 		goodsDeclar.setMajorGoodsName(sb.toString());
 		goodsDeclar.setInternalAreaCompanyName(configService.getDeclareInternalAreaCompanyName());
 		goodsDeclar.setInternalAreaCompanyNo(configService.getDeclareInternalAreaCompanyNo());
-		goodsDeclar.setApplicationFormNo(applicationFormNo);	//cc_kata_kplus_transportation.application_form_no
+		goodsDeclar.setApplicationFormNo(order.getTransportationObject().getApplicationFormNo());	//cc_kata_kplus_transportation.application_form_no
 		goodsDeclar.setIsAuthorize((byte)0);
 		
 		List<GoodsDeclarDetail> goodsDeclarDetails = new ArrayList<GoodsDeclarDetail>();
@@ -274,20 +282,21 @@ public class AssembleService implements InitializingBean {
 			Commsku commsku = tc.getCommskuObject();
 			GoodsDeclarDetail cdd = new GoodsDeclarDetail();
 			cdd.setGoodsOrder(i);
-			cdd.setMailTaxNo(mailTaxNo);	//cc_kata_kplus_commodity.tariff
-			cdd.setGoodsItemNo(i+ ""); // ???????? 待确定
+			cdd.setMailTaxNo(commsku.getCommodityObject().getTariff());	//cc_kata_kplus_commodity.tariff
+			cdd.setGoodsItemNo(tc.getGoodsItemNo()); // 由仓储提供 cc_kata_kplus_transport_commodity.goods_item_no
 			cdd.setGoodsName(commsku.getName());
-			cdd.setGoodsSpecification(goodsSpecification);	//cc_kata_kplus_commodity.specification
-			cdd.setProductionMarketingCountry(productionMarketingCountry);	//cc_kata_kplus_commodity.sales_country
+			cdd.setGoodsSpecification(commsku.getCommodityObject().getSpecification());	//cc_kata_kplus_commodity.specification
+			Country country = countryManager.getById(commsku.getCommodityObject().getSalesCountry());
+			cdd.setProductionMarketingCountry(country.getCountryCode());	//cc_kata_kplus_commodity.sales_country
 			cdd.setBargainCurrency(configService.getDeclareCurrency());
 			cdd.setBargainTotalPrices(tc.getPrice() * tc.getDelivernum());
 			cdd.setDeclarePrice(tc.getPrice());
 			cdd.setDeclareTotalPrices(tc.getPrice() * tc.getDelivernum());
 			cdd.setPurpose("");
 			cdd.setDeclareCount(tc.getDelivernum());
-			cdd.setDeclareMeasureUnit(declareMeasureUnit);	//cc_kata_kplus_commodity.unit
-			cdd.setGoodsRoughWeight(commsku.getCommodity().getWeight());
-			cdd.setFirstUnit(firstUnit);	//cc_kata_kplus_commodity.unit_desc
+			cdd.setDeclareMeasureUnit(commsku.getCommodityObject().getUnit());	//cc_kata_kplus_commodity.unit
+			cdd.setGoodsRoughWeight(commsku.getCommodityObject().getWeight());
+			cdd.setFirstUnit(commsku.getCommodityObject().getUnitDesc());	//cc_kata_kplus_commodity.unit_desc
 			cdd.setFirstCount(tc.getDelivernum());
 			goodsDeclarDetails.add(cdd);
 		}
@@ -328,12 +337,13 @@ public class AssembleService implements InitializingBean {
 		if(sb.length() > 0) 
 			sb.deleteCharAt(sb.length() - 1);
 		dto.setGoodsName(sb.toString());
-		dto.setSendArea();	//cc_kata_kplus_order_transport.addressor_country + addressor_city
+		Country addressorCountry = countryManager.getById(order.getOrderTransportObject().getAddressorCountry());
+		dto.setSendArea(addressorCountry.getName() + order.getOrderTransportObject().getAddressorCity());	//cc_kata_kplus_order_transport.addressor_country + addressor_city
 		dto.setConsigneeArea(order.getOrderTransportObject().getAddress1());
 		dto.setConsigneeAddress(order.getOrderTransportObject().getAddress1());
 		dto.setConsignee(order.getOrderTransportObject().getFirstname() + " " + order.getOrderTransportObject().getLastname());
 		dto.setConsigneeTel(order.getOrderTransportObject().getPhonenumber());
-		dto.setZipCode();	//cc_kata_kplus_order_transport.zip_code
+		dto.setZipCode(order.getOrderTransportObject().getZipCode());	//cc_kata_kplus_order_transport.zip_code
 		dto.setCustomsCode(configService.getDeclareCustomsCode());
 		dto.setWorth(order.getTotalamout());
 		dto.setImportDateString(order.getOrdertime());

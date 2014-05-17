@@ -4,7 +4,7 @@
 
 
 <!-- namespace必须指向Dao接口 -->
-<mapper namespace="com.openteach.qsync.core.goods.CommskuDao">
+<mapper namespace="com.openteach.qsync.core.dao.goods.CommskuDao">
 	
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goods-Commsku-columns">

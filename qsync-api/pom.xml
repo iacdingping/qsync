@@ -39,24 +39,31 @@
 			<artifactId>oval</artifactId>
 		</dependency>
 		
-		<!-- Log Start -->
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-		</dependency>
+		<!-- 代码直接调用log4j会被桥接到slf4j -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
+			<artifactId>log4j-over-slf4j</artifactId>
+			<scope>runtime</scope>
 		</dependency>
+		<!-- 代码直接调用common-logging会被桥接到slf4j -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<scope>runtime</scope>
 		</dependency>
+		<!-- 代码直接调用java.util.logging会被桥接到slf4j -->
 		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jul-to-slf4j</artifactId>
+			<scope>runtime</scope>
 		</dependency>
-		<!-- Log End -->
+
+		<dependency>
+			<groupId>com.googlecode.log4jdbc</groupId>
+			<artifactId>log4jdbc</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- LOGGING end -->
 		
 		<dependency>
 			<groupId>com.sun.xml.bind</groupId>

@@ -4,12 +4,12 @@
 
 
 <!-- namespace必须指向Dao接口 -->
-<mapper namespace="com.openteach.qsync.core.logistics.TransportationDao">
+<mapper namespace="com.openteach.qsync.core.dao.logistics.TransportationDao">
 	
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="logistics-Transportation-columns">
 	    <![CDATA[
-		`id` as `id`, `name` as `name`, `picurl` as `picurl`, `remark` as `remark`, `freeshipping` as `freeshipping`, `isdeleted` as `isdeleted`, `createDatetime` as `createDatetime`, `updatedatetime` as `updatedatetime`
+		`id` as `id`, `name` as `name`, `picurl` as `picurl`, `remark` as `remark`, `freeshipping` as `freeshipping`, `isdeleted` as `isdeleted`, `createDatetime` as `createDatetime`, `updatedatetime` as `updatedatetime`, `type` as `type`, `tool_flt_no` as `toolFltNo`, `type_code` as `typeCode`, `from_country` as `fromCountry`, `pack_type` as `packType`, `application_form_no` as `applicationFormNo`
 	    ]]>
 	</sql>	
 
@@ -17,9 +17,9 @@
 	<insert id="save" useGeneratedKeys="true" keyProperty="id">
     <![CDATA[
         INSERT INTO cc_kata_kplus_transportation (
-        `id`, `name`, `picurl`, `remark`, `freeshipping`, `isdeleted`, `createDatetime`, `updatedatetime`
+        `id`, `name`, `picurl`, `remark`, `freeshipping`, `isdeleted`, `createDatetime`, `updatedatetime`, `type`, `tool_flt_no`, `type_code`, `from_country`, `pack_type`, `application_form_no`
         ) VALUES (
-        #{id}, #{name}, #{picurl}, #{remark}, #{freeshipping}, #{isdeleted}, #{createDatetime}, #{updatedatetime}        
+        #{id}, #{name}, #{picurl}, #{remark}, #{freeshipping}, #{isdeleted}, #{createDatetime}, #{updatedatetime}, #{type}, #{toolFltNo}, #{typeCode}, #{fromCountry}, #{packType}, #{applicationFormNo}        
         )
     ]]>
 		<!--	
@@ -34,7 +34,7 @@
 	<update id="update">
     <![CDATA[
         UPDATE cc_kata_kplus_transportation SET
-	        `name` = #{name} , `picurl` = #{picurl} , `remark` = #{remark} , `freeshipping` = #{freeshipping} , `isdeleted` = #{isdeleted} , `createDatetime` = #{createDatetime} , `updatedatetime` = #{updatedatetime}  
+	        `name` = #{name} , `picurl` = #{picurl} , `remark` = #{remark} , `freeshipping` = #{freeshipping} , `isdeleted` = #{isdeleted} , `createDatetime` = #{createDatetime} , `updatedatetime` = #{updatedatetime} , `type` = #{type} , `tool_flt_no` = #{toolFltNo} , `type_code` = #{typeCode} , `from_country` = #{fromCountry} , `pack_type` = #{packType} , `application_form_no` = #{applicationFormNo}  
         WHERE 
         	id = #{id}  	        
     ]]>
@@ -89,6 +89,24 @@
 		   <if test="updatedatetimeEnd != null">
 				AND `updatedatetime` &lt;= #{updatedatetimeEnd}
 		   </if>
+	       <if test="type">
+				AND `type` = #{type}
+			</if>
+	       <if test="toolFltNo">
+				AND `tool_flt_no` = #{toolFltNo}
+			</if>
+	       <if test="typeCode">
+				AND `type_code` = #{typeCode}
+			</if>
+	       <if test="fromCountry">
+				AND `from_country` = #{fromCountry}
+			</if>
+	       <if test="packType">
+				AND `pack_type` = #{packType}
+			</if>
+	       <if test="applicationFormNo">
+				AND `application_form_no` = #{applicationFormNo}
+			</if>
 		</where>
 	</sql>
 		

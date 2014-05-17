@@ -6,23 +6,26 @@ import org.springframework.stereotype.Service;
 @Service
 public class ConfigService {
 	//企业备案编号
-	@Value("${declare.company.code}")
+	@Value("${declare.companyCode}")
 	private String declareCompanyCode;
 	//电商平台名称
-	@Value("${declare.company.name}")
+	@Value("${declare.companyName}")
 	private String declareCompanyName;
 	//业务编号
-	@Value("${declare.business.no}")
+	@Value("${declare.businessNo}")
 	private String declareBusinessNo;
 	//业务类型
-	@Value("${declare.business.type}")
+	@Value("${declare.businessType}")
 	private String declareBusinessType;
 	//申报类型代码
 	@Value("${declare.type}")
 	private String declareType;
 	//电商企业编码
-	@Value("${declare.record.no}")
+	@Value("${declare.recordNo}")
 	private String declareRecordNo;
+	//电商企业名
+	@Value("${declare.recordName}")
+	private String declareRecordName;
 	//币制
 	@Value("${declare.currency}")
 	private String declareCurrency;
@@ -33,7 +36,11 @@ public class ConfigService {
 	@Value("${declare.arrivedPort}")
 	private String declareArrivedPort;
 	@Value("${declare.companyType}")
+	//申报单位类别：个人委托电商企业申报 | 个人委托物流企业申报 | 个人委托第三方申报
 	private String declareCompanyType;
+	//账册编号
+	@Value("${declare.accountBookNo}")
+	private String declareAccountBookNo;
 	//区内企业编码 保税进口必填 填报仓储企业编码
 	@Value("${declare.internalAreaCompanyNo}")
 	private String declareInternalAreaCompanyNo;
@@ -122,5 +129,17 @@ public class ConfigService {
 	}
 	public void setDeclareCustomsCode(String declareCustomsCode) {
 		this.declareCustomsCode = declareCustomsCode;
+	}
+	public String getDeclareRecordName() {
+		return declareRecordName;
+	}
+	public void setDeclareRecordName(String declareRecordName) {
+		this.declareRecordName = declareRecordName;
+	}
+	public String getDeclareAccountBookNo() {
+		return declareAccountBookNo;
+	}
+	public void setDeclareAccountBookNo(String declareAccountBookNo) {
+		this.declareAccountBookNo = declareAccountBookNo;
 	}
 }

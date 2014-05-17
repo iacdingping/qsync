@@ -11,7 +11,7 @@ import org.apache.commons.logging.LogFactory;
 import com.openteach.qcity.qsync.common.lifecycle.AbstractLifeCycle;
 import com.openteach.qsync.api.XmlRequest;
 import com.openteach.qsync.api.utils.JaxbUtils;
-import com.openteach.qsync.core.order.Order;
+import com.openteach.qsync.core.entity.order.Order;
 import com.openteach.qsync.service.declare.AssembleService;
 import com.openteach.qsync.task.Task;
 import com.openteach.qsync.task.TaskGenerator;

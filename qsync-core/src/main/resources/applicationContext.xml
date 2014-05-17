@@ -25,7 +25,7 @@
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 -->
-		<property name="typeAliasesPackage" value="com.openteach.qsync" />
+		<property name="typeAliasesPackage" value="com.openteach.qsync.core.entity" />
 		<!-- 显式指定Mapper文件位置 -->
 		<property name="mapperLocations" value="classpath:/mapping/*/*Mapper.xml" />
 	</bean>
@@ -47,7 +47,7 @@
 	<!-- <aop:aspectj-autoproxy proxy-target-class="true"/> -->
 	
 	<!-- production环境 -->
- 	<beans profile="test">
+ 	<beans profile="production">
  		<context:property-placeholder ignore-unresolvable="true"
 			location="classpath*:/application.production.properties,
 				classpath*:/override.production.properties" />	
@@ -93,12 +93,13 @@
 			location="classpath*:/application.test.properties,
 				classpath*:/override.test.properties" />	
 		
-		<!-- Spring Simple连接池 -->
-		<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
-			<property name="driverClass" value="${jdbc.driver}" />
+		<!-- Tomcat JDBC连接池 -->
+		<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+			<property name="driverClassName" value="${jdbc.driver}" />
 			<property name="url" value="${jdbc.url}" />
 			<property name="username" value="${jdbc.username}" />
 			<property name="password" value="${jdbc.password}" />
+			<property name="defaultAutoCommit" value="false" />
 		</bean>
 
 		<!-- 初始化数据表结构 与默认数据
