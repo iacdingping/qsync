@@ -90,6 +90,7 @@ public class Order {
     /**
      * code       db_column: code 
      */	
+	@NotNull
 	private java.lang.String code;
     /**
      * appraise       db_column: appraise 
@@ -102,6 +103,7 @@ public class Order {
     /**
      * ordertime       db_column: ordertime 
      */	
+	@NotNull
 	private java.util.Date ordertime;
     /**
      * remark       db_column: remark 
@@ -155,6 +157,7 @@ public class Order {
     /**
      * transPrice       db_column: trans_price 
      */	
+	@NotNull
 	private java.lang.Double transPrice;
     /**
      * isBigOrder       db_column: is_big_order 
@@ -305,6 +308,7 @@ public class Order {
     /**
      * transportnumber       db_column: transportnumber 
      */	
+	@NotNull
 	private java.lang.String transportnumber;
     /**
      * transportremark       db_column: transportremark 
@@ -352,8 +356,9 @@ public class Order {
 	 */
 	private java.lang.String declareStatus;
 	//columns END
-
+	@NotNull
 	private Integer totalGoodsCount;
+	@NotNull
 	private Double totalGoodsWeight;
 	
 	public Order(){

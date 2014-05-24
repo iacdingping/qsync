@@ -137,10 +137,12 @@ public class OrderTransport {
     /**
      * firstname       db_column: firstname 
      */	
+	@NotNull
 	private java.lang.String firstname;
     /**
      * lastname       db_column: lastname 
      */	
+	@NotNull
 	private java.lang.String lastname;
     /**
      * address1       db_column: address1 
@@ -161,10 +163,12 @@ public class OrderTransport {
     /**
      * phonenumber       db_column: phonenumber 
      */	
+	@NotNull
 	private java.lang.String phonenumber;
     /**
      * 发件人国别       db_column: addressor_country 
      */	
+	@NotNull
 	private java.lang.Long addressorCountry;
     /**
      * 发件人城市       db_column: addressor_city 
@@ -173,6 +177,7 @@ public class OrderTransport {
     /**
      * 发件人姓名       db_column: addressor_name 
      */	
+	@NotNull
 	private java.lang.String addressorName;
     /**
      * 收件人邮编       db_column: zip_code 
@@ -181,6 +186,7 @@ public class OrderTransport {
     /**
      * 收件人邮箱       db_column: consignee_email 
      */	
+	@NotNull
 	private java.lang.String consigneeEmail;
 	//columns END
 	@NotNull

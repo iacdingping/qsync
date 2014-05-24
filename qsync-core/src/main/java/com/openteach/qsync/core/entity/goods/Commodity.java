@@ -83,6 +83,7 @@ public class Commodity {
     /**
      * itemcode       db_column: itemcode 
      */	
+	@NotNull
 	private java.lang.String itemcode;
     /**
      * description       db_column: description 
@@ -276,22 +277,27 @@ public class Commodity {
     /**
      * 行邮税号 必须已备案，且与参数说明文档中的行邮税号中的税号一致       db_column: tariff 
      */	
+	@NotNull
 	private java.lang.String tariff;
     /**
      * 产销国       db_column: sales_country 
      */	
+	@NotNull
 	private java.lang.Long salesCountry;
     /**
      * 申报计量单位 见计量单位代码       db_column: unit 
      */	
+	@NotNull
 	private java.lang.String unit;
     /**
      * 申报计量单位描述       db_column: unit_desc 
      */	
+	@NotNull
 	private java.lang.String unitDesc;
     /**
      * 商品规格、型号       db_column: specification 
      */	
+	@NotNull
 	private java.lang.String specification;
 	//columns END
 

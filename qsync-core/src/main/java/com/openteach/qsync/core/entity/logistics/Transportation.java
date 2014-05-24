@@ -1,5 +1,7 @@
 package com.openteach.qsync.core.entity.logistics;
 
+import javax.validation.constraints.NotNull;
+
 
 
 /**
@@ -64,6 +66,7 @@ public class Transportation {
     /**
      * 1 邮政小包 2 快件 3 EMS       db_column: type 
      */	
+	@NotNull
 	private java.lang.Integer type;
     /**
      * 运输工具航次(班)号       db_column: tool_flt_no 

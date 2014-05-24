@@ -57,10 +57,11 @@ public class AssembleService implements InitializingBean {
 		return orderService.listOrders();
 	}
 	
+	ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+	Validator validator = factory.getValidator();
+	
 	public void mappingOrder(Order order) {
 		orderService.mappingOrder(order);
-		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-		Validator validator = factory.getValidator();
 		Set<ConstraintViolation<Order>> violations = validator.validate(order);
 		StringBuffer buf = new StringBuffer();
 		for (ConstraintViolation<Order> violation : violations) {

@@ -45,6 +45,7 @@ public class TransportCommodity {
     /**
      * price       db_column: price 
      */	
+	@NotNull
 	private java.lang.Double price;
     /**
      * delivernum       db_column: delivernum 

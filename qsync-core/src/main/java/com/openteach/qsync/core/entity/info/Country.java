@@ -1,5 +1,7 @@
 package com.openteach.qsync.core.entity.info;
 
+import javax.validation.constraints.NotNull;
+
 
 
 /**
@@ -64,6 +66,7 @@ public class Country {
     /**
      * 国别代码 见报文参数2.国别代码       db_column: country_code 
      */	
+	@NotNull
 	private java.lang.String countryCode;
 	//columns END
 

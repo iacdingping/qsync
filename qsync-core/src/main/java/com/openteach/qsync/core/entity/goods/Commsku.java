@@ -1,6 +1,7 @@
 package com.openteach.qsync.core.entity.goods;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 
 
@@ -70,6 +71,7 @@ public class Commsku {
     /**
      * name       db_column: name 
      */	
+	@NotNull
 	private java.lang.String name;
     /**
      * picurl       db_column: picurl 

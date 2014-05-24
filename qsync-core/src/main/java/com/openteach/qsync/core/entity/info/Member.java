@@ -1,5 +1,7 @@
 package com.openteach.qsync.core.entity.info;
 
+import javax.validation.constraints.NotNull;
+
 
 
 /**
@@ -108,6 +110,7 @@ public class Member {
     /**
      * email       db_column: email 
      */	
+	@NotNull
 	private java.lang.String email;
     /**
      * password       db_column: password 
@@ -128,6 +131,7 @@ public class Member {
     /**
      * truename       db_column: truename 
      */	
+	@NotNull
 	private java.lang.String truename;
     /**
      * handphone       db_column: handphone 
@@ -204,6 +208,7 @@ public class Member {
     /**
      * address       db_column: address 
      */	
+	@NotNull
 	private java.lang.String address;
     /**
      * company       db_column: company 
@@ -380,10 +385,12 @@ public class Member {
     /**
      * 证件类型 01:身份证（试点期间只能是身份证） 02:护照 03:其他       db_column: certificates_type 
      */	
+	@NotNull
 	private java.lang.String certificatesType;
     /**
      * 证件号码       db_column: certificates 
      */	
+	@NotNull
 	private java.lang.String certificates;
 	//columns END
 
