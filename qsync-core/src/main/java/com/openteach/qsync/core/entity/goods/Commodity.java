@@ -607,15 +607,18 @@ public class Commodity {
 	public void setWeight(java.lang.Integer value) {
 		this.weight = value;
 	}
+	@NotNull
 	public java.lang.Integer getWeight() {
 		return this.weight;
 	}
 	public void setTariff(java.lang.String value) {
 		this.tariff = value;
 	}
+	@NotNull
 	public java.lang.String getTariff() {
 		return this.tariff;
 	}
+	@NotNull
 	public java.lang.Long getSalesCountry() {
 		return salesCountry;
 	}
@@ -625,18 +628,21 @@ public class Commodity {
 	public void setUnit(java.lang.String value) {
 		this.unit = value;
 	}
+	@NotNull
 	public java.lang.String getUnit() {
 		return this.unit;
 	}
 	public void setUnitDesc(java.lang.String value) {
 		this.unitDesc = value;
 	}
+	@NotNull
 	public java.lang.String getUnitDesc() {
 		return this.unitDesc;
 	}
 	public void setSpecification(java.lang.String value) {
 		this.specification = value;
 	}
+	@NotNull
 	public java.lang.String getSpecification() {
 		return this.specification;
 	}

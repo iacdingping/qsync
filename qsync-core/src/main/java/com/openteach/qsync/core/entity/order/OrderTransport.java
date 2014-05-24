@@ -217,6 +217,7 @@ public class OrderTransport {
 	public void setCongsignee(java.lang.String value) {
 		this.congsignee = value;
 	}
+	@NotNull
 	public java.lang.String getCongsignee() {
 		return this.congsignee;
 	}
@@ -229,6 +230,7 @@ public class OrderTransport {
 	public void setWaybillnumber(java.lang.String value) {
 		this.waybillnumber = value;
 	}
+	@NotNull
 	public java.lang.String getWaybillnumber() {
 		return this.waybillnumber;
 	}
@@ -325,18 +327,21 @@ public class OrderTransport {
 	public void setFirstname(java.lang.String value) {
 		this.firstname = value;
 	}
+	@NotNull
 	public java.lang.String getFirstname() {
 		return this.firstname;
 	}
 	public void setLastname(java.lang.String value) {
 		this.lastname = value;
 	}
+	@NotNull
 	public java.lang.String getLastname() {
 		return this.lastname;
 	}
 	public void setAddress1(java.lang.String value) {
 		this.address1 = value;
 	}
+	@NotNull
 	public java.lang.String getAddress1() {
 		return this.address1;
 	}
@@ -361,30 +366,35 @@ public class OrderTransport {
 	public void setPhonenumber(java.lang.String value) {
 		this.phonenumber = value;
 	}
+	@NotNull
 	public java.lang.String getPhonenumber() {
 		return this.phonenumber;
 	}
 	public void setAddressorCountry(java.lang.Long value) {
 		this.addressorCountry = value;
 	}
+	@NotNull
 	public java.lang.Long getAddressorCountry() {
 		return this.addressorCountry;
 	}
 	public void setAddressorCity(java.lang.String value) {
 		this.addressorCity = value;
 	}
+	@NotNull
 	public java.lang.String getAddressorCity() {
 		return this.addressorCity;
 	}
 	public void setAddressorName(java.lang.String value) {
 		this.addressorName = value;
 	}
+	@NotNull
 	public java.lang.String getAddressorName() {
 		return this.addressorName;
 	}
 	public void setZipCode(java.lang.String value) {
 		this.zipCode = value;
 	}
+	@NotNull
 	public java.lang.String getZipCode() {
 		return this.zipCode;
 	}
@@ -394,6 +404,7 @@ public class OrderTransport {
 	public java.lang.String getConsigneeEmail() {
 		return this.consigneeEmail;
 	}
+	@NotNull
 	public List<TransportCommodity> getTransportCommodityList() {
 		return transportCommodityList;
 	}

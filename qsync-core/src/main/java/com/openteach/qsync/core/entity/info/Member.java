@@ -838,12 +838,14 @@ public class Member {
 	public void setCertificatesType(java.lang.String value) {
 		this.certificatesType = value;
 	}
+	@NotNull
 	public java.lang.String getCertificatesType() {
 		return this.certificatesType;
 	}
 	public void setCertificates(java.lang.String value) {
 		this.certificates = value;
 	}
+	@NotNull
 	public java.lang.String getCertificates() {
 		return this.certificates;
 	}

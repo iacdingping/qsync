@@ -1,5 +1,7 @@
 package com.openteach.qsync.core;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

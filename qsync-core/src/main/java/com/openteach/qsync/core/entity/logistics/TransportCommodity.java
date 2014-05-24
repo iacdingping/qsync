@@ -106,12 +106,14 @@ public class TransportCommodity {
 	public void setPrice(java.lang.Double value) {
 		this.price = value;
 	}
+	@NotNull
 	public java.lang.Double getPrice() {
 		return this.price;
 	}
 	public void setDelivernum(java.lang.Integer value) {
 		this.delivernum = value;
 	}
+	@NotNull
 	public java.lang.Integer getDelivernum() {
 		return this.delivernum;
 	}
@@ -133,6 +135,7 @@ public class TransportCommodity {
 	public java.lang.Long getSkuId() {
 		return this.skuId;
 	}
+	@NotNull
 	public Commsku getCommskuObject() {
 		return commskuObject;
 	}
@@ -148,6 +151,7 @@ public class TransportCommodity {
 	public void setGoodsItemNo(java.lang.String value) {
 		this.goodsItemNo = value;
 	}
+	@NotNull
 	public java.lang.String getGoodsItemNo() {
 		return this.goodsItemNo;
 	}
