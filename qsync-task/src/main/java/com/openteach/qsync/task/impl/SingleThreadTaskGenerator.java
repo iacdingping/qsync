@@ -17,6 +17,7 @@ import com.openteach.qsync.service.declare.AssembleService;
 import com.openteach.qsync.task.TaskGenerator;
 import com.openteach.qsync.task.TaskStatus;
 import com.openteach.qsync.task.TaskStorage;
+import com.openteach.qsync.util.common.Exceptions;
 
 /**
  * 目前是单线程跑
@@ -107,11 +108,17 @@ public class SingleThreadTaskGenerator extends AbstractLifeCycle implements Task
 	private int generate() {
 		List<Order> oList = assembleService.listOrders();
 		for(Order o : oList) {
-			XmlRequest request = assembleService.getOrderXmlRequest(o);
-			storage.store(newTask(request, TaskType.ORDER_DECLARE));
-			storage.store(newTask(assembleService.getLogisticsXmlRequest(o), TaskType.LOGISTICS_DECLARE));
-			storage.store(newTask(assembleService.getWaybillXmlRequest(o), TaskType.WAY_BILL_DECLARE));
-			storage.store(newTask(assembleService.getGoodsXmlRequest(o), TaskType.GOODS_DECLARE));
+			
+			try {
+					assembleService.mappingOrder(o);
+					XmlRequest request = assembleService.getOrderXmlRequest(o);
+					storage.store(newTask(o.getId(), request, TaskType.ORDER_DECLARE));
+					storage.store(newTask(o.getId(), assembleService.getLogisticsXmlRequest(o), TaskType.LOGISTICS_DECLARE));
+					storage.store(newTask(o.getId(), assembleService.getWaybillXmlRequest(o), TaskType.WAY_BILL_DECLARE));
+					storage.store(newTask(o.getId(), assembleService.getGoodsXmlRequest(o), TaskType.GOODS_DECLARE));
+			} catch (Throwable t) {
+					storage.store(newErrorTask(o.getId(), Exceptions.getStackTraceAsString(t)));
+			}
 			// TODO 标记订单已经被处理，处理中
 		}
 		return oList.size();
@@ -123,12 +130,25 @@ public class SingleThreadTaskGenerator extends AbstractLifeCycle implements Task
 	 * @param type
 	 * @return
 	 */
-	private CcSyncTaks newTask(XmlRequest request, TaskType type) {
+	private CcSyncTaks newTask(Long orderId, XmlRequest request, TaskType type) {
 		CcSyncTaks t = new CcSyncTaks();
+		t.setOrderId(orderId);
 		t.setGenerator(HOST_NAME);
 		t.setType(type.name());
 		t.setStatus(TaskStatus.UNDO.name());
 		t.setXmlRequest(JaxbUtils.convertToXml(request));
+		t.setGmtCreate(new Date());
+		t.setGmtModified(t.getGmtCreate());
+		return t;
+	}
+	
+	private CcSyncTaks newErrorTask(Long orderId, String exception) {
+		CcSyncTaks t = new CcSyncTaks();
+		t.setGenerator(HOST_NAME);
+		t.setType(TaskType.NOTHING.name());
+		t.setStatus(TaskStatus.UNDO.name());
+		t.setXmlRequest("");
+		t.setOrderId(orderId);
 		t.setGmtCreate(new Date());
 		t.setGmtModified(t.getGmtCreate());
 		return t;

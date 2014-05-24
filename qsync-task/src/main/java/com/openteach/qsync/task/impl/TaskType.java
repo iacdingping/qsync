@@ -25,5 +25,10 @@ public enum TaskType {
 	/**
 	 * 
 	 */
-	GOODS_DECLARE;
+	GOODS_DECLARE,
+	
+	/**
+	 * 数据组装错误
+	 */
+	NOTHING;
 }

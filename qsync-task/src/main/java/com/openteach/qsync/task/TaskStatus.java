@@ -10,5 +10,6 @@ public enum TaskStatus {
 	UNDO,
 	DOING,
 	DONE,
-	FAILED;
+	FAILED,
+	DATA_ERROR;
 }

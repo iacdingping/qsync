@@ -73,3 +73,5 @@ CREATE TABLE `cc_sync_taks` (
 	`gmt_modified` DATETIME
 ) ENGINE=INNODB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='申报任务';
 
+ALTER TABLE `cc_sync_taks` ADD `order_id` BIGINT(22) COMMENT '订单ID';
+

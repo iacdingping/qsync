@@ -28,6 +28,8 @@ public class CcSyncTaks {
      * id       db_column: id 
      */	
 	private java.lang.Long id;
+	
+	private Long orderId;
     /**
      * generator       db_column: generator 
      */	
@@ -124,6 +126,12 @@ public class CcSyncTaks {
 	}
 	public java.util.Date getGmtModified() {
 		return this.gmtModified;
+	}
+	public Long getOrderId() {
+		return orderId;
+	}
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
 	}
 }
 
