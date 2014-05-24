@@ -5,6 +5,7 @@ import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.openteach.qsync.api.JkfClient;
@@ -18,6 +19,7 @@ import com.openteach.qsync.task.impl.SingleThreadTaskGenerator;
  *
  */
 @Service
+@Lazy(false)
 public class Scheduler {
 
 	@Resource

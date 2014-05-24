@@ -106,9 +106,6 @@ public class JkfClientOverFtp implements JkfClient {
 			// 
 			buffer = new ArrayBlockingQueue<PendingRequest>(bufferSize);
 			
-			initializePushers();
-			initializePullers();
-			
 			try {
 				InetAddress address = InetAddress.getLocalHost();
 				PREFIX = address.hashCode() + "";
@@ -118,6 +115,10 @@ public class JkfClientOverFtp implements JkfClient {
 			}
 			sequence = new AtomicLong(0);
 			pendingRequests = new ConcurrentHashMap<String, PendingRequest>();
+			
+			initializePushers();
+			initializePullers();
+			
 		} catch (IOException e) {
 			throw new IllegalArgumentException("Can not connect ftp server", e);
 		}
