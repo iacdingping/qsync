@@ -1,5 +1,8 @@
 package com.openteach.qsync.core.entity.logistics;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import com.openteach.qsync.core.entity.goods.Commsku;
 
 
@@ -46,6 +49,7 @@ public class TransportCommodity {
     /**
      * delivernum       db_column: delivernum 
      */	
+	@NotNull
 	private java.lang.Integer delivernum;
     /**
      * source       db_column: source 
@@ -59,6 +63,7 @@ public class TransportCommodity {
      * skuId       db_column: sku_id 
      */	
 	private java.lang.Long skuId;
+	@Valid
 	private Commsku commskuObject;
     /**
      * isreturn       db_column: isreturn 

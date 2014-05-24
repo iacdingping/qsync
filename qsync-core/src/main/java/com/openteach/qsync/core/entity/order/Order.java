@@ -1,5 +1,7 @@
 package com.openteach.qsync.core.entity.order;
 
+import javax.validation.Valid;
+
 import com.openteach.qsync.core.entity.info.Member;
 import com.openteach.qsync.core.entity.logistics.Transportation;
 import com.openteach.qsync.core.entity.logistics.Transportationcompany;
@@ -185,6 +187,7 @@ public class Order {
      */	
 	private java.lang.Long member;
 	
+	@Valid
 	private Member memberObject;
     /**
      * shopId       db_column: shop_id 
@@ -210,6 +213,7 @@ public class Order {
      * ordertransport       db_column: ordertransport 
      */	
 	private java.lang.Long ordertransport;
+	@Valid
 	private OrderTransport orderTransportObject;
     /**
      * statementId       db_column: statement_id 
@@ -287,12 +291,14 @@ public class Order {
      * transportationId       db_column: transportation_id 
      */	
 	private java.lang.Long transportationId;
+	@Valid
 	private Transportation transportationObject;
     /**
      * transportationcompanyId       db_column: transportationcompany_id 
      */	
 	private java.lang.Long transportationcompanyId;
 	
+	@Valid
 	private Transportationcompany transportationcompanyObject;
     /**
      * transportnumber       db_column: transportnumber 

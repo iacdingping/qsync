@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.openteach.qsync.core.dao.system.CcSyncTaksDao">
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="system-CcSyncTaks-columns">
+	    <![CDATA[
+		`id` as `id`, `order_id` as orderId, `generator` as `generator`, `type` as `type`, `status` as `status`, `xml_request` as `xmlRequest`, `xml_response` as `xmlResponse`, `exception` as `exception`, `gmt_create` as `gmtCreate`, `gmt_modified` as `gmtModified`
+	    ]]>
+	</sql>	
+
+	<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+	<insert id="save" useGeneratedKeys="true" keyProperty="id">
+    <![CDATA[
+        INSERT INTO cc_sync_taks (
+        `id`, `order_id`, `generator`, `type`, `status`, `xml_request`, `xml_response`, `exception`, `gmt_create`, `gmt_modified`
+        ) VALUES (
+        #{id}, #{orderId}, #{generator}, #{type}, #{status}, #{xmlRequest}, #{xmlResponse}, #{exception}, #{gmtCreate}, #{gmtModified}        
+        )
+    ]]>
+		<!--	
+			oracle: order="BEFORE" SELECT sequenceName.nextval AS ID FROM DUAL 
+			DB2: order="BEFORE"" values nextval for sequenceName
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="userId">
+			SELECT sequenceName.nextval AS ID FROM DUAL 
+        </selectKey>
+		-->
+	</insert>
+    
+	<update id="update">
+    <![CDATA[
+        UPDATE cc_sync_taks SET
+	        `order_id` = #{orderId}, `generator` = #{generator} , `type` = #{type} , `status` = #{status} , `xml_request` = #{xmlRequest} , `xml_response` = #{xmlResponse} , `exception` = #{exception} , `gmt_create` = #{gmtCreate} , `gmt_modified` = #{gmtModified}  
+        WHERE 
+        	id = #{id}  	        
+    ]]>
+	</update>
+
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM cc_sync_taks WHERE
+        `id` = #{id} 
+    ]]>
+    </delete>
+    
+    <select id="getById" resultType="CcSyncTaks">
+		SELECT <include refid="system-CcSyncTaks-columns" />
+	    <![CDATA[
+		    FROM cc_sync_taks 
+	        WHERE 
+		        `id` = #{id} 
+	    ]]>
+	</select>
+	
+	<sql id="CcSyncTaks-where">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+	       <if test="id">
+				AND `id` = #{id}
+			</if>
+	       <if test="generator">
+				AND `generator` = #{generator}
+			</if>
+	       <if test="type">
+				AND `type` = #{type}
+			</if>
+	       <if test="status">
+				AND `status` = #{status}
+			</if>
+	       <if test="xmlRequest">
+				AND `xml_request` = #{xmlRequest}
+			</if>
+	       <if test="xmlResponse">
+				AND `xml_response` = #{xmlResponse}
+			</if>
+	       <if test="exception">
+				AND `exception` = #{exception}
+			</if>
+	       <if test="gmtCreateBegin != null">
+				AND `gmt_create` >= #{gmtCreateBegin}
+		   </if>
+		   <if test="gmtCreateEnd != null">
+				AND `gmt_create` &lt;= #{gmtCreateEnd}
+		   </if>
+	       <if test="gmtModifiedBegin != null">
+				AND `gmt_modified` >= #{gmtModifiedBegin}
+		   </if>
+		   <if test="gmtModifiedEnd != null">
+				AND `gmt_modified` &lt;= #{gmtModifiedEnd}
+		   </if>
+		   <if test="inStatus != null">
+		   		AND `status` IN
+			   <foreach collection="inStatus" index="index" item="status" open="(" separator="," close=")"> 
+	            	#{status} 
+	        	</foreach>
+        	</if>
+		</where>
+	</sql>
+		
+    <select id="count" resultType="long">
+        SELECT count(*) FROM cc_sync_taks 
+		<include refid="CcSyncTaks-where"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="findPage" resultType="CcSyncTaks">
+    	SELECT <include refid="system-CcSyncTaks-columns" />
+	    FROM cc_sync_taks 
+		<include refid="CcSyncTaks-where"/>
+		
+		<if test="sortColumns != null">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	
+	<select id="list" resultType="CcSyncTaks">
+    	SELECT <include refid="system-CcSyncTaks-columns" />
+	    FROM cc_sync_taks 
+		<include refid="CcSyncTaks-where"/>
+		
+		<if test="sortColumns != null">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+
+	
+</mapper>
+

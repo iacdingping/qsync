@@ -1,5 +1,7 @@
 package com.openteach.qsync.core.entity.goods;
 
+import javax.validation.constraints.NotNull;
+
 
 
 /**
@@ -269,6 +271,7 @@ public class Commodity {
     /**
      * weight       db_column: weight 
      */	
+	@NotNull
 	private java.lang.Integer weight;
     /**
      * 行邮税号 必须已备案，且与参数说明文档中的行邮税号中的税号一致       db_column: tariff 

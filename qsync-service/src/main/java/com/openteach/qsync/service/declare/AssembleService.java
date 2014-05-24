@@ -3,8 +3,17 @@ package com.openteach.qsync.service.declare;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,6 +53,8 @@ public class AssembleService implements InitializingBean {
 	@Autowired private ConfigService configService;
 	@Autowired private CountryManager countryManager;
 	@Autowired private OrderService orderService;
+
+	private Logger log = LoggerFactory.getLogger(getClass());
 	
 	private JkfSign jkfSign;
 	
@@ -53,6 +64,16 @@ public class AssembleService implements InitializingBean {
 	
 	public void mappingOrder(Order order) {
 		orderService.mappingOrder(order);
+		ValidatorFactory factory = Validation.buildDefaultValidatorFactory(); 
+		 Validator validator = factory.getValidator(); 
+		 Set<ConstraintViolation<Order>> violations = validator.validate(order); 
+		 StringBuffer buf = new StringBuffer(); 
+		 ResourceBundle bundle = ResourceBundle.getBundle("messages"); 
+		 for(ConstraintViolation<Order> violation: violations) { 
+			 buf.append("-" + bundle.getString(violation.getPropertyPath().toString())); 
+			 buf.append(violation.getMessage() + "\n"); 
+		 } 
+		 log.warn("order validate result:" + buf.toString());
 	}
 	
 	/**
@@ -72,7 +93,7 @@ public class AssembleService implements InitializingBean {
 		jkfOrderImportHead.setPayType(order.getDeclarePayType());	//cc_kata_kplus_order.declare_pay_type
 		jkfOrderImportHead.setPayCompanyCode(order.getPayCompanyCode());		//cc_kata_kplus_order.pay_company_code
 		jkfOrderImportHead.setPayNumber(order.getPayNumber());	//cc_kata_kplus_order.pay_number
-		jkfOrderImportHead.setTotalAmount(order.getAmount());
+		jkfOrderImportHead.setOrderTotalAmount(order.getAmount());
 		jkfOrderImportHead.setOrderNo(order.getCode());
 		jkfOrderImportHead.setOrderTaxAmount(order.getOrderTaxAmount());	//cc_kata_kplus_order.order_tax_amount
 		jkfOrderImportHead.setFeeAmount(order.getTransPrice());

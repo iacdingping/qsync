@@ -1,5 +1,7 @@
 package com.openteach.qsync.core.entity.goods;
 
+import javax.validation.Valid;
+
 
 
 /**
@@ -121,6 +123,7 @@ public class Commsku {
      * itemId       db_column: item_id 
      */	
 	private java.lang.Long itemId;
+	@Valid
 	private Commodity commodityObject;
     /**
      * isprice       db_column: isprice 

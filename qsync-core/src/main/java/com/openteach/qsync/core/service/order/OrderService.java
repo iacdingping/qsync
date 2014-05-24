@@ -77,8 +77,10 @@ public class OrderService {
 			Commsku commsku = commskuManager.getByIdMappedCommodity(tc.getSkuId());
 			tc.setCommskuObject(commsku);
 			//计算总件数与总重量
-			totalGoodsCount += tc.getDelivernum().intValue();
-			totalGoodsWeight += tc.getDelivernum().intValue() * tc.getCommskuObject().getCommodityObject().getWeight().doubleValue();
+			totalGoodsCount += tc.getDelivernum() == null ? 0 : tc.getDelivernum().intValue();
+			Integer weight = tc.getCommskuObject().getCommodityObject().getWeight() == null ?
+					0 : tc.getCommskuObject().getCommodityObject().getWeight();
+			totalGoodsWeight += tc.getDelivernum() == null ? 0 : tc.getDelivernum().intValue() * weight;
 		}
 		order.setTotalGoodsCount(totalGoodsCount);
 		order.setTotalGoodsWeight(totalGoodsWeight);
@@ -86,3 +88,4 @@ public class OrderService {
 		order.setOrderTransportObject(orderTransport);
 	}
 }
+

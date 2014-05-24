@@ -1,5 +1,5 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.openteach</groupId>
@@ -11,34 +11,34 @@
 	<packaging>jar</packaging>
 	<name>qsync-api</name>
 	<url></url>
-  
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-net</groupId>
 			<artifactId>commons-net</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>net.sf.oval</groupId>
 			<artifactId>oval</artifactId>
 		</dependency>
-		
+
 		<!-- 代码直接调用log4j会被桥接到slf4j -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -64,20 +64,31 @@
 			<scope>runtime</scope>
 		</dependency>
 		<!-- LOGGING end -->
-		
+
+		<!-- validataion -->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>com.sun.xml.bind</groupId>
 			<artifactId>jaxb-impl</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 		</dependency>
-        
-	  </dependencies>
-	  
-	  <build>
+
+	</dependencies>
+
+	<build>
 		<finalName>qsync-api</finalName>
 		<plugins>
 			<plugin>
@@ -88,32 +99,28 @@
 					<encoding>${java.encoding}</encoding>
 				</configuration>
 			</plugin>
-				
+
 			<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-source-plugin</artifactId>
-					<version>2.1.2</version>
-					<executions>
-						<execution>
-								<id>attach-sources</id>
-								<phase>verify</phase>
-								<goals>
-									<goal>jar-no-fork</goal>
-								</goals>
-						</execution>
-					</executions>
-				</plugin>
-			</plugins>
-			<resources>
-				<resource>
-					<filtering>true</filtering>
-					<directory>src/main/resources</directory>
-				</resource>
-			</resources>
-			<!--
-			<filters>
-				<filter>${user.home}/antx.properties</filter>
-			</filters>
-			-->
-	  </build>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.1.2</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<resources>
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+		<!-- <filters> <filter>${user.home}/antx.properties</filter> </filters> -->
+	</build>
 </project> 

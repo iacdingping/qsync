@@ -2,6 +2,9 @@ package com.openteach.qsync.core.entity.order;
 
 import java.util.List;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import com.openteach.qsync.core.entity.logistics.TransportCommodity;
 
 
@@ -180,6 +183,8 @@ public class OrderTransport {
      */	
 	private java.lang.String consigneeEmail;
 	//columns END
+	@NotNull
+	@Valid
 	private List<TransportCommodity> transportCommodityList;
 
 	public OrderTransport(){
