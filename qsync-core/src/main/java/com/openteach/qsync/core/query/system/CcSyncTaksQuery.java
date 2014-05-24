@@ -1,5 +1,7 @@
 package com.openteach.qsync.core.query.system;
 
+import java.util.List;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -23,6 +25,9 @@ public class CcSyncTaksQuery extends PageQuery {
 	private java.lang.String type;
 	/** status */
 	private java.lang.String status;
+	
+	private List<String> inStatus;
+	
 	/** xmlRequest */
 	private java.lang.String xmlRequest;
 	/** xmlResponse */
@@ -123,7 +128,14 @@ public class CcSyncTaksQuery extends PageQuery {
 	public void setGmtModifiedEnd(java.util.Date value) {
 		this.gmtModifiedEnd = value;
 	}
-	
+
+	public List<String> getInStatus() {
+		return inStatus;
+	}
+
+	public void setInStatus(List<String> inStatus) {
+		this.inStatus = inStatus;
+	}
 
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this,ToStringStyle.MULTI_LINE_STYLE);
