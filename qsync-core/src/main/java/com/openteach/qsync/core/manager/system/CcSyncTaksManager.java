@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.openteach.qsync.core.PageList;
-import com.openteach.qsync.core.PageQuery;
 import com.openteach.qsync.core.dao.system.CcSyncTaksDao;
 import com.openteach.qsync.core.entity.system.CcSyncTaks;
 import com.openteach.qsync.core.query.system.CcSyncTaksQuery;
@@ -66,14 +65,14 @@ public class CcSyncTaksManager {
 	/** 
 	 * 统计总数CcSyncTaks
 	 **/ 
-	public Long count(PageQuery query) {
+	public Long count(CcSyncTaksQuery query) {
 		return ccSyncTaksDao.count(query);
 	}
 	
 	/** 
 	 * list CcSyncTaks
 	 **/ 
-	public List<CcSyncTaks> list(PageQuery query) {
+	public List<CcSyncTaks> list(CcSyncTaksQuery query) {
 		return ccSyncTaksDao.list(query);
 	}
 	

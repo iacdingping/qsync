@@ -40,6 +40,8 @@ public class CcSyncTaksQuery extends PageQuery {
 	/** gmtModified */
 	private java.util.Date gmtModifiedBegin;
 	private java.util.Date gmtModifiedEnd;
+	
+	private Integer mode;
 
 	public java.lang.Long getId() {
 		return this.id;
@@ -139,6 +141,14 @@ public class CcSyncTaksQuery extends PageQuery {
 
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this,ToStringStyle.MULTI_LINE_STYLE);
+	}
+
+	public Integer getMode() {
+		return mode;
+	}
+
+	public void setMode(Integer mode) {
+		this.mode = mode;
 	}
 	
 }

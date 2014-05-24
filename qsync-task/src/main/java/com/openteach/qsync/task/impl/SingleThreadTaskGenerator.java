@@ -12,8 +12,8 @@ import com.openteach.qcity.qsync.common.lifecycle.AbstractLifeCycle;
 import com.openteach.qsync.api.XmlRequest;
 import com.openteach.qsync.api.utils.JaxbUtils;
 import com.openteach.qsync.core.entity.order.Order;
+import com.openteach.qsync.core.entity.system.CcSyncTaks;
 import com.openteach.qsync.service.declare.AssembleService;
-import com.openteach.qsync.task.Task;
 import com.openteach.qsync.task.TaskGenerator;
 import com.openteach.qsync.task.TaskStatus;
 import com.openteach.qsync.task.TaskStorage;
@@ -123,11 +123,11 @@ public class SingleThreadTaskGenerator extends AbstractLifeCycle implements Task
 	 * @param type
 	 * @return
 	 */
-	private Task newTask(XmlRequest request, TaskType type) {
-		Task t = new Task();
+	private CcSyncTaks newTask(XmlRequest request, TaskType type) {
+		CcSyncTaks t = new CcSyncTaks();
 		t.setGenerator(HOST_NAME);
-		t.setType(type);
-		t.setStatus(TaskStatus.UNDO);
+		t.setType(type.name());
+		t.setStatus(TaskStatus.UNDO.name());
 		t.setXmlRequest(JaxbUtils.convertToXml(request));
 		t.setGmtCreate(new Date());
 		t.setGmtModified(t.getGmtCreate());
