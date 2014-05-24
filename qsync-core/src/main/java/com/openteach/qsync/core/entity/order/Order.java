@@ -330,6 +330,12 @@ public class Order {
      * 订单税款       db_column: order_tax_amount 
      */	
 	private java.lang.Double orderTaxAmount;
+	/**
+	 * 报关状态 初始状态 00000 从左到右 
+	 * 第一位 1 初始化 第二位订单报关状态 第三位  物流报关状态 第四位运单报关状态 第五位 个人物品报关状态   
+	 * 报关状态 0 未开始 1 报关中 2 报关完成 3 报关失败
+	 */
+	private java.lang.String declareStatus;
 	//columns END
 
 	private Integer totalGoodsCount;
@@ -754,6 +760,14 @@ public class Order {
 
 	public void setOrderTaxAmount(java.lang.Double orderTaxAmount) {
 		this.orderTaxAmount = orderTaxAmount;
+	}
+
+	public java.lang.String getDeclareStatus() {
+		return declareStatus;
+	}
+
+	public void setDeclareStatus(java.lang.String declareStatus) {
+		this.declareStatus = declareStatus;
 	}
 
 }

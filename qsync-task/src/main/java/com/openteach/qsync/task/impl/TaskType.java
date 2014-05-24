@@ -20,5 +20,10 @@ public enum TaskType {
 	/**
 	 * 
 	 */
-	WAY_BILL_DECLARE;
+	WAY_BILL_DECLARE,
+	
+	/**
+	 * 
+	 */
+	GOODS_DECLARE;
 }

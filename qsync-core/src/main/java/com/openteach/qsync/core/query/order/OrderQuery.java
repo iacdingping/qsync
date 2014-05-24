@@ -144,6 +144,8 @@ public class OrderQuery extends PageQuery {
 	private java.lang.String payNumber;
 	/** 订单税款 */
 	private java.lang.Double orderTaxAmount;
+	/** 报关状态 */
+	private String declareStatus;
 
 	public java.lang.Long getId() {
 		return this.id;
@@ -687,6 +689,14 @@ public class OrderQuery extends PageQuery {
 
 	public void setOrderTaxAmount(java.lang.Double orderTaxAmount) {
 		this.orderTaxAmount = orderTaxAmount;
+	}
+
+	public String getDeclareStatus() {
+		return declareStatus;
+	}
+
+	public void setDeclareStatus(String declareStatus) {
+		this.declareStatus = declareStatus;
 	}
 
 	public String toString() {

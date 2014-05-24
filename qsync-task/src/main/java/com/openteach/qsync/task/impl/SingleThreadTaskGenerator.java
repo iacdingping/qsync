@@ -111,6 +111,7 @@ public class SingleThreadTaskGenerator extends AbstractLifeCycle implements Task
 			storage.store(newTask(request, TaskType.ORDER_DECLARE));
 			storage.store(newTask(assembleService.getLogisticsXmlRequest(o), TaskType.LOGISTICS_DECLARE));
 			storage.store(newTask(assembleService.getWaybillXmlRequest(o), TaskType.WAY_BILL_DECLARE));
+			storage.store(newTask(assembleService.getGoodsXmlRequest(o), TaskType.GOODS_DECLARE));
 			// TODO 标记订单已经被处理，处理中
 		}
 		return oList.size();

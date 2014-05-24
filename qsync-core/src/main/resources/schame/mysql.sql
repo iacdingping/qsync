@@ -48,6 +48,7 @@ ALTER TABLE `cc_kata_kplus_order` ADD `declare_pay_type` VARCHAR(5) COMMENT '报
 ALTER TABLE `cc_kata_kplus_order` ADD `pay_company_code` VARCHAR(20) COMMENT '支付公司编码';
 ALTER TABLE `cc_kata_kplus_order` ADD `pay_number` VARCHAR(20) COMMENT '支付单号';
 ALTER TABLE `cc_kata_kplus_order` ADD `order_tax_amount` DOUBLE COMMENT '订单税款';
+ALTER TABLE `cc_kata_kplus_order` ADD `declare_status` VARCHAR(5) DEFAULT '00000' COMMENT '报关状态 初始状态 00000 从左到右 第一位 1 初始化 第二位订单报关状态 第三位  物流报关状态 第四位运单报关状态 第五位 个人物品报关状态   报关状态 0 未开始 1 报关中 2 报关完成 3 报关失败';
 
 
 ALTER TABLE `cc_kata_kplus_transportation` ADD `tool_flt_no` VARCHAR(50) COMMENT '运输工具航次(班)号';
