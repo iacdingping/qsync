@@ -6,7 +6,10 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.openteach.qsync.core.TaskStatus;
+import com.openteach.qsync.core.TaskType;
 import com.openteach.qsync.core.entity.system.CcSyncTaks;
+import com.openteach.qsync.core.manager.order.OrderManager;
 import com.openteach.qsync.core.manager.system.CcSyncTaksManager;
 import com.openteach.qsync.core.query.system.CcSyncTaksQuery;
 import com.openteach.qsync.task.TaskStorage;
@@ -21,6 +24,8 @@ public class TaskStorageOverDatabase implements TaskStorage {
 
 	@Resource
 	private CcSyncTaksManager ccSyncTaksManager;
+	@Resource
+	private OrderManager orderManager;
 	
 	@Override
 	public List<CcSyncTaks> query(CcSyncTaksQuery query) {
@@ -29,11 +34,18 @@ public class TaskStorageOverDatabase implements TaskStorage {
 
 	@Override
 	public void store(CcSyncTaks task) {
+		TaskStatus taskStatus = TaskStatus.valueOf(task.getStatus());
+		TaskType taskType = TaskType.valueOf(task.getType());
+				
+		orderManager.updateDeclareStatus(task.getOrderId(), taskType, taskStatus);
 		ccSyncTaksManager.save(task);
 	}
 
 	@Override
 	public void update(CcSyncTaks task) {
+		TaskStatus taskStatus = TaskStatus.valueOf(task.getStatus());
+		TaskType taskType = TaskType.valueOf(task.getType());
+		orderManager.updateDeclareStatus(task.getOrderId(), taskType, taskStatus);
 		ccSyncTaksManager.update(task);
 	}
 }

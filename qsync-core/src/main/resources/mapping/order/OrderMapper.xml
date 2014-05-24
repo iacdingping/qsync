@@ -39,6 +39,16 @@
         	id = #{id}  	        
     ]]>
 	</update>
+	
+	<update id="updateDeclareStatus">
+    <![CDATA[
+        UPDATE cc_kata_kplus_order SET
+	         `declare_status` = #{declareStatus}  
+        WHERE 
+        	id = #{id}  	        
+    ]]>
+	</update>
+	
 
     <delete id="deleteById">
     <![CDATA[

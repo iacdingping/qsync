@@ -11,11 +11,12 @@ import org.apache.commons.logging.LogFactory;
 import com.openteach.qcity.qsync.common.lifecycle.AbstractLifeCycle;
 import com.openteach.qsync.api.XmlRequest;
 import com.openteach.qsync.api.utils.JaxbUtils;
+import com.openteach.qsync.core.TaskStatus;
+import com.openteach.qsync.core.TaskType;
 import com.openteach.qsync.core.entity.order.Order;
 import com.openteach.qsync.core.entity.system.CcSyncTaks;
 import com.openteach.qsync.service.declare.AssembleService;
 import com.openteach.qsync.task.TaskGenerator;
-import com.openteach.qsync.task.TaskStatus;
 import com.openteach.qsync.task.TaskStorage;
 import com.openteach.qsync.util.common.Exceptions;
 
@@ -145,7 +146,7 @@ public class SingleThreadTaskGenerator extends AbstractLifeCycle implements Task
 	private CcSyncTaks newErrorTask(Long orderId, String exception) {
 		CcSyncTaks t = new CcSyncTaks();
 		t.setGenerator(HOST_NAME);
-		t.setType(TaskType.NOTHING.name());
+		t.setType(TaskType.DATA_ERROR.name());
 		t.setStatus(TaskStatus.UNDO.name());
 		t.setXmlRequest("");
 		t.setOrderId(orderId);

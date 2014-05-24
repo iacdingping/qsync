@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.openteach.qsync.core.ConfigService;
+import com.openteach.qsync.core.OrderDeclareStatus;
 import com.openteach.qsync.core.OrderStatus;
 import com.openteach.qsync.core.entity.goods.Commsku;
 import com.openteach.qsync.core.entity.info.Member;
@@ -48,10 +49,14 @@ public class OrderService {
 		orderQuery = new OrderQuery();
 		orderQuery.setStatus(OrderStatus.DELIVERED.ordinal());
 		orderQuery.setPageSize(10L);
+		orderQuery.setDeclareStatus(OrderDeclareStatus.READY.getValue());
 	}
 	
 	public 	List<Order> listOrders() {
 		List<Order> orders = orderManager.list(orderQuery);
+		for(Order order : orders) {
+			orderManager.updateDeclareStatus(order.getId(), OrderDeclareStatus.INITIALIZE.getValue());
+		}
 		return orders;
 	}
 	

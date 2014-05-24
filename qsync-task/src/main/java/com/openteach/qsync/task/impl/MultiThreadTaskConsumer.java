@@ -16,10 +16,10 @@ import com.openteach.qsync.api.XmlRequest;
 import com.openteach.qsync.api.XmlResponse;
 import com.openteach.qsync.api.exception.ApiException;
 import com.openteach.qsync.api.utils.JaxbUtils;
+import com.openteach.qsync.core.TaskStatus;
 import com.openteach.qsync.core.entity.system.CcSyncTaks;
 import com.openteach.qsync.core.query.system.CcSyncTaksQuery;
 import com.openteach.qsync.task.TaskConsumer;
-import com.openteach.qsync.task.TaskStatus;
 import com.openteach.qsync.task.TaskStorage;
 
 /**
@@ -90,6 +90,8 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 				exception.printStackTrace(pw);
 				task.setException(sw.toString());
 				task.setGmtModified(new Date());
+				
+				
 				storage.update(task);
 			}
 			

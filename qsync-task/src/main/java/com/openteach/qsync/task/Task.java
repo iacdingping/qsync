@@ -2,7 +2,8 @@ package com.openteach.qsync.task;
 
 import java.util.Date;
 
-import com.openteach.qsync.task.impl.TaskType;
+import com.openteach.qsync.core.TaskStatus;
+import com.openteach.qsync.core.TaskType;
 
 
 /**

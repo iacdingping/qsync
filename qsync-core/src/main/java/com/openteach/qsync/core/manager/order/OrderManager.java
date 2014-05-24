@@ -1,14 +1,20 @@
 package com.openteach.qsync.core.manager.order;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import com.openteach.qsync.core.OrderDeclareStatus;
 import com.openteach.qsync.core.PageList;
 import com.openteach.qsync.core.PageQuery;
+import com.openteach.qsync.core.TaskStatus;
+import com.openteach.qsync.core.TaskType;
 import com.openteach.qsync.core.dao.order.OrderDao;
 import com.openteach.qsync.core.entity.order.Order;
 import com.openteach.qsync.core.query.order.OrderQuery;
@@ -85,6 +91,41 @@ public class OrderManager {
 	    Assert.notNull(query,"'query' must be not null");
 		return new PageList<Order>(list(query), 
 				query.getPage(), query.getPageSize(), count(query));
+	}
+
+	public int updateDeclareStatus(Long id, String declareStatus) {
+		Map<String, Object> params = new HashMap<String, Object>(2);
+		params.put("id", id);
+		params.put("declareStatus", declareStatus);
+		return orderDao.updateDeclareStatus(params);
+	}
+	
+	public synchronized int updateDeclareStatus(Long orderId, TaskType taskType, TaskStatus taskStatus) {
+		Order order = getById(orderId);
+		String declareStatus = StringUtils.defaultIfEmpty(order.getDeclareStatus(), OrderDeclareStatus.INITIALIZE.getValue());
+		int index = 0;
+		char s =  (taskStatus.ordinal() + "").charAt(0);
+		switch(taskType) {
+		case DATA_ERROR:
+			s = '2';
+			break;
+		case ORDER_DECLARE:
+			index = 1;
+			break;
+		case GOODS_DECLARE:
+			index = 2;
+			break;
+		case WAY_BILL_DECLARE:
+			index = 3;
+			break;
+		case LOGISTICS_DECLARE:
+			index = 4;
+			break;
+		}
+		char[] status = declareStatus.toCharArray();
+		status[index] = s;
+		System.out.println(String.format("原始状态:%s, 更新状态%s", declareStatus, String.valueOf(status)));
+		return updateDeclareStatus(order.getId(), String.valueOf(status));
 	}
 	
 }
