@@ -1,6 +1,7 @@
 package com.openteach.qsync.core.entity.order;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import com.openteach.qsync.core.entity.info.Member;
 import com.openteach.qsync.core.entity.logistics.Transportation;
@@ -113,6 +114,7 @@ public class Order {
     /**
      * amount       db_column: amount 
      */	
+	@NotNull
 	private java.lang.Double amount;
     /**
      * cutamount       db_column: cutamount 
@@ -311,30 +313,37 @@ public class Order {
 	/**
      * 物流跟踪状态 10 启运 20 抵港 30 到货 40 离开 50 签收       db_column: logistics_state 
      */	
+	@NotNull
 	private java.lang.Integer logisticsState;
     /**
      * 场站代码       db_column: station_code 
      */	
+	@NotNull
 	private java.lang.String stationCode;
     /**
      * 车牌号码       db_column: license_plate_number 
      */	
+	@NotNull
 	private java.lang.String licensePlateNumber;
     /**
      * 支付类型 01:银行卡支付 02:余额支付 03:其他       db_column: declare_pay_type 
      */	
+	@NotNull
 	private java.lang.String declarePayType;
     /**
      * 支付公司编码       db_column: pay_company_code 
      */	
+	@NotNull
 	private java.lang.String payCompanyCode;
     /**
      * 支付单号       db_column: pay_number 
      */	
+	@NotNull
 	private java.lang.String payNumber;
     /**
      * 订单税款       db_column: order_tax_amount 
      */	
+	@NotNull
 	private java.lang.Double orderTaxAmount;
 	/**
 	 * 报关状态 初始状态 00000 从左到右 

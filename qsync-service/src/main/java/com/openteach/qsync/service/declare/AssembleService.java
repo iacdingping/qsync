@@ -3,7 +3,6 @@ package com.openteach.qsync.service.declare;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -12,8 +11,6 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,8 +51,6 @@ public class AssembleService implements InitializingBean {
 	@Autowired private CountryManager countryManager;
 	@Autowired private OrderService orderService;
 
-	private Logger log = LoggerFactory.getLogger(getClass());
-	
 	private JkfSign jkfSign;
 	
 	public List<Order> listOrders() {
@@ -64,16 +59,16 @@ public class AssembleService implements InitializingBean {
 	
 	public void mappingOrder(Order order) {
 		orderService.mappingOrder(order);
-		ValidatorFactory factory = Validation.buildDefaultValidatorFactory(); 
-		 Validator validator = factory.getValidator(); 
-		 Set<ConstraintViolation<Order>> violations = validator.validate(order); 
-		 StringBuffer buf = new StringBuffer(); 
-		 ResourceBundle bundle = ResourceBundle.getBundle("messages"); 
-		 for(ConstraintViolation<Order> violation: violations) { 
-			 buf.append("-" + bundle.getString(violation.getPropertyPath().toString())); 
-			 buf.append(violation.getMessage() + "\n"); 
-		 } 
-		 log.warn("order validate result:" + buf.toString());
+		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+		Validator validator = factory.getValidator();
+		Set<ConstraintViolation<Order>> violations = validator.validate(order);
+		StringBuffer buf = new StringBuffer();
+		for (ConstraintViolation<Order> violation : violations) {
+			buf.append(violation.getPropertyPath());
+			buf.append(violation.getMessage() + "\n");
+		}
+		if(buf.length() > 0)
+			throw new DataAssembleException(buf.toString());
 	}
 	
 	/**
