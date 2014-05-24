@@ -12,9 +12,10 @@
 		<module>qsync-util</module>
 		<module>qsync-common</module>
 		<module>qsync-api</module>
+		<module>qsync-core</module>
 		<module>qsync-service</module>
 		<module>qsync-task</module>
-		<module>qsync-core</module>
+		<module>qsync-web</module>
 	</modules>
 
 	<properties>
@@ -96,6 +97,12 @@
 				<artifactId>qsync-core</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>qsync-web</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			
 
 			<!-- LOGGING begin -->
 			<dependency>
