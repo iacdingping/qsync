@@ -41,40 +41,40 @@ public class JkfClientOverFtp implements JkfClient {
 	
 	private static final Log logger = LogFactory.getLog(JkfClientOverFtp.class);
 
-	@Value("{sync.customs.pusher.ftp.server}")
+	@Value("${sync.customs.pusher.ftp.server}")
 	private String pusherFtpServer;
 	
-	@Value("{sync.customs.pusher.ftp.port}")
+	@Value("${sync.customs.pusher.ftp.port}")
 	private int pusherFtpPort;
 	
-	@Value("{sync.customs.pusher.ftp.username}")
+	@Value("${sync.customs.pusher.ftp.username}")
 	private String pusherFtpUsername;
 	
-	@Value("{sync.customs.pusher.ftp.password}")
+	@Value("${sync.customs.pusher.ftp.password}")
 	private String pusherFtpPassword;
 	
-	@Value("{sync.customs.puller.ftp.server}")
+	@Value("${sync.customs.puller.ftp.server}")
 	private String pullerFtpServer;
 	
-	@Value("{sync.customs.puller.ftp.port}")
+	@Value("${sync.customs.puller.ftp.port}")
 	private int pullerFtpPort;
 	
-	@Value("{sync.customs.puller.ftp.username}")
+	@Value("${sync.customs.puller.ftp.username}")
 	private String pullerFtpUsername;
 	
-	@Value("{sync.customs.puller.ftp.password}")
+	@Value("${sync.customs.puller.ftp.password}")
 	private String pullerFtpPassword;
 	
 	/**
 	 * 
 	 */
-	@Value("{sync.customs.pusher.count}")
+	@Value("${sync.customs.pusher.count}")
 	private int pusherCount = DEFAULT_COUNT;
 	
 	/**
 	 * 
 	 */
-	@Value("{sync.customs.puller.count}")
+	@Value("${sync.customs.puller.count}")
 	private int pullerCount = DEFAULT_COUNT;
 	
 	private Pusher[] pushers;

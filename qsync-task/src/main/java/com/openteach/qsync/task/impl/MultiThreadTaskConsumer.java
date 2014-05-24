@@ -62,6 +62,7 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 	@Override
 	public void initialize() {
 		super.initialize();
+		threads = new Thread[threadCount];
 		for(int i = 0; i < threadCount; i++) {
 			CcSyncTaksQuery query = new CcSyncTaksQuery();
 			query.setInStatus(Arrays.asList(TaskStatus.UNDO.name(), TaskStatus.FAILED.name()));
