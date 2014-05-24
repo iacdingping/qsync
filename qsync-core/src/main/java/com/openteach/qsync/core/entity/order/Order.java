@@ -374,6 +374,7 @@ public class Order {
 	public void setCode(java.lang.String value) {
 		this.code = value;
 	}
+	@NotNull
 	public java.lang.String getCode() {
 		return this.code;
 	}
@@ -392,6 +393,8 @@ public class Order {
 	public void setOrdertime(java.util.Date value) {
 		this.ordertime = value;
 	}
+	
+	@NotNull
 	public java.util.Date getOrdertime() {
 		return this.ordertime;
 	}
@@ -521,6 +524,7 @@ public class Order {
 	public java.lang.Long getMember() {
 		return this.member;
 	}
+	@NotNull
 	public Member getMemberObject() {
 		return memberObject;
 	}
@@ -563,6 +567,7 @@ public class Order {
 	public java.lang.Long getOrdertransport() {
 		return this.ordertransport;
 	}
+	@NotNull
 	public OrderTransport getOrderTransportObject() {
 		return orderTransportObject;
 	}
@@ -662,6 +667,7 @@ public class Order {
 	public void setTotalamout(java.lang.Double value) {
 		this.totalamout = value;
 	}
+	@NotNull
 	public java.lang.Double getTotalamout() {
 		return this.totalamout;
 	}
@@ -683,6 +689,7 @@ public class Order {
 	public java.lang.Long getTransportationId() {
 		return this.transportationId;
 	}
+	@NotNull
 	public Transportation getTransportationObject() {
 		return transportationObject;
 	}
@@ -705,6 +712,7 @@ public class Order {
 	public void setTransportnumber(java.lang.String value) {
 		this.transportnumber = value;
 	}
+	@NotNull
 	public java.lang.String getTransportnumber() {
 		return this.transportnumber;
 	}
@@ -732,12 +740,14 @@ public class Order {
 	public java.lang.String getLicensePlateNumber() {
 		return this.licensePlateNumber;
 	}
+	@NotNull
 	public Integer getTotalGoodsCount() {
 		return totalGoodsCount;
 	}
 	public void setTotalGoodsCount(Integer totalGoodsCount) {
 		this.totalGoodsCount = totalGoodsCount;
 	}
+	@NotNull
 	public Double getTotalGoodsWeight() {
 		return totalGoodsWeight;
 	}

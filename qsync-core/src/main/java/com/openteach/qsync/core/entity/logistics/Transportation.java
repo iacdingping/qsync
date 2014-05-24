@@ -1,5 +1,7 @@
 package com.openteach.qsync.core.entity.logistics;
 
+import javax.validation.constraints.NotNull;
+
 
 
 /**
@@ -105,6 +107,7 @@ public class Transportation {
 	public void setName(java.lang.String value) {
 		this.name = value;
 	}
+	@NotNull
 	public java.lang.String getName() {
 		return this.name;
 	}
@@ -153,15 +156,18 @@ public class Transportation {
 	public void setToolFltNo(java.lang.String value) {
 		this.toolFltNo = value;
 	}
+	@NotNull
 	public java.lang.String getToolFltNo() {
 		return this.toolFltNo;
 	}
 	public void setTypeCode(java.lang.String value) {
 		this.typeCode = value;
 	}
+	@NotNull
 	public java.lang.String getTypeCode() {
 		return this.typeCode;
 	}
+	@NotNull
 	public java.lang.Long getFromCountry() {
 		return fromCountry;
 	}
@@ -171,12 +177,14 @@ public class Transportation {
 	public void setPackType(java.lang.String value) {
 		this.packType = value;
 	}
+	@NotNull
 	public java.lang.String getPackType() {
 		return this.packType;
 	}
 	public void setApplicationFormNo(java.lang.String value) {
 		this.applicationFormNo = value;
 	}
+	@NotNull
 	public java.lang.String getApplicationFormNo() {
 		return this.applicationFormNo;
 	}

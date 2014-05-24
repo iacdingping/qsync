@@ -1,5 +1,7 @@
 package com.openteach.qsync.core.entity.info;
 
+import javax.validation.constraints.NotNull;
+
 
 
 /**
@@ -91,6 +93,7 @@ public class Country {
 	public void setName(java.lang.String value) {
 		this.name = value;
 	}
+	@NotNull
 	public java.lang.String getName() {
 		return this.name;
 	}
@@ -133,6 +136,7 @@ public class Country {
 	public void setCountryCode(java.lang.String value) {
 		this.countryCode = value;
 	}
+	@NotNull
 	public java.lang.String getCountryCode() {
 		return this.countryCode;
 	}
