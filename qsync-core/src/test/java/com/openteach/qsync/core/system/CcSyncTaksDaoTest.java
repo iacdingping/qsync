@@ -3,6 +3,7 @@ package com.openteach.qsync.core.system;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
@@ -109,5 +110,13 @@ public class CcSyncTaksDaoTest extends SpringTransactionalTestCase{
 		ccSyncTaksDao.deleteById(ccSyncTaks.getId());
 		long deleteRows = ccSyncTaksDao.count(query);
 		assertEquals(startRows, deleteRows);
+	}
+	
+	@Test
+	public void ccSyncTaksQueryTest() {
+		CcSyncTaksQuery query = new CcSyncTaksQuery();
+		query.setInStatus(Arrays.asList("abc", "多状态查询"));
+		long c = ccSyncTaksDao.count(query);
+		assertEquals(c, 0L);
 	}
 }

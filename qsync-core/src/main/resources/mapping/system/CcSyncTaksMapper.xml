@@ -92,6 +92,12 @@
 		   <if test="gmtModifiedEnd != null">
 				AND `gmt_modified` &lt;= #{gmtModifiedEnd}
 		   </if>
+		   <if test="inStatus != null">
+		   		AND `status` IN
+			   <foreach collection="inStatus" index="index" item="status" open="(" separator="," close=")"> 
+	            	#{status} 
+	        	</foreach>
+        	</if>
 		</where>
 	</sql>
 		

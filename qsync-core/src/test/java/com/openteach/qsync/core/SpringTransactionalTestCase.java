@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
  * 
  * 子类需要定义applicationContext文件的位置, 如:
  * 
- * @ContextConfiguration(locations = { "/applicationContext.xml" })
+ * @ContextConfiguration(locations = { "/applicationContext-test.xml" })
  * 
  * @author calvin
  */

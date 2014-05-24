@@ -25,13 +25,13 @@
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 -->
-		<property name="typeAliasesPackage" value="com.openteach.qsync.core.entity" />
+		<property name="typeAliasesPackage" value="com.openteach.qsync.core.entity.system" />
 		<!-- 显式指定Mapper文件位置 -->
-		<property name="mapperLocations" value="classpath:/mapping/*/*Mapper.xml" />
+		<property name="mapperLocations" value="classpath:/mapping/system/CcSyncTaksMapper.xml" />
 	</bean>
 	<!-- 扫描basePackage下所有以@MyBatisRepository标识的 接口-->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.openteach.qsync.core.dao" />
+		<property name="basePackage" value="com.openteach.qsync.core.dao.system" />
 		<property name="annotationClass" value="com.openteach.qsync.core.MyBatisRepository"/>
 	</bean>
 	
@@ -43,8 +43,8 @@
 	<!-- 使用annotation定义事务 -->
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 
-	<!-- 定义aspectj -->
-	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	<!-- 定义aspectj
+	<aop:aspectj-autoproxy proxy-target-class="true"/> -->
 	
 	<!-- production环境 -->
  	<beans profile="production">
