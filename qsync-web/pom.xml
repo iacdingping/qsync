@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.openteach</groupId>
+		<artifactId>qsync</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>qsync-web</artifactId>
+	<packaging>war</packaging>
+	<name>qsync</name>
+	<url>http://www.qsync.com</url>
+
+	<dependencies>
+	    
+		<!-- ================================================= -->
+		<!-- 	qsync modules 	   		   	       -->
+		<!-- ================================================= -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>qsync-task</artifactId>
+		</dependency>
+		
+		<!-- ================================================= -->
+		<!-- 					spring 	       -->
+		<!-- ================================================= -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.apache.velocity</groupId>
+		    <artifactId>velocity</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+	
+	<build>
+		<finalName>qsync</finalName>
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<webResources>
+						<resource>
+							<directory>src/main/webapp</directory>
+							<includes>
+								<include>WEB-INF/**/*.xml</include>
+							</includes>
+							<filtering>true</filtering>
+						</resource>
+						<resource>
+							<directory>src/main/webapp</directory>
+							<excludes>
+								<include>WEB-INF/**/*.xml</include>
+							</excludes>
+						</resource>
+					</webResources>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
