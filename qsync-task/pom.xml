@@ -28,6 +28,11 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>qsync-common</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>qsync-core</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>

@@ -12,7 +12,11 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>qsync-util</artifactId>
-			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>qsync-common</artifactId>
 		</dependency>
 	
 		<dependency>
