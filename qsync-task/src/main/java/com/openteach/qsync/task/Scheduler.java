@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.openteach.qsync.api.JkfClient;
 import com.openteach.qsync.service.declare.AssembleService;
-import com.openteach.qsync.task.db.TaskDAO;
-import com.openteach.qsync.task.db.TaskStorageOverDatabase;
 import com.openteach.qsync.task.impl.MultiThreadTaskConsumer;
 import com.openteach.qsync.task.impl.SingleThreadTaskGenerator;
 
@@ -23,9 +21,6 @@ import com.openteach.qsync.task.impl.SingleThreadTaskGenerator;
 public class Scheduler {
 
 	@Resource
-	private TaskDAO taskDAO;
-	
-	@Resource
 	private AssembleService assembleService;
 	
 	@Resource
@@ -37,6 +32,7 @@ public class Scheduler {
 	/**
 	 * storage
 	 */
+	@Resource
 	private TaskStorage storage;
 	
 	@Value("${sync.task.generator.retry.period}")
@@ -57,10 +53,6 @@ public class Scheduler {
 
 	@PostConstruct
 	public void initialize() {
-		//
-		this.storage = new TaskStorageOverDatabase();
-		((TaskStorageOverDatabase)this.storage).setTaskDAO(this.taskDAO);
-		
 		// 
 		this.generator = new SingleThreadTaskGenerator();
 		((SingleThreadTaskGenerator)this.generator).setRetryPeriod(generatorRetryPeriod);

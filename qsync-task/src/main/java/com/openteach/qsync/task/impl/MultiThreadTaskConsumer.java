@@ -16,7 +16,8 @@ import com.openteach.qsync.api.XmlRequest;
 import com.openteach.qsync.api.XmlResponse;
 import com.openteach.qsync.api.exception.ApiException;
 import com.openteach.qsync.api.utils.JaxbUtils;
-import com.openteach.qsync.task.Task;
+import com.openteach.qsync.core.entity.system.CcSyncTaks;
+import com.openteach.qsync.core.query.system.CcSyncTaksQuery;
 import com.openteach.qsync.task.TaskConsumer;
 import com.openteach.qsync.task.TaskStatus;
 import com.openteach.qsync.task.TaskStorage;
@@ -62,8 +63,8 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 	public void initialize() {
 		super.initialize();
 		for(int i = 0; i < threadCount; i++) {
-			TaskStorage.TaskQuery query = new TaskStorage.TaskQuery();
-			query.setStatusList(Arrays.asList(TaskStatus.UNDO, TaskStatus.FAILED));
+			CcSyncTaksQuery query = new CcSyncTaksQuery();
+			query.setInStatus(Arrays.asList(TaskStatus.UNDO.name(), TaskStatus.FAILED.name()));
 			query.setMode(i);
 			threads[i] = new Worker(query);
 		}
@@ -72,8 +73,8 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 
 			@Override
 			public void onSucceed(XmlResponse response, Object context) {
-				Task task = (Task)context;
-				task.setStatus(TaskStatus.DONE);
+				CcSyncTaks task = (CcSyncTaks)context;
+				task.setStatus(TaskStatus.DONE.name());
 				task.setXmlResponse(JaxbUtils.convertToXml(response));
 				task.setGmtModified(new Date());
 				storage.update(task);
@@ -81,8 +82,8 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 
 			@Override
 			public void onFailed(ApiException exception, Object context) {
-				Task task = (Task)context;
-				task.setStatus(TaskStatus.FAILED);
+				CcSyncTaks task = (CcSyncTaks)context;
+				task.setStatus(TaskStatus.FAILED.name());
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw); 
 				exception.printStackTrace(pw);
@@ -129,9 +130,9 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 	/**
 	 * 
 	 */
-	private int consume(TaskStorage.TaskQuery query) {
-		List<Task> tList = storage.query(query);
-		for(Task t : tList) {
+	private int consume(CcSyncTaksQuery query) {
+		List<CcSyncTaks> tList = storage.query(query);
+		for(CcSyncTaks t : tList) {
 			jkfClient.async(JaxbUtils.converyToJavaBean(t.getXmlRequest(), XmlRequest.class), callback, t);
 		}
 		return tList.size();
@@ -144,9 +145,9 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 	 */
 	private class Worker extends Thread {
 		
-		private TaskStorage.TaskQuery query;
+		private CcSyncTaksQuery query;
 		
-		public Worker(TaskStorage.TaskQuery query) {
+		public Worker(CcSyncTaksQuery query) {
 			super("default-task-consumer-thread-" + query.getMode());
 			this.query = query;
 		}
