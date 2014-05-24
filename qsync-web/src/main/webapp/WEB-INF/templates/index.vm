@@ -1,53 +1,8 @@
 <html>
 	<head>
-		<title>Meetup Server Console</title>
-		
-		<link rel="stylesheet" type="text/css" href="/assets/js/extjs/4.2.1/resources/css/ext-all-debug.css">
-		<link rel="stylesheet" type="text/css" href="/assets/css/desktop.css">
-		<link rel="stylesheet" type="text/css" href="/assets/css/filechooser.css">
-		
-		<script type="text/javascript" src="/assets/js/extjs/4.2.1/ext-all-debug.js"></script>
-
-		<script type="text/javascript" src="/assets/js/extjs/4.2.1/shared/include-ext.js"></script>
-    	<script type="text/javascript" src="/assets/js/extjs/4.2.1/shared/options-toolbar.js"></script>
-    
-    	<script language="javascript">
-			var squareTypeMap = {};
-			var messageTypeMap = {};
-			var messageStatusMap = {};
-			var genderMap = {};
-
-			#foreach($type in $squareTypes)
-				squareTypeMap[$type.value] = '$type.desc';
-			#end
-			
-			#foreach($type in $messageTypes)
-				messageTypeMap['$type.name()'] = '$type.desc';
-			#end
-			
-			#foreach($status in $messageStatus)
-				messageStatusMap['$status.name()'] = '$status.desc';
-			#end
-			
-			#foreach($g in $genders)
-				genderMap[$g.value] = '$g.desc';
-			#end
-			
-			var squareTypeStore = Ext.create('Ext.data.SimpleStore', {  
-            	fields: ['value','text'],
-            　　	data: [#foreach($type in $squareTypes) ['$type.value','$type.desc'], #end]  
-    　　  	})
-    
-    		var messageTypeStore = Ext.create('Ext.data.SimpleStore', {  
-            	fields: ['value','text'],
-            　　	data: [#foreach($type in $messageTypes) ['$type.value','$type.desc'], #end]  
-    　　  	})
-		</script>
-		
-		<script type="text/javascript" src="/assets/js/extjs/4.2.1/locale/ext-lang-zh_CN.js"></script>		
-		<script type="text/javascript" src="/assets/js/app/app.js"></script>
-		
+		<title>qsync console</title>
 	</head>
 	<body>
+		<h1>qsync console</h1>
 	</body>
 </html>

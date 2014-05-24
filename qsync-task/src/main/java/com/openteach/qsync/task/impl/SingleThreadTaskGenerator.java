@@ -147,9 +147,10 @@ public class SingleThreadTaskGenerator extends AbstractLifeCycle implements Task
 		CcSyncTaks t = new CcSyncTaks();
 		t.setGenerator(HOST_NAME);
 		t.setType(TaskType.DATA_ERROR.name());
-		t.setStatus(TaskStatus.UNDO.name());
+		t.setStatus(TaskStatus.DATA_ERROR.name());
 		t.setXmlRequest("");
 		t.setOrderId(orderId);
+		t.setException(exception);
 		t.setGmtCreate(new Date());
 		t.setGmtModified(t.getGmtCreate());
 		return t;

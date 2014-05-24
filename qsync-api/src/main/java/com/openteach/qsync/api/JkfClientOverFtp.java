@@ -11,6 +11,9 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.net.ftp.FTP;
@@ -97,6 +100,7 @@ public class JkfClientOverFtp implements JkfClient {
 	/**
 	 * 
 	 */
+	@PostConstruct
 	public void initialize() {
 		try {
 			// 
@@ -122,6 +126,7 @@ public class JkfClientOverFtp implements JkfClient {
 	/**
 	 * 
 	 */
+	@PreDestroy
 	public void release() {
 		// TODO 优雅的停下来
 		releasePushers();
@@ -369,7 +374,7 @@ public class JkfClientOverFtp implements JkfClient {
 								// 存储失败
 							}
 						} catch (InterruptedException e) {
-							logger.error(e);
+							logger.error("Thread interrupted", e);
 							Thread.currentThread().interrupt();
 						} catch (FTPConnectionClosedException e) {
 							// 重新初始化ftp呗
@@ -382,7 +387,7 @@ public class JkfClientOverFtp implements JkfClient {
 							reInitializeFtp();
 							//goto _retry;
 						} catch (Throwable t) {
-							logger.error(t);
+							logger.error("Exception", t);
 						} finally {
 							if(null != stream) {
 								try {
@@ -468,7 +473,7 @@ public class JkfClientOverFtp implements JkfClient {
 						try {
 							FTPFile[] files = ftp.listFiles();
 							for(FTPFile f : files) {
-								if(null == f) {
+								if(null == f || null == f.getName()) {
 									continue;
 								}
 								PendingRequest pr = pendingRequests.remove(f.getName());
@@ -492,7 +497,7 @@ public class JkfClientOverFtp implements JkfClient {
 							reInitializeFtp();
 							//goto _retry;
 						} catch (Throwable t) {
-							logger.error(t);
+							logger.error("Exception", t);
 						}
 					}
 				}
