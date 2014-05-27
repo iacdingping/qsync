@@ -2,8 +2,6 @@ package com.openteach.qsync.api.goods.request;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -14,8 +12,7 @@ import com.openteach.qsync.api.BaseBody;
  * @author rqq
  *
  */
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "body")
+@XmlType (namespace="goods.request", name="body")
 public class Body extends BaseBody {
 
 	/**

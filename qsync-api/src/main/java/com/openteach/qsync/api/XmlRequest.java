@@ -1,5 +1,7 @@
 package com.openteach.qsync.api;
 
+import java.util.Arrays;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -7,6 +9,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import com.openteach.qsync.api.goods.request.GoodsDeclar;
+import com.openteach.qsync.api.goods.request.GoodsDeclarModule;
 import com.openteach.qsync.api.utils.JaxbUtils;
 
 
@@ -34,7 +38,7 @@ public class XmlRequest {
 	/**
 	 * 
 	 */
-	@XmlElement(required = true)
+	@XmlElement(required = true, name="body")
 	private BaseBody body;
 
 	public String getVersion() {
@@ -75,8 +79,18 @@ public class XmlRequest {
 	 */
 	public static void main(String ... args) {
 		XmlRequest request = new XmlRequest();
-		request.setHead(new BaseHead());
-		request.setBody(new BaseBody());
+		GoodsDeclarModule m = new GoodsDeclarModule();
+		GoodsDeclar gd = new GoodsDeclar();
+		BaseHead head = new BaseHead();
+		com.openteach.qsync.api.goods.request.Body body = new com.openteach.qsync.api.goods.request.Body();
+		head.setBusinessType("IUIIUOIUEWOHRWEOHFDSF");
+		gd.setAccountBookNo("fdsfsre");
+		gd.setApplicationFormNo("dsfsdfsfrewr");
+		gd.setCurrency("dfsfd");
+		m.setGoodsDeclar(gd);
+		body.setGoodsDeclarModuleList(Arrays.asList(m));
+		request.setHead(head);
+		request.setBody(body);
 		System.out.println(request.toXml());
 	}
 }

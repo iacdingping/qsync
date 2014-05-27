@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ImportCompany")
+@XmlType(namespace="record.request", name = "ImportCompany")
 public class ImportCompany {
 
 	/**

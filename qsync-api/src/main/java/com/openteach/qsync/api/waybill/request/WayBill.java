@@ -13,7 +13,7 @@ import com.openteach.qsync.api.JkfSign;
  *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wayBill")
+@XmlType(namespace="waybill.request", name = "wayBill")
 public class WayBill {
 	
 	/**

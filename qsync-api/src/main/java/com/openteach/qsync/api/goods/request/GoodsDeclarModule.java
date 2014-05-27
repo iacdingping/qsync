@@ -15,7 +15,7 @@ import com.openteach.qsync.api.JkfSign;
  *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "goodsDeclarModule")
+@XmlType(namespace="goods.request", name = "goodsDeclarModule")
 public class GoodsDeclarModule {
 	
 	/**

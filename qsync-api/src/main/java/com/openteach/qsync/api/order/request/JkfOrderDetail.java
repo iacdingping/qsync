@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlType;
  * @author IAC-DINGPING
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "jkfOrderDetail")
+@XmlType(namespace="order.request", name = "jkfOrderDetail")
 public class JkfOrderDetail {
 
 	/**

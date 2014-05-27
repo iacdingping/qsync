@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "wayBillImportDto")
+@XmlType(namespace="waybill.request", name = "wayBillImportDto")
 public class WayBillImportDto {
 
 	@XmlElement(required = true)

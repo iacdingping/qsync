@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "jkfResult")
+@XmlType(name = "jkfResultDetail")
 public class JkfResultDetail {
 
 	/**

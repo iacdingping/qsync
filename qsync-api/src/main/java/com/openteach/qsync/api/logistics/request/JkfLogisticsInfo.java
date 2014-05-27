@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "jkfLogisticsInfo")
+@XmlType(namespace="logistics.request", name = "jkfLogisticsInfo")
 public class JkfLogisticsInfo {
 
 	/**

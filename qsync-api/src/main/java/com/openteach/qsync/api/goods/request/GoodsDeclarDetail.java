@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "goodsDeclarDetail")
+@XmlType(namespace="goods.request", name = "goodsDeclarDetail")
 public class GoodsDeclarDetail {
 	
 	/**

@@ -1,12 +1,17 @@
 package com.openteach.qsync.api.order.request;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * 购买人信息
  * @author IAC-DINGPING
  *
  */
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType (namespace="order.request", name="jkfGoodsPurchaser")
 public class JkfGoodsPurchaser {
 
 	/**
