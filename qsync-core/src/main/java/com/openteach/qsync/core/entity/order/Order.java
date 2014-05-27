@@ -304,6 +304,7 @@ public class Order {
 	private java.lang.Long transportationcompanyId;
 	
 	@Valid
+	@NotNull
 	private Transportationcompany transportationcompanyObject;
     /**
      * transportnumber       db_column: transportnumber 

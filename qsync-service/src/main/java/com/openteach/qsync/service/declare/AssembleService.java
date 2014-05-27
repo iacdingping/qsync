@@ -27,6 +27,7 @@ import com.openteach.qsync.api.order.request.JkfGoodsPurchaser;
 import com.openteach.qsync.api.order.request.JkfOrderDetail;
 import com.openteach.qsync.api.order.request.JkfOrderImportHead;
 import com.openteach.qsync.api.order.request.OrderInfo;
+import com.openteach.qsync.api.utils.JaxbUtils;
 import com.openteach.qsync.api.waybill.request.WayBill;
 import com.openteach.qsync.api.waybill.request.WayBillImportDto;
 import com.openteach.qsync.core.ConfigService;
@@ -237,7 +238,7 @@ public class AssembleService implements InitializingBean {
 		
 		List<TransportCommodity> transportCommoditiyList = order.getOrderTransportObject().getTransportCommodityList();
 		StringBuilder sb = new StringBuilder();
-		for(int i=0; i<=transportCommoditiyList.size() && i<=3; i++) {
+		for(int i=0; i<transportCommoditiyList.size() && i<=3; i++) {
 			TransportCommodity tc = transportCommoditiyList.get(i);
 			Commsku commsku = tc.getCommskuObject();
 			sb.append(commsku.getName()).append("，");
@@ -252,7 +253,7 @@ public class AssembleService implements InitializingBean {
 		
 		List<GoodsDeclarDetail> goodsDeclarDetails = new ArrayList<GoodsDeclarDetail>();
 		goodsDeclarModule.setGoodsDeclarDetails(goodsDeclarDetails);
-		for(int i=0; i<=transportCommoditiyList.size() && i<=3; i++) {
+		for(int i=0; i<transportCommoditiyList.size() && i<=3; i++) {
 			TransportCommodity tc = transportCommoditiyList.get(i);
 			Commsku commsku = tc.getCommskuObject();
 			GoodsDeclarDetail cdd = new GoodsDeclarDetail();
@@ -282,6 +283,7 @@ public class AssembleService implements InitializingBean {
 		head.setBusinessType(BaseHead.PERSONAL_GOODS_DECLAR);
 		request.setHead(head);
 		request.setBody(body);
+		System.out.println(JaxbUtils.convertToXml(request));
 		return request;
 	}
 	
@@ -305,7 +307,7 @@ public class AssembleService implements InitializingBean {
 		dto.setNetWeight(order.getTotalGoodsWeight());
 		List<TransportCommodity> transportCommoditiyList = order.getOrderTransportObject().getTransportCommodityList();
 		StringBuilder sb = new StringBuilder();
-		for(int i=0; i<=transportCommoditiyList.size() && i<=3; i++) {
+		for(int i=0; i<transportCommoditiyList.size() && i<=3; i++) {
 			TransportCommodity tc = transportCommoditiyList.get(i);
 			Commsku commsku = tc.getCommskuObject();
 			sb.append(commsku.getName()).append("，");
