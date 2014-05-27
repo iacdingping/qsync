@@ -27,7 +27,6 @@ import com.openteach.qsync.api.order.request.JkfGoodsPurchaser;
 import com.openteach.qsync.api.order.request.JkfOrderDetail;
 import com.openteach.qsync.api.order.request.JkfOrderImportHead;
 import com.openteach.qsync.api.order.request.OrderInfo;
-import com.openteach.qsync.api.utils.JaxbUtils;
 import com.openteach.qsync.api.waybill.request.WayBill;
 import com.openteach.qsync.api.waybill.request.WayBillImportDto;
 import com.openteach.qsync.core.ConfigService;
@@ -283,7 +282,6 @@ public class AssembleService implements InitializingBean {
 		head.setBusinessType(BaseHead.PERSONAL_GOODS_DECLAR);
 		request.setHead(head);
 		request.setBody(body);
-		System.out.println(JaxbUtils.convertToXml(request));
 		return request;
 	}
 	

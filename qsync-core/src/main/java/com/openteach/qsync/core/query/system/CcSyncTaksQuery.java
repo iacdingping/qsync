@@ -42,6 +42,16 @@ public class CcSyncTaksQuery extends PageQuery {
 	private java.util.Date gmtModifiedEnd;
 	
 	private Integer mode;
+	
+	public Integer getWorkerSize() {
+		return workerSize;
+	}
+
+	public void setWorkerSize(Integer workerSize) {
+		this.workerSize = workerSize;
+	}
+
+	private Integer workerSize;
 
 	public java.lang.Long getId() {
 		return this.id;

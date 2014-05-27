@@ -62,6 +62,9 @@
 	       <if test="id">
 				AND `id` = #{id}
 			</if>
+			<if test="mode != null">
+				AND `id` % #{workerSize} = #{mode}
+		   </if>
 	       <if test="generator">
 				AND `generator` = #{generator}
 			</if>

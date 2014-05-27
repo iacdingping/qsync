@@ -84,7 +84,7 @@ public class JkfClientOverFtp implements JkfClient {
 	
 	private Puller[] pullers;
 	
-	private static String PREFIX;
+	private static String PREFIX = "12345";
 	
 	private AtomicLong sequence;
 	

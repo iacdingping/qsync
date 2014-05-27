@@ -33,7 +33,7 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 	
 	public static final int DEFAULT_RETRY_PERIOD = 10;
 	
-	public static final int DEFAULT_THREAD_COUNT = 4;
+	public static final int DEFAULT_THREAD_COUNT = Runtime.getRuntime().availableProcessors() + 1;
 	
 	private TaskStorage storage;
 	
@@ -65,6 +65,7 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 		threads = new Thread[threadCount];
 		for(int i = 0; i < threadCount; i++) {
 			CcSyncTaksQuery query = new CcSyncTaksQuery();
+			query.setWorkerSize(threadCount);
 			query.setInStatus(Arrays.asList(TaskStatus.UNDO.name(), TaskStatus.FAILED.name()));
 			query.setMode(i);
 			threads[i] = new Worker(query);
