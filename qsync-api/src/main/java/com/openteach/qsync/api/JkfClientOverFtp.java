@@ -91,7 +91,7 @@ public class JkfClientOverFtp implements JkfClient {
 	
 	private Puller[] pullers;
 	
-	private static String PREFIX = "12345";
+	private static String PREFIX = "";
 	
 	private AtomicLong sequence;
 	
@@ -126,7 +126,7 @@ public class JkfClientOverFtp implements JkfClient {
 			
 			try {
 				InetAddress address = InetAddress.getLocalHost();
-				PREFIX = address.hashCode() + "";
+				PREFIX = String.valueOf(address.hashCode() + System.currentTimeMillis());
 			} catch (UnknownHostException e) {
 				// XXX 还是失败了好, 后面很多都依赖这两个值
 				throw new RuntimeException("Can not get host_name and host ip", e);
@@ -363,7 +363,7 @@ public class JkfClientOverFtp implements JkfClient {
 	 * @return
 	 */
 	private String generateSequence() {
-		return PREFIX + "_" + sequence.getAndIncrement();
+		return String.valueOf(sequence.getAndIncrement());
 	}
 	
 	/**
