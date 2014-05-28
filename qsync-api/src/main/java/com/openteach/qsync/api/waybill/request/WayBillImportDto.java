@@ -6,6 +6,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.openteach.qsync.api.utils.JaxbDateSerializer;
 
 /**
  * 
@@ -62,6 +65,7 @@ public class WayBillImportDto {
 	private String currCode;
 	
 	@XmlElement(required = true)
+	@XmlJavaTypeAdapter(JaxbDateSerializer.class)
 	private Date importDateString;
 
 	public String getWayBillNo() {
