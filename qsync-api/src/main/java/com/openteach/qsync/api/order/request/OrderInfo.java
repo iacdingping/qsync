@@ -5,6 +5,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlType;
 
 import com.openteach.qsync.api.JkfSign;
@@ -24,7 +25,8 @@ public class OrderInfo {
 	@XmlElement(required = true)
 	private JkfOrderImportHead jkfOrderImportHead;
 	
-	@XmlElement(required = true)
+	@XmlElementWrapper
+	@XmlElement(required = true, name="jkfOrderDetail")
 	private List<JkfOrderDetail> jkfOrderDetailList;
 	
 	@XmlElement(required = true)

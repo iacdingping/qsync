@@ -3,6 +3,7 @@ package com.openteach.qsync.api.record.request;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlType;
 
 import com.openteach.qsync.api.BaseBody;
@@ -25,7 +26,8 @@ public class Body extends BaseBody {
 	/**
 	 * 
 	 */
-	@XmlElement(required = true, name="ImportCompanyList")
+	@XmlElementWrapper
+	@XmlElement(required = true, name="importCompany")
 	private List<ImportCompany> importCompanyList;
 
 	public JkfSign getJkfSign() {

@@ -3,6 +3,7 @@ package com.openteach.qsync.api.waybill.request;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlType;
 
 import com.openteach.qsync.api.BaseBody;
@@ -18,7 +19,8 @@ public class Body extends BaseBody {
 	/**
 	 * 
 	 */
-	@XmlElement(required = true)
+	@XmlElementWrapper
+	@XmlElement(required = true, name="wayBill")
 	private List<WayBill> wayBillList;
 
 	public List<WayBill> getWayBillList() {
