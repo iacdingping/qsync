@@ -33,7 +33,7 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 	
 	public static final int DEFAULT_RETRY_PERIOD = 10;
 	
-	public static final int DEFAULT_THREAD_COUNT = Runtime.getRuntime().availableProcessors() + 1;
+	public static final int DEFAULT_THREAD_COUNT = 1 /*Runtime.getRuntime().availableProcessors() + 1*/;
 	
 	private TaskStorage storage;
 	
@@ -138,6 +138,8 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 		List<CcSyncTaks> tList = storage.query(query);
 		for(CcSyncTaks t : tList) {
 			jkfClient.async(JaxbUtils.converyToJavaBean(t.getXmlRequest(), XmlRequest.class), callback, t);
+			t.setStatus(TaskStatus.DOING.name());
+			storage.update(t);
 		}
 		return tList.size();
 	}

@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import com.openteach.qsync.api.BaseBody;
 
@@ -13,7 +13,7 @@ import com.openteach.qsync.api.BaseBody;
  * @author IAC-DINGPING
  *
  */
-@XmlType (namespace="order.request", name="body")
+@XmlRootElement(name="body", namespace="order.request")
 public class Body extends BaseBody {
 
 	/**

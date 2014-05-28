@@ -1,6 +1,7 @@
 package com.openteach.qsync.api;
 
 import java.util.Arrays;
+import java.util.Date;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -87,6 +88,7 @@ public class XmlRequest {
 		gd.setAccountBookNo("fdsfsre");
 		gd.setApplicationFormNo("dsfsdfsfrewr");
 		gd.setCurrency("dfsfd");
+		gd.setInOutDatStr(new Date());
 		m.setGoodsDeclar(gd);
 		body.setGoodsDeclarModuleList(Arrays.asList(m));
 		request.setHead(head);

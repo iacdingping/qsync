@@ -6,9 +6,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Iterator;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.annotation.PostConstruct;
@@ -25,6 +29,7 @@ import org.apache.commons.net.io.CopyStreamException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.openteach.qcity.qsync.common.lifecycle.NamedThreadFactory;
 import com.openteach.qsync.api.exception.ApiException;
 import com.openteach.qsync.api.utils.JaxbUtils;
 
@@ -39,6 +44,8 @@ public class JkfClientOverFtp implements JkfClient {
 	public static final int DEFAULT_COUNT = 4;
 	
 	public static final int DEFAULT_BUFFER_SIZE = 1024;
+	
+	public static final int DEFAULT_TIMEOUT = 1800;
 	
 	private static final String SUFFIX = "PT14050401";
 	
@@ -84,7 +91,7 @@ public class JkfClientOverFtp implements JkfClient {
 	
 	private Puller[] pullers;
 	
-	private static String PREFIX = "12345";
+	private static String PREFIX = "";
 	
 	private AtomicLong sequence;
 	
@@ -98,6 +105,17 @@ public class JkfClientOverFtp implements JkfClient {
 	private BlockingQueue<PendingRequest> buffer;
 	
 	/**
+	 * 看门狗
+	 */
+	private ScheduledExecutorService scheduledExecutorService;
+	
+	/**
+	 * 
+	 */
+	@Value("${sync.customs.timeout}")
+	private long timeout = DEFAULT_TIMEOUT;
+	
+	/**
 	 * 
 	 */
 	@PostConstruct
@@ -108,7 +126,7 @@ public class JkfClientOverFtp implements JkfClient {
 			
 			try {
 				InetAddress address = InetAddress.getLocalHost();
-				PREFIX = address.hashCode() + "";
+				PREFIX = String.valueOf(address.hashCode() + System.currentTimeMillis());
 			} catch (UnknownHostException e) {
 				// XXX 还是失败了好, 后面很多都依赖这两个值
 				throw new RuntimeException("Can not get host_name and host ip", e);
@@ -118,7 +136,7 @@ public class JkfClientOverFtp implements JkfClient {
 			
 			initializePushers();
 			initializePullers();
-			
+			initializeWatchdog();
 		} catch (IOException e) {
 			throw new IllegalArgumentException("Can not connect ftp server", e);
 		}
@@ -132,6 +150,7 @@ public class JkfClientOverFtp implements JkfClient {
 		// TODO 优雅的停下来
 		releasePushers();
 		releasePullers();
+		shutdownWatchdog();
 		buffer.clear();
 		pendingRequests.clear();
 	}
@@ -143,11 +162,14 @@ public class JkfClientOverFtp implements JkfClient {
 		synchronized(pr) {
 			//
 			try {
-				pr.wait();
+				pr.wait(1000 * timeout);
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 				throw new ApiException(e);
 			}
+		}
+		if(null == pr.response) {
+			throw new ApiException("Timeout");
 		}
 		return pr.response;
 	}
@@ -237,6 +259,29 @@ public class JkfClientOverFtp implements JkfClient {
 	/**
 	 * 
 	 */
+	private void initializeWatchdog() {
+		scheduledExecutorService = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("mtop-trace-timer"));
+		scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+
+			@Override
+			public void run() {
+				String key = null;
+				for(Iterator<String> it = pendingRequests.keySet().iterator(); it.hasNext();) {
+					key = it.next();
+					PendingRequest pr = pendingRequests.get(key);
+					if(null != pr && System.currentTimeMillis() - pr.commitedTimestamp > timeout) {
+						pendingRequests.remove(key);
+						pr.failed(new ApiException("Timeout"));
+					}
+				}
+			}
+			
+		}, timeout, timeout, TimeUnit.SECONDS);
+	}
+	
+	/**
+	 * 
+	 */
 	private void releasePushers() {
 		if(null != pushers) {
 			for(Pusher r : pushers) {
@@ -253,6 +298,15 @@ public class JkfClientOverFtp implements JkfClient {
 			for(Puller r : pullers) {
 				r.stop();
 			}
+		}
+	}
+	
+	/**
+	 * 
+	 */
+	private void shutdownWatchdog() {
+		if(null != scheduledExecutorService) {
+			scheduledExecutorService.shutdown();
 		}
 	}
 	
@@ -309,7 +363,7 @@ public class JkfClientOverFtp implements JkfClient {
 	 * @return
 	 */
 	private String generateSequence() {
-		return PREFIX + "_" + sequence.getAndIncrement();
+		return String.valueOf(sequence.getAndIncrement());
 	}
 	
 	/**
@@ -371,8 +425,11 @@ public class JkfClientOverFtp implements JkfClient {
 						_retry:
 							if(ftp.storeFile(pr.requestFileName, stream)) {
 								pendingRequests.put(pr.responseFileName, pr);
+								// 
+								pr.commitedTimestamp = System.currentTimeMillis();
 							} else {
-								// 存储失败
+								// TODO 存储失败
+								pr.failed(new ApiException("Store file to ftp failed"));
 							}
 						} catch (InterruptedException e) {
 							logger.error("Thread interrupted", e);
@@ -567,8 +624,10 @@ public class JkfClientOverFtp implements JkfClient {
 		
 		XmlResponse response;
 		
-		private Callback callback;
-		private Object context;
+		Callback callback;
+		Object context;
+		
+		long commitedTimestamp;
 		
 		/**
 		 * 
@@ -597,6 +656,7 @@ public class JkfClientOverFtp implements JkfClient {
 			this.responseFileName = responseFileName;
 			this.callback = callback;
 			this.context = context;
+			this.commitedTimestamp = System.currentTimeMillis();
 		}
 		
 		/**
@@ -614,6 +674,18 @@ public class JkfClientOverFtp implements JkfClient {
 			if(null != callback) {
 				// async
 				callback.onSucceed(response, context);
+			} else {
+				notifyCompleted();
+			}
+		}
+		
+		/**
+		 * 
+		 */
+		public void failed(ApiException e) {
+			if(null != callback) {
+				// async
+				callback.onFailed(e, context);
 			} else {
 				notifyCompleted();
 			}
