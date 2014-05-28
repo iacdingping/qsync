@@ -31,8 +31,8 @@ public class JkfClientOverFtpTest {
 		jkfClient.setPusherFtpPassword("newyork_pub");
 		jkfClient.setPullerFtpServer("60.191.76.84");
 		jkfClient.setPullerFtpPort(21);
-		jkfClient.setPullerFtpUsername("newyork_PT14050401");
-		jkfClient.setPullerFtpPassword("123456");
+		jkfClient.setPullerFtpUsername("newyork_pub");
+		jkfClient.setPullerFtpPassword("newyork_pub");
 		jkfClient.initialize();
 	}
 	
