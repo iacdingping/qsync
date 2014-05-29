@@ -16,7 +16,7 @@ import com.openteach.qsync.api.utils.JaxbDateSerializer;
  *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(namespace="waybill.request", name = "wayBillImportDto")
+@XmlType(name = "wayBillImportDto")
 public class WayBillImportDto {
 
 	@XmlElement(required = true)

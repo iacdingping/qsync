@@ -15,20 +15,27 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.openteach.qsync.api.BaseHead;
+import com.openteach.qsync.api.CommonXmlRequestHead;
 import com.openteach.qsync.api.JkfSign;
-import com.openteach.qsync.api.XmlRequest;
 import com.openteach.qsync.api.goods.request.GoodsDeclar;
 import com.openteach.qsync.api.goods.request.GoodsDeclarDetail;
 import com.openteach.qsync.api.goods.request.GoodsDeclarModule;
+import com.openteach.qsync.api.goods.request.XmlGoodsDeclarRequestBody;
+import com.openteach.qsync.api.goods.request.XmlGoodsDeclarRequest;
 import com.openteach.qsync.api.logistics.request.JkfLogisticsInfo;
 import com.openteach.qsync.api.logistics.request.Logistics;
+import com.openteach.qsync.api.logistics.request.XmlLogisticsRequest;
+import com.openteach.qsync.api.logistics.request.XmlLogisticsRequestBody;
 import com.openteach.qsync.api.order.request.JkfGoodsPurchaser;
 import com.openteach.qsync.api.order.request.JkfOrderDetail;
 import com.openteach.qsync.api.order.request.JkfOrderImportHead;
 import com.openteach.qsync.api.order.request.OrderInfo;
+import com.openteach.qsync.api.order.request.XmlOrderRequest;
+import com.openteach.qsync.api.order.request.XmlOrderRequestBody;
 import com.openteach.qsync.api.waybill.request.WayBill;
 import com.openteach.qsync.api.waybill.request.WayBillImportDto;
+import com.openteach.qsync.api.waybill.request.XmlWaybillRequest;
+import com.openteach.qsync.api.waybill.request.XmlWaybillRequestBody;
 import com.openteach.qsync.core.ConfigService;
 import com.openteach.qsync.core.entity.goods.Commsku;
 import com.openteach.qsync.core.entity.info.Country;
@@ -77,9 +84,9 @@ public class AssembleService implements InitializingBean {
 	 * @param order
 	 * @return
 	 */
-	public XmlRequest getOrderXmlRequest(Order order) {
-		XmlRequest request = new XmlRequest();
-		com.openteach.qsync.api.order.request.Body body = new com.openteach.qsync.api.order.request.Body();
+	public XmlOrderRequest getOrderXmlRequest(Order order) {
+		XmlOrderRequest request = new XmlOrderRequest();
+		XmlOrderRequestBody body = new XmlOrderRequestBody();
 		OrderInfo orderInfo = new OrderInfo();
 		orderInfo.setJkfSign(this.getJkfSign());
 		JkfOrderImportHead jkfOrderImportHead = new JkfOrderImportHead();
@@ -144,8 +151,8 @@ public class AssembleService implements InitializingBean {
 		jkfGoodsPurchaser.setAddress(order.getMemberObject().getAddress());
 		orderInfo.setJkfGoodsPurchaser(jkfGoodsPurchaser);
 		
-		BaseHead head = new BaseHead(); 
-		head.setBusinessType(BaseHead.IMPORTORDER);
+		CommonXmlRequestHead head = new CommonXmlRequestHead(); 
+		head.setBusinessType(CommonXmlRequestHead.IMPORTORDER);
 		request.setHead(head);
 		request.setBody(body);
 		return request;
@@ -156,9 +163,9 @@ public class AssembleService implements InitializingBean {
 	 * @param order
 	 * @return
 	 */
-	public XmlRequest getLogisticsXmlRequest(Order order) {
-		XmlRequest request = new XmlRequest();
-		com.openteach.qsync.api.logistics.request.Body body = new com.openteach.qsync.api.logistics.request.Body();
+	public XmlLogisticsRequest getLogisticsXmlRequest(Order order) {
+		XmlLogisticsRequest request = new XmlLogisticsRequest();
+		XmlLogisticsRequestBody body = new XmlLogisticsRequestBody();
 		Logistics logistics = new Logistics();
 		JkfLogisticsInfo jkfLogisticsInfo = new JkfLogisticsInfo();
 		jkfLogisticsInfo.setLogisticsCompanyNo(order.getTransportationcompanyObject().getCode());
@@ -174,8 +181,8 @@ public class AssembleService implements InitializingBean {
 		logistics.setJkfSign(jkfSign);
 		body.setLogisticsList(Arrays.asList(logistics));
 		
-		BaseHead head = new BaseHead();
-		head.setBusinessType(BaseHead.LOGISTICS_INFO);
+		CommonXmlRequestHead head = new CommonXmlRequestHead();
+		head.setBusinessType(CommonXmlRequestHead.LOGISTICS_INFO);
 		request.setHead(head);
 		request.setBody(body);
 		return request;
@@ -188,9 +195,9 @@ public class AssembleService implements InitializingBean {
 	 * @param order
 	 * @return
 	 */
-	public XmlRequest getGoodsXmlRequest(Order order) {
-		XmlRequest request = new XmlRequest();
-		com.openteach.qsync.api.goods.request.Body body = new com.openteach.qsync.api.goods.request.Body();
+	public XmlGoodsDeclarRequest getGoodsXmlRequest(Order order) {
+		XmlGoodsDeclarRequest request = new XmlGoodsDeclarRequest();
+		XmlGoodsDeclarRequestBody body = new XmlGoodsDeclarRequestBody();
 		GoodsDeclarModule goodsDeclarModule = new GoodsDeclarModule();
 		goodsDeclarModule.setJkfSign(jkfSign);
 		
@@ -278,8 +285,8 @@ public class AssembleService implements InitializingBean {
 		
 		body.setGoodsDeclarModuleList(Arrays.asList(goodsDeclarModule));
 		
-		BaseHead head = new BaseHead();
-		head.setBusinessType(BaseHead.PERSONAL_GOODS_DECLAR);
+		CommonXmlRequestHead head = new CommonXmlRequestHead();
+		head.setBusinessType(CommonXmlRequestHead.PERSONAL_GOODS_DECLAR);
 		request.setHead(head);
 		request.setBody(body);
 		return request;
@@ -290,9 +297,9 @@ public class AssembleService implements InitializingBean {
 	 * @param order
 	 * @return
 	 */
-	public XmlRequest getWaybillXmlRequest(Order order) {
-		XmlRequest request = new XmlRequest();
-		com.openteach.qsync.api.waybill.request.Body body = new com.openteach.qsync.api.waybill.request.Body();
+	public XmlWaybillRequest getWaybillXmlRequest(Order order) {
+		XmlWaybillRequest request = new XmlWaybillRequest();
+		XmlWaybillRequestBody body = new XmlWaybillRequestBody();
 		
 		WayBill wayBill = new WayBill();
 		wayBill.setJkfSign(jkfSign);
@@ -327,8 +334,8 @@ public class AssembleService implements InitializingBean {
 		
 		body.setWayBillList(Arrays.asList(wayBill));
 		
-		BaseHead head = new BaseHead();
-		head.setBusinessType(BaseHead.IMPORTBILL);
+		CommonXmlRequestHead head = new CommonXmlRequestHead();
+		head.setBusinessType(CommonXmlRequestHead.IMPORTBILL);
 		request.setHead(head);
 		request.setBody(body);
 		return request;

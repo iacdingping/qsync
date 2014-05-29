@@ -2,11 +2,12 @@ package com.openteach.qsync.api.record.request;
 
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlType;
 
-import com.openteach.qsync.api.BaseBody;
 import com.openteach.qsync.api.JkfSign;
 
 /**
@@ -14,8 +15,9 @@ import com.openteach.qsync.api.JkfSign;
  * @author rqq
  *
  */
-@XmlType(namespace="record.request", name = "body")
-public class Body extends BaseBody {
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "body")
+public class XmlRecordRequestBody {
 
 	/**
 	 * 

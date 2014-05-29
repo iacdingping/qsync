@@ -16,7 +16,7 @@ import com.openteach.qsync.api.utils.JaxbDateSerializer;
  *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(namespace="goods.response", name = "jkfGoodsDeclar")
+@XmlType(name = "jkfGoodsDeclar")
 public class JkfGoodsDeclar {
 
 	/**

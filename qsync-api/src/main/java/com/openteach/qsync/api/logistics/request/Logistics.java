@@ -13,7 +13,7 @@ import com.openteach.qsync.api.JkfSign;
  *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(namespace="logistics.request", name = "logistics")
+@XmlType(name = "logistics")
 public class Logistics {
 	
 	/**

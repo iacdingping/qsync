@@ -16,7 +16,7 @@ import com.openteach.qsync.api.JkfSign;
  *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(namespace="order.request", name = "orderInfo")
+@XmlType(name = "orderInfo")
 public class OrderInfo {
 
 	@XmlElement(required = true)

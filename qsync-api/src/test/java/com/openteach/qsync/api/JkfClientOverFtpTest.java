@@ -13,6 +13,9 @@ import org.junit.Test;
 
 import com.openteach.qsync.api.exception.ApiException;
 import com.openteach.qsync.api.record.request.ImportCompany;
+import com.openteach.qsync.api.record.request.XmlRecordRequest;
+import com.openteach.qsync.api.record.request.XmlRecordRequestBody;
+import com.openteach.qsync.api.record.response.XmlRecordResponse;
 import com.openteach.qsync.api.utils.JaxbUtils;
 
 public class JkfClientOverFtpTest {
@@ -45,12 +48,12 @@ public class JkfClientOverFtpTest {
 	public void testSyncRequest() throws ApiException {
 		JkfSign jkfSign = new JkfSign();
 		ImportCompany im = new ImportCompany();
-		com.openteach.qsync.api.record.request.Body body = new com.openteach.qsync.api.record.request.Body();
+		XmlRecordRequestBody body = new XmlRecordRequestBody();
 		body.setJkfSign(jkfSign);
 		body.setImportCompanyList(Arrays.asList(im));
-		XmlRequest request = new XmlRequest();
+		XmlRecordRequest request = new XmlRecordRequest();
 		request.setBody(body);
-		XmlResponse response = jkfClient.sync(request);
+		XmlResponse response = jkfClient.sync(request, XmlRecordResponse.class);
 		System.out.println(JaxbUtils.convertToXml(response));
 	}
 

@@ -156,8 +156,8 @@ public class JkfClientOverFtp implements JkfClient {
 	}
 	
 	@Override
-	public XmlResponse sync(XmlRequest request) throws ApiException {
-		PendingRequest pr = this.pendingRequest(request, null, null);
+	public XmlResponse sync(XmlRequest request, Class<? extends XmlResponse> responseClass) throws ApiException {
+		PendingRequest pr = this.pendingRequest(request, null, null, responseClass);
 		// 同步等待
 		synchronized(pr) {
 			//
@@ -175,14 +175,14 @@ public class JkfClientOverFtp implements JkfClient {
 	}
 
 	@Override
-	public void async(XmlRequest request, Callback callback) {
-		async(request, callback, null);
+	public void async(XmlRequest request, Callback callback, Class<? extends XmlResponse> responseClass) {
+		async(request, callback, null, responseClass);
 	}
 	
 	@Override
-	public void async(XmlRequest request, Callback callback, Object context) {
+	public void async(XmlRequest request, Callback callback, Object context, Class<? extends XmlResponse> responseClass) {
 		try {
-			this.pendingRequest(request, callback, context);
+			this.pendingRequest(request, callback, context, responseClass);
 		} catch (ApiException e) {
 			callback.onFailed(e, context);
 		}
@@ -338,12 +338,12 @@ public class JkfClientOverFtp implements JkfClient {
 	 * @return
 	 * @throws ApiException
 	 */
-	private PendingRequest pendingRequest(XmlRequest request, Callback callback, Object context) throws ApiException {
+	private PendingRequest pendingRequest(XmlRequest request, Callback callback, Object context, Class<? extends XmlResponse> responseClass) throws ApiException {
 				
 		String sequence = generateSequence();
 		String requestFileName = generateRequestFileName(sequence);
 		String responseFileName = generateReponseFileName(sequence);
-		PendingRequest pr = new PendingRequest(request, sequence, requestFileName, responseFileName, callback, context);
+		PendingRequest pr = new PendingRequest(request, sequence, requestFileName, responseFileName, responseClass, callback, context);
 		
 		try {
 			buffer.put(pr);
@@ -540,7 +540,7 @@ public class JkfClientOverFtp implements JkfClient {
 									continue;
 								}
 								String xml = getAndDeleteFile(f.getName());
-								pr.response = JaxbUtils.converyToJavaBean(xml, XmlResponse.class);
+								pr.response = JaxbUtils.converyToJavaBean(xml, pr.responseClass);
 								pr.completed();
 							}
 						} catch (FTPConnectionClosedException e) {
@@ -622,6 +622,8 @@ public class JkfClientOverFtp implements JkfClient {
 		String requestFileName;
 		String responseFileName;
 		
+		Class<? extends XmlResponse> responseClass;
+		
 		XmlResponse response;
 		
 		Callback callback;
@@ -635,9 +637,10 @@ public class JkfClientOverFtp implements JkfClient {
 		 * @param sequence
 		 * @param requestFileName
 		 * @param responseFileName
+		 * @parma responseClass
 		 */
-		public PendingRequest(XmlRequest request, String sequence, String requestFileName, String responseFileName) {
-			this(request, sequence, requestFileName, responseFileName, null, null);
+		public PendingRequest(XmlRequest request, String sequence, String requestFileName, String responseFileName, Class<? extends XmlResponse> responseClass) {
+			this(request, sequence, requestFileName, responseFileName, responseClass, null, null);
 		}
 		
 		/**
@@ -649,11 +652,12 @@ public class JkfClientOverFtp implements JkfClient {
 		 * @param callback
 		 * @param context
 		 */
-		public PendingRequest(XmlRequest request, String sequence, String requestFileName, String responseFileName, Callback callback, Object context) {
+		public PendingRequest(XmlRequest request, String sequence, String requestFileName, String responseFileName, Class<? extends XmlResponse> responseClass, Callback callback, Object context) {
 			this.request = request;
 			this.sequence = sequence;
 			this.requestFileName = requestFileName;
 			this.responseFileName = responseFileName;
+			this.responseClass = responseClass;
 			this.callback = callback;
 			this.context = context;
 			this.commitedTimestamp = System.currentTimeMillis();

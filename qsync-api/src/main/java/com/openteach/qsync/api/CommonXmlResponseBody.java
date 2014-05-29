@@ -1,12 +1,13 @@
-package com.openteach.qsync.api.waybill.response;
+package com.openteach.qsync.api;
 
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlType;
 
-import com.openteach.qsync.api.BaseBody;
 import com.openteach.qsync.api.JkfResult;
 
 /**
@@ -14,8 +15,9 @@ import com.openteach.qsync.api.JkfResult;
  * @author rqq
  *
  */
-@XmlType (namespace="waybill.response", name="body")
-public class Body extends BaseBody {
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType (name="body")
+public class CommonXmlResponseBody {
 
 	/**
 	 * 
