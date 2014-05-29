@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.annotation.PostConstruct;
@@ -527,9 +528,12 @@ public class JkfClientOverFtp implements JkfClient {
 
 				@Override
 				public void run() {
+					String key = null;
+					PendingRequest pr = null;
+					String xml = null;
 					while(!Thread.currentThread().isInterrupted()) {
 						try {
-							FTPFile[] files = ftp.listFiles();
+							/*FTPFile[] files = ftp.listFiles();
 							for(FTPFile f : files) {
 								if(null == f || null == f.getName()) {
 									continue;
@@ -542,6 +546,25 @@ public class JkfClientOverFtp implements JkfClient {
 								String xml = getAndDeleteFile(f.getName());
 								pr.response = JaxbUtils.converyToJavaBean(xml, pr.responseClass);
 								pr.completed();
+							}*/
+							for(Iterator<String> it = pendingRequests.keySet().iterator(); it.hasNext();) {
+								key = it.next();
+								pr = pendingRequests.get(key);
+								if(null == pr) {
+									continue;
+								}
+								if(pr.tryLock()) {
+									xml = getFile(key);
+									if(null == xml) {
+										// 还没审批
+										continue;
+									}
+									// remove
+									pendingRequests.remove(key);
+									pr.response = JaxbUtils.converyToJavaBean(xml, pr.responseClass);
+									pr.response.setFileName(key);
+									pr.completed();
+								}
 							}
 						} catch (FTPConnectionClosedException e) {
 							// 重新初始化ftp呗
@@ -596,13 +619,15 @@ public class JkfClientOverFtp implements JkfClient {
 			}
 		}
 		
-		private String getAndDeleteFile(String fileName) throws IOException {
+		private String getFile(String fileName) throws IOException {
 			ByteArrayOutputStream bo = null;
 			try {
 				bo = new ByteArrayOutputStream();
-				ftp.retrieveFile(fileName, bo);
-				ftp.deleteFile(fileName);
-				return bo.toString();
+				if(ftp.retrieveFile(fileName, bo)) {
+					return bo.toString();
+				} else {
+					return null;
+				}
 			} finally {
 				if(null != bo) {
 					bo.close();
@@ -630,6 +655,11 @@ public class JkfClientOverFtp implements JkfClient {
 		Object context;
 		
 		long commitedTimestamp;
+		
+		/**
+		 * 
+		 */
+		AtomicBoolean isLocked;
 		
 		/**
 		 * 
@@ -661,6 +691,7 @@ public class JkfClientOverFtp implements JkfClient {
 			this.callback = callback;
 			this.context = context;
 			this.commitedTimestamp = System.currentTimeMillis();
+			this.isLocked = new AtomicBoolean(false);
 		}
 		
 		/**
@@ -681,6 +712,14 @@ public class JkfClientOverFtp implements JkfClient {
 			} else {
 				notifyCompleted();
 			}
+		}
+		
+		/**
+		 * 
+		 * @return
+		 */
+		public boolean tryLock() {
+			return isLocked.compareAndSet(false, true);
 		}
 		
 		/**
