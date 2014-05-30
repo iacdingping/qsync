@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.net.ftp.FTP;
@@ -27,6 +28,10 @@ import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.parser.ParserInitializationException;
 import org.apache.commons.net.io.CopyStreamException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.parser.Parser;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -92,7 +97,7 @@ public class JkfClientOverFtp implements JkfClient {
 	
 	private Puller[] pullers;
 	
-	private static String PREFIX = "";
+	private static String PREFIX = "JKF";
 	
 	private AtomicLong sequence;
 	
@@ -132,7 +137,7 @@ public class JkfClientOverFtp implements JkfClient {
 				// XXX 还是失败了好, 后面很多都依赖这两个值
 				throw new RuntimeException("Can not get host_name and host ip", e);
 			}
-			sequence = new AtomicLong(0);
+			sequence = new AtomicLong(System.currentTimeMillis());
 			pendingRequests = new ConcurrentHashMap<String, PendingRequest>();
 			
 			initializePushers();
@@ -343,8 +348,7 @@ public class JkfClientOverFtp implements JkfClient {
 				
 		String sequence = generateSequence();
 		String requestFileName = generateRequestFileName(sequence);
-		String responseFileName = generateReponseFileName(sequence);
-		PendingRequest pr = new PendingRequest(request, sequence, requestFileName, responseFileName, responseClass, callback, context);
+		PendingRequest pr = new PendingRequest(request, requestFileName, request.getResponseFileNameKey(), responseClass, callback, context);
 		
 		try {
 			buffer.put(pr);
@@ -352,7 +356,7 @@ public class JkfClientOverFtp implements JkfClient {
 		} catch (InterruptedException e) {
 			// 清理
 			buffer.remove(pr);
-			pendingRequests.remove(pr.responseFileName);
+			pendingRequests.remove(pr.responseFileNameKey);
 			// 
 			Thread.currentThread().interrupt();
 			throw new ApiException(e);
@@ -374,15 +378,6 @@ public class JkfClientOverFtp implements JkfClient {
 	 */
 	private String generateRequestFileName(String sequence) {
 		return PREFIX + "_" + sequence + "_" + SUFFIX + ".xml";
-	}
-	
-	/**
-	 * 
-	 * @param sequence
-	 * @return
-	 */
-	private String generateReponseFileName(String sequence) {
-		return "receipt_" + sequence + ".xml";
 	}
 	
 	/**
@@ -425,7 +420,7 @@ public class JkfClientOverFtp implements JkfClient {
 							stream = pr.getInputStream();
 						_retry:
 							if(ftp.storeFile(pr.requestFileName, stream)) {
-								pendingRequests.put(pr.responseFileName, pr);
+								pendingRequests.put(pr.responseFileNameKey, pr);
 								// 
 								pr.commitedTimestamp = System.currentTimeMillis();
 							} else {
@@ -533,20 +528,29 @@ public class JkfClientOverFtp implements JkfClient {
 					String xml = null;
 					while(!Thread.currentThread().isInterrupted()) {
 						try {
-							/*FTPFile[] files = ftp.listFiles();
+							FTPFile[] files = ftp.listFiles();
 							for(FTPFile f : files) {
 								if(null == f || null == f.getName()) {
 									continue;
 								}
-								PendingRequest pr = pendingRequests.remove(f.getName());
-								if(null == pr) {
-									// 另外一个线程在处理
+							
+								xml = getAndDeleteFile(f.getName());
+								if(null == xml) {
+									logger.error("Get content of file:" + f.getName() + " from ftp failed");
 									continue;
 								}
-								String xml = getAndDeleteFile(f.getName());
+								
+								key = getKey(xml);
+								if(null == key) {
+									logger.error("Content of file:" + f.getName() + " wrong, not contains businessNo element");
+								}
+								pr = pendingRequests.get(key);
+								
 								pr.response = JaxbUtils.converyToJavaBean(xml, pr.responseClass);
+								pr.response.setFileName(key);
 								pr.completed();
-							}*/
+							}
+							/*
 							for(Iterator<String> it = pendingRequests.keySet().iterator(); it.hasNext();) {
 								key = it.next();
 								pr = pendingRequests.get(key);
@@ -566,6 +570,7 @@ public class JkfClientOverFtp implements JkfClient {
 									pr.completed();
 								}
 							}
+							*/
 						} catch (FTPConnectionClosedException e) {
 							// 重新初始化ftp呗
 							reInitializeFtp();
@@ -577,6 +582,8 @@ public class JkfClientOverFtp implements JkfClient {
 							// 重新初始化ftp呗
 							reInitializeFtp();
 							//goto _retry;
+						} catch (ApiException e) {
+							
 						} catch (Throwable t) {
 							logger.error("Exception", t);
 						}
@@ -619,11 +626,16 @@ public class JkfClientOverFtp implements JkfClient {
 			}
 		}
 		
-		private String getFile(String fileName) throws IOException {
+		private String getAndDeleteFile(String fileName) throws IOException {
 			ByteArrayOutputStream bo = null;
 			try {
 				bo = new ByteArrayOutputStream();
 				if(ftp.retrieveFile(fileName, bo)) {
+					try {
+						ftp.deleteFile(fileName);
+					} catch (FTPConnectionClosedException e) {
+						//
+					}
 					return bo.toString();
 				} else {
 					return null;
@@ -638,14 +650,31 @@ public class JkfClientOverFtp implements JkfClient {
 	
 	/**
 	 * 
+	 * @param xml
+	 * @return
+	 * throws ApiException
+	 */
+	private String getKey(String xml) throws ApiException {
+		Document doc = Jsoup.parse(xml, "", Parser.xmlParser());
+		Elements es = doc.select("businessNo");
+		if(es.isEmpty()) {
+			throw new ApiException("Wrong response : " + xml);
+		} else if(es.size() == 1) {
+			return StringUtils.trim(es.get(0).text());
+		} else {
+			throw new ApiException("Wrong response, multi businessNo : " + xml);
+		}
+	}
+	
+	/**
+	 * 
 	 * @author sihai
 	 *
 	 */
 	private class PendingRequest {
 		XmlRequest request;
-		String sequence;
 		String requestFileName;
-		String responseFileName;
+		String responseFileNameKey;
 		
 		Class<? extends XmlResponse> responseClass;
 		
@@ -658,40 +687,31 @@ public class JkfClientOverFtp implements JkfClient {
 		
 		/**
 		 * 
-		 */
-		AtomicBoolean isLocked;
-		
-		/**
-		 * 
 		 * @param request
-		 * @param sequence
 		 * @param requestFileName
-		 * @param responseFileName
+		 * @param responseFileNameKey
 		 * @parma responseClass
 		 */
-		public PendingRequest(XmlRequest request, String sequence, String requestFileName, String responseFileName, Class<? extends XmlResponse> responseClass) {
-			this(request, sequence, requestFileName, responseFileName, responseClass, null, null);
+		public PendingRequest(XmlRequest request, String requestFileName, String responseFileNameKey, Class<? extends XmlResponse> responseClass) {
+			this(request, requestFileName, responseFileNameKey, responseClass, null, null);
 		}
 		
 		/**
 		 * 
 		 * @param request
-		 * @param sequence
 		 * @param requestFileName
-		 * @param responseFileName
+		 * @param responseFileNameKey
 		 * @param callback
 		 * @param context
 		 */
-		public PendingRequest(XmlRequest request, String sequence, String requestFileName, String responseFileName, Class<? extends XmlResponse> responseClass, Callback callback, Object context) {
+		public PendingRequest(XmlRequest request, String requestFileName, String responseFileNameKey, Class<? extends XmlResponse> responseClass, Callback callback, Object context) {
 			this.request = request;
-			this.sequence = sequence;
 			this.requestFileName = requestFileName;
-			this.responseFileName = responseFileName;
+			this.responseFileNameKey = responseFileNameKey;
 			this.responseClass = responseClass;
 			this.callback = callback;
 			this.context = context;
 			this.commitedTimestamp = System.currentTimeMillis();
-			this.isLocked = new AtomicBoolean(false);
 		}
 		
 		/**
@@ -712,14 +732,6 @@ public class JkfClientOverFtp implements JkfClient {
 			} else {
 				notifyCompleted();
 			}
-		}
-		
-		/**
-		 * 
-		 * @return
-		 */
-		public boolean tryLock() {
-			return isLocked.compareAndSet(false, true);
 		}
 		
 		/**

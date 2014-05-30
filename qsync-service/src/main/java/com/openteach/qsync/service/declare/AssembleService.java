@@ -155,6 +155,9 @@ public class AssembleService implements InitializingBean {
 		head.setBusinessType(CommonXmlRequestHead.IMPORTORDER);
 		request.setHead(head);
 		request.setBody(body);
+		
+		// XXX important
+		request.setResponseFileNameKey(orderInfo.getJkfSign().getBusinessNo());
 		return request;
 	}
 	
@@ -185,6 +188,7 @@ public class AssembleService implements InitializingBean {
 		head.setBusinessType(CommonXmlRequestHead.LOGISTICS_INFO);
 		request.setHead(head);
 		request.setBody(body);
+		request.setResponseFileNameKey(logistics.getJkfSign().getBusinessNo());
 		return request;
 	}
 	
@@ -289,6 +293,7 @@ public class AssembleService implements InitializingBean {
 		head.setBusinessType(CommonXmlRequestHead.PERSONAL_GOODS_DECLAR);
 		request.setHead(head);
 		request.setBody(body);
+		request.setResponseFileNameKey(goodsDeclarModule.getJkfSign().getBusinessNo());
 		return request;
 	}
 	
@@ -338,6 +343,7 @@ public class AssembleService implements InitializingBean {
 		head.setBusinessType(CommonXmlRequestHead.IMPORTBILL);
 		request.setHead(head);
 		request.setBody(body);
+		request.setResponseFileNameKey(wayBill.getJkfSign().getBusinessNo());
 		return request;
 	}
 	
