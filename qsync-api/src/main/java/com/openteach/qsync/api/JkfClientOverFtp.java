@@ -1,7 +1,9 @@
 package com.openteach.qsync.api;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
@@ -13,7 +15,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.annotation.PostConstruct;
@@ -634,7 +635,7 @@ public class JkfClientOverFtp implements JkfClient {
 					} catch (FTPConnectionClosedException e) {
 						//
 					}
-					return bo.toString();
+					return bo.toString("gbk");
 				} else {
 					return null;
 				}
@@ -651,7 +652,7 @@ public class JkfClientOverFtp implements JkfClient {
 	 * @param xml
 	 * @return
 	 */
-	private String getKey(String xml) {
+	private static String getKey(String xml) {
 		Document doc = Jsoup.parse(xml, "", Parser.xmlParser());
 		Elements es = doc.select("businessNo");
 		if(es.isEmpty()) {
@@ -748,6 +749,35 @@ public class JkfClientOverFtp implements JkfClient {
 		 */
 		private synchronized void notifyCompleted() {
 			this.notifyAll();
+		}
+	}
+	
+	public static void main(String[] args) {
+		BufferedReader reader = null;
+		try {
+			StringBuilder sb = new StringBuilder();
+			String line = null;
+			reader = new BufferedReader(new FileReader("d:\\receipt_5103782061297550.xml"));
+			
+			while(null != (line = reader.readLine())) {
+				sb.append(line);
+			}
+			
+			System.out.println(sb.toString());
+			
+			System.out.println();
+			
+			System.out.println(getKey(sb.toString()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if(null != reader) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 }
