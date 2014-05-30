@@ -150,6 +150,7 @@ public class AssembleService implements InitializingBean {
 		jkfGoodsPurchaser.setPaperNumber(order.getMemberObject().getCertificates());	//kata_kplus_member.certificates
 		jkfGoodsPurchaser.setAddress(order.getMemberObject().getAddress());
 		orderInfo.setJkfGoodsPurchaser(jkfGoodsPurchaser);
+		body.setOrderInfoList(Arrays.asList(orderInfo));
 		
 		CommonXmlRequestHead head = new CommonXmlRequestHead(); 
 		head.setBusinessType(CommonXmlRequestHead.IMPORTORDER);
@@ -305,6 +306,7 @@ public class AssembleService implements InitializingBean {
 		wayBill.setJkfSign(jkfSign);
 		
 		WayBillImportDto dto = new WayBillImportDto();
+		wayBill.setWayBillImportDto(dto);
 		dto.setWayBillNo(order.getTransportnumber());
 		dto.setTotalWayBill(order.getOrderTransportObject().getWaybillnumber());
 		dto.setPackageNo(order.getTotalGoodsCount());

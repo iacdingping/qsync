@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 public class JaxbDateSerializer extends XmlAdapter<String, Date> {
 
 	
-	public static final String DEFAULT_DATE_FORMAT = "yyyyMMdd:HHmmss";
+	public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 	
     @Override  
     public String marshal(Date date) throws Exception {  
