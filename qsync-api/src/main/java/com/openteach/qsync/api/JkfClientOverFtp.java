@@ -582,8 +582,6 @@ public class JkfClientOverFtp implements JkfClient {
 							// 重新初始化ftp呗
 							reInitializeFtp();
 							//goto _retry;
-						} catch (ApiException e) {
-							
 						} catch (Throwable t) {
 							logger.error("Exception", t);
 						}
@@ -652,17 +650,16 @@ public class JkfClientOverFtp implements JkfClient {
 	 * 
 	 * @param xml
 	 * @return
-	 * throws ApiException
 	 */
-	private String getKey(String xml) throws ApiException {
+	private String getKey(String xml) {
 		Document doc = Jsoup.parse(xml, "", Parser.xmlParser());
 		Elements es = doc.select("businessNo");
 		if(es.isEmpty()) {
-			throw new ApiException("Wrong response : " + xml);
+			throw new IllegalArgumentException("Wrong response : " + xml);
 		} else if(es.size() == 1) {
 			return StringUtils.trim(es.get(0).text());
 		} else {
-			throw new ApiException("Wrong response, multi businessNo : " + xml);
+			throw new IllegalArgumentException("Wrong response, multi businessNo : " + xml);
 		}
 	}
 	
