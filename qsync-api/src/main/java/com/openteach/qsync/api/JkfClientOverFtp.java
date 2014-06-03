@@ -531,7 +531,7 @@ public class JkfClientOverFtp implements JkfClient {
 						try {
 							FTPFile[] files = ftp.listFiles();
 							for(FTPFile f : files) {
-								if(null == f || null == f.getName()) {
+								if(null == f || null == f.getName() || f.isDirectory()) {
 									continue;
 								}
 							
