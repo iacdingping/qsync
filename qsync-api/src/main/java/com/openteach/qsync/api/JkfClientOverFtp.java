@@ -343,6 +343,7 @@ public class JkfClientOverFtp implements JkfClient {
 				
 		String sequence = generateSequence();
 		String requestFileName = generateRequestFileName(sequence);
+		System.out.println("push task request file name:" + requestFileName);
 		String responseFileName = generateReponseFileName(sequence);
 		PendingRequest pr = new PendingRequest(request, sequence, requestFileName, responseFileName, responseClass, callback, context);
 		

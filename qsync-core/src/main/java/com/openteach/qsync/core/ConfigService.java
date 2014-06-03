@@ -1,7 +1,5 @@
 package com.openteach.qsync.core;
 
-import javax.validation.constraints.NotNull;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +11,6 @@ public class ConfigService {
 	//电商平台名称
 	@Value("${declare.companyName}")
 	private String declareCompanyName;
-	//业务编号
-	@Value("${declare.businessNo}")
-	private String declareBusinessNo;
 	//业务类型
 	@Value("${declare.businessType}")
 	private String declareBusinessType;
@@ -58,12 +53,6 @@ public class ConfigService {
 	}
 	public void setDeclareCompanyCode(String declareCompanyCode) {
 		this.declareCompanyCode = declareCompanyCode;
-	}
-	public String getDeclareBusinessNo() {
-		return declareBusinessNo;
-	}
-	public void setDeclareBusinessNo(String declareBusinessNo) {
-		this.declareBusinessNo = declareBusinessNo;
 	}
 	public String getDeclareBusinessType() {
 		return declareBusinessType;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -11,7 +12,6 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +20,8 @@ import com.openteach.qsync.api.JkfSign;
 import com.openteach.qsync.api.goods.request.GoodsDeclar;
 import com.openteach.qsync.api.goods.request.GoodsDeclarDetail;
 import com.openteach.qsync.api.goods.request.GoodsDeclarModule;
-import com.openteach.qsync.api.goods.request.XmlGoodsDeclarRequestBody;
 import com.openteach.qsync.api.goods.request.XmlGoodsDeclarRequest;
+import com.openteach.qsync.api.goods.request.XmlGoodsDeclarRequestBody;
 import com.openteach.qsync.api.logistics.request.JkfLogisticsInfo;
 import com.openteach.qsync.api.logistics.request.Logistics;
 import com.openteach.qsync.api.logistics.request.XmlLogisticsRequest;
@@ -53,12 +53,16 @@ import com.openteach.qsync.util.common.DateUtil;
  *
  */
 @Service
-public class AssembleService implements InitializingBean {
+public class AssembleService {
 	@Autowired private ConfigService configService;
 	@Autowired private CountryManager countryManager;
 	@Autowired private OrderService orderService;
+	
+	private AtomicLong sequence = new AtomicLong(1);
 
-	private JkfSign jkfSign;
+	private String generateSequence() {
+		return System.currentTimeMillis() + "" + sequence.incrementAndGet();
+	}
 	
 	public List<Order> listOrders() {
 		return orderService.listOrders();
@@ -88,7 +92,6 @@ public class AssembleService implements InitializingBean {
 		XmlOrderRequest request = new XmlOrderRequest();
 		XmlOrderRequestBody body = new XmlOrderRequestBody();
 		OrderInfo orderInfo = new OrderInfo();
-		orderInfo.setJkfSign(this.getJkfSign());
 		JkfOrderImportHead jkfOrderImportHead = new JkfOrderImportHead();
 		jkfOrderImportHead.setCompanyName(configService.getDeclareCompanyName());
 		jkfOrderImportHead.setCompanyCode(configService.getDeclareCompanyCode());
@@ -152,6 +155,12 @@ public class AssembleService implements InitializingBean {
 		orderInfo.setJkfGoodsPurchaser(jkfGoodsPurchaser);
 		body.setOrderInfoList(Arrays.asList(orderInfo));
 		
+		JkfSign jkfSign = new JkfSign();
+		jkfSign.setBusinessType(configService.getDeclareBusinessType());
+		jkfSign.setCompanyCode(configService.getDeclareCompanyCode());
+		jkfSign.setDeclareType(configService.getDeclareType());
+		jkfSign.setBusinessNo(generateSequence());
+		orderInfo.setJkfSign(jkfSign);
 		CommonXmlRequestHead head = new CommonXmlRequestHead(); 
 		head.setBusinessType(CommonXmlRequestHead.IMPORTORDER);
 		request.setHead(head);
@@ -179,6 +188,13 @@ public class AssembleService implements InitializingBean {
 		jkfLogisticsInfo.setStationCode(order.getStationCode());//cc_kata_kplus_order.station_code
 		jkfLogisticsInfo.setLicensePlateNumber(order.getLicensePlateNumber()); //cc_kata_kplus_order.license_plate_number
 		logistics.setJkfLogisticsInfo(jkfLogisticsInfo);
+		
+		JkfSign jkfSign = new JkfSign();
+		jkfSign.setBusinessType(configService.getDeclareBusinessType());
+		jkfSign.setCompanyCode(configService.getDeclareCompanyCode());
+		jkfSign.setDeclareType(configService.getDeclareType());
+		jkfSign.setBusinessNo(generateSequence());
+		
 		logistics.setJkfSign(jkfSign);
 		body.setLogisticsList(Arrays.asList(logistics));
 		
@@ -200,7 +216,6 @@ public class AssembleService implements InitializingBean {
 		XmlGoodsDeclarRequest request = new XmlGoodsDeclarRequest();
 		XmlGoodsDeclarRequestBody body = new XmlGoodsDeclarRequestBody();
 		GoodsDeclarModule goodsDeclarModule = new GoodsDeclarModule();
-		goodsDeclarModule.setJkfSign(jkfSign);
 		
 		GoodsDeclar goodsDeclar = new GoodsDeclar();
 		goodsDeclarModule.setGoodsDeclar(goodsDeclar);
@@ -285,6 +300,12 @@ public class AssembleService implements InitializingBean {
 		}
 		
 		body.setGoodsDeclarModuleList(Arrays.asList(goodsDeclarModule));
+		JkfSign jkfSign = new JkfSign();
+		jkfSign.setBusinessType(configService.getDeclareBusinessType());
+		jkfSign.setCompanyCode(configService.getDeclareCompanyCode());
+		jkfSign.setDeclareType(configService.getDeclareType());
+		jkfSign.setBusinessNo(generateSequence());
+		goodsDeclarModule.setJkfSign(jkfSign);
 		
 		CommonXmlRequestHead head = new CommonXmlRequestHead();
 		head.setBusinessType(CommonXmlRequestHead.PERSONAL_GOODS_DECLAR);
@@ -303,7 +324,6 @@ public class AssembleService implements InitializingBean {
 		XmlWaybillRequestBody body = new XmlWaybillRequestBody();
 		
 		WayBill wayBill = new WayBill();
-		wayBill.setJkfSign(jkfSign);
 		
 		WayBillImportDto dto = new WayBillImportDto();
 		wayBill.setWayBillImportDto(dto);
@@ -334,6 +354,12 @@ public class AssembleService implements InitializingBean {
 		dto.setImportDateString(order.getOrdertime());
 		dto.setCurrCode(configService.getDeclareCurrency());
 		
+		JkfSign jkfSign = new JkfSign();
+		jkfSign.setBusinessType(configService.getDeclareBusinessType());
+		jkfSign.setCompanyCode(configService.getDeclareCompanyCode());
+		jkfSign.setDeclareType(configService.getDeclareType());
+		jkfSign.setBusinessNo(generateSequence());
+		wayBill.setJkfSign(jkfSign);
 		body.setWayBillList(Arrays.asList(wayBill));
 		
 		CommonXmlRequestHead head = new CommonXmlRequestHead();
@@ -341,26 +367,5 @@ public class AssembleService implements InitializingBean {
 		request.setHead(head);
 		request.setBody(body);
 		return request;
-	}
-	
-	/**
-	 * 读取配置文件后即初始化  note字段未指定
-	 * 
-	 * @return 请求签名信息
-	 */
-	public JkfSign getJkfSign() {
-		return jkfSign;
-	}
-	public void setJkfSign(JkfSign jkfSign) {
-		this.jkfSign = jkfSign;
-	}
-
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		jkfSign = new JkfSign();
-		jkfSign.setBusinessNo(configService.getDeclareBusinessNo());
-		jkfSign.setBusinessType(configService.getDeclareBusinessType());
-		jkfSign.setCompanyCode(configService.getDeclareCompanyCode());
-		jkfSign.setDeclareType(configService.getDeclareType());
 	}
 }
