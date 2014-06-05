@@ -5,7 +5,6 @@ import java.util.Date;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -23,23 +22,12 @@ import com.openteach.qsync.api.XmlRequest;
 @XmlType(name = "mo", propOrder = {"head", "body"})
 public class XmlGoodsDeclarRequest extends XmlRequest {
 
-	@XmlAttribute(required = true)
-	private String version = DEFAULT_VERSION;
-	
 	@XmlElement(required = true, name="head")
 	private CommonXmlRequestHead head;
 	
 	@XmlElement(required = true, name="body")
 	private XmlGoodsDeclarRequestBody body;
 	
-	public String getVersion() {
-		return version;
-	}
-
-	public void setVersion(String version) {
-		this.version = version;
-	}
-
 	public CommonXmlRequestHead getHead() {
 		return head;
 	}

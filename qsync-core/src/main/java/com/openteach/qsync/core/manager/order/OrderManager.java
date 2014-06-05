@@ -124,7 +124,6 @@ public class OrderManager {
 		}
 		char[] status = declareStatus.toCharArray();
 		status[index] = s;
-		System.out.println(String.format("原始状态:%s, 更新状态%s", declareStatus, String.valueOf(status)));
 		return updateDeclareStatus(order.getId(), String.valueOf(status));
 	}
 	

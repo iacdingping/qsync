@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Iterator;
@@ -349,7 +350,7 @@ public class JkfClientOverFtp implements JkfClient {
 				
 		String sequence = generateSequence();
 		String requestFileName = generateRequestFileName(sequence);
-		PendingRequest pr = new PendingRequest(request, requestFileName, request.getResponseFileNameKey(), responseClass, callback, context);
+		PendingRequest pr = new PendingRequest(request, requestFileName, responseClass, callback, context);
 		
 		try {
 			buffer.put(pr);
@@ -421,6 +422,7 @@ public class JkfClientOverFtp implements JkfClient {
 							stream = pr.getInputStream();
 						_retry:
 							if(ftp.storeFile(pr.requestFileName, stream)) {
+								logger.info("stored file to ftp server:" + pr.requestFileName);
 								pendingRequests.put(pr.responseFileNameKey, pr);
 								// 
 								pr.commitedTimestamp = System.currentTimeMillis();
@@ -672,7 +674,7 @@ public class JkfClientOverFtp implements JkfClient {
 	private class PendingRequest {
 		XmlRequest request;
 		String requestFileName;
-		String responseFileNameKey;
+		String businessNo;
 		
 		Class<? extends XmlResponse> responseClass;
 		
@@ -690,8 +692,8 @@ public class JkfClientOverFtp implements JkfClient {
 		 * @param responseFileNameKey
 		 * @parma responseClass
 		 */
-		public PendingRequest(XmlRequest request, String requestFileName, String responseFileNameKey, Class<? extends XmlResponse> responseClass) {
-			this(request, requestFileName, responseFileNameKey, responseClass, null, null);
+		public PendingRequest(XmlRequest request, String requestFileName, Class<? extends XmlResponse> responseClass) {
+			this(request, requestFileName, responseClass, null, null);
 		}
 		
 		/**
@@ -702,10 +704,9 @@ public class JkfClientOverFtp implements JkfClient {
 		 * @param callback
 		 * @param context
 		 */
-		public PendingRequest(XmlRequest request, String requestFileName, String responseFileNameKey, Class<? extends XmlResponse> responseClass, Callback callback, Object context) {
+		public PendingRequest(XmlRequest request, String requestFileName, Class<? extends XmlResponse> responseClass, Callback callback, Object context) {
 			this.request = request;
 			this.requestFileName = requestFileName;
-			this.responseFileNameKey = responseFileNameKey;
 			this.responseClass = responseClass;
 			this.callback = callback;
 			this.context = context;
@@ -715,9 +716,10 @@ public class JkfClientOverFtp implements JkfClient {
 		/**
 		 * 
 		 * @return
+		 * @throws UnsupportedEncodingException 
 		 */
-		public InputStream getInputStream() {
-			return new ByteArrayInputStream(request.toXml().getBytes());
+		public InputStream getInputStream() throws UnsupportedEncodingException {
+			return new ByteArrayInputStream(request.toXml().getBytes("UTF-8"));
 		}
 		
 		/**

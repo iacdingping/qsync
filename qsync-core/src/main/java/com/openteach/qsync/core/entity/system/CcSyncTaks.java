@@ -62,6 +62,7 @@ public class CcSyncTaks {
      * gmtModified       db_column: gmt_modified 
      */	
 	private java.util.Date gmtModified;
+	private String businessNo;
 	//columns END
 
 	public CcSyncTaks(){
@@ -132,6 +133,12 @@ public class CcSyncTaks {
 	}
 	public void setOrderId(Long orderId) {
 		this.orderId = orderId;
+	}
+	public String getBusinessNo() {
+		return businessNo;
+	}
+	public void setBusinessNo(String businessNo) {
+		this.businessNo = businessNo;
 	}
 }
 

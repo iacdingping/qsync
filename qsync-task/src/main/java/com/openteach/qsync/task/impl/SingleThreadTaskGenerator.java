@@ -10,7 +10,11 @@ import org.apache.commons.logging.LogFactory;
 
 import com.openteach.qcity.qsync.common.lifecycle.AbstractLifeCycle;
 import com.openteach.qsync.api.XmlRequest;
+import com.openteach.qsync.api.goods.request.XmlGoodsDeclarRequest;
+import com.openteach.qsync.api.logistics.request.XmlLogisticsRequest;
+import com.openteach.qsync.api.order.request.XmlOrderRequest;
 import com.openteach.qsync.api.utils.JaxbUtils;
+import com.openteach.qsync.api.waybill.request.XmlWaybillRequest;
 import com.openteach.qsync.core.TaskStatus;
 import com.openteach.qsync.core.TaskType;
 import com.openteach.qsync.core.entity.order.Order;
@@ -112,11 +116,14 @@ public class SingleThreadTaskGenerator extends AbstractLifeCycle implements Task
 			
 			try {
 					assembleService.mappingOrder(o);
-					XmlRequest request = assembleService.getOrderXmlRequest(o);
-					storage.store(newTask(o.getId(), request, TaskType.ORDER_DECLARE));
-					storage.store(newTask(o.getId(), assembleService.getLogisticsXmlRequest(o), TaskType.LOGISTICS_DECLARE));
-					storage.store(newTask(o.getId(), assembleService.getWaybillXmlRequest(o), TaskType.WAY_BILL_DECLARE));
-					storage.store(newTask(o.getId(), assembleService.getGoodsXmlRequest(o), TaskType.GOODS_DECLARE));
+					XmlOrderRequest orderRequest = assembleService.getOrderXmlRequest(o);
+					storage.store(newTask(o.getId(), orderRequest, TaskType.ORDER_DECLARE, orderRequest.getBody().getOrderInfoList().get(0).getJkfSign().getBusinessNo()));
+					XmlLogisticsRequest logisticsRequest = assembleService.getLogisticsXmlRequest(o);
+					storage.store(newTask(o.getId(), logisticsRequest, TaskType.LOGISTICS_DECLARE, logisticsRequest.getBody().getLogisticsList().get(0).getJkfSign().getBusinessNo()));
+					XmlWaybillRequest waybillRequest = assembleService.getWaybillXmlRequest(o);
+					storage.store(newTask(o.getId(), waybillRequest, TaskType.WAY_BILL_DECLARE, waybillRequest.getBody().getWayBillList().get(0).getJkfSign().getBusinessNo()));
+					XmlGoodsDeclarRequest goodsDeclarRequest = assembleService.getGoodsXmlRequest(o);
+					storage.store(newTask(o.getId(), goodsDeclarRequest, TaskType.GOODS_DECLARE, goodsDeclarRequest.getBody().getGoodsDeclarModuleList().get(0).getJkfSign().getBusinessNo()));
 			} catch (Throwable t) {
 					storage.store(newErrorTask(o.getId(), Exceptions.getStackTraceAsString(t)));
 			}
@@ -131,7 +138,7 @@ public class SingleThreadTaskGenerator extends AbstractLifeCycle implements Task
 	 * @param type
 	 * @return
 	 */
-	private CcSyncTaks newTask(Long orderId, XmlRequest request, TaskType type) {
+	private CcSyncTaks newTask(Long orderId, XmlRequest request, TaskType type, String businessNo) {
 		CcSyncTaks t = new CcSyncTaks();
 		t.setOrderId(orderId);
 		t.setGenerator(HOST_NAME);
@@ -140,6 +147,7 @@ public class SingleThreadTaskGenerator extends AbstractLifeCycle implements Task
 		t.setXmlRequest(JaxbUtils.convertToXml(request));
 		t.setGmtCreate(new Date());
 		t.setGmtModified(t.getGmtCreate());
+		t.setBusinessNo(businessNo);
 		return t;
 	}
 	
