@@ -34,26 +34,29 @@ public interface JkfClient {
 	/**
 	 * 
 	 * @param request
+	 * @param String responseKey
 	 * @param responseClass
 	 * @return
 	 * @throws ApiException
 	 */
-	XmlResponse sync(XmlRequest request, Class<? extends XmlResponse> responseClass) throws ApiException;
+	XmlResponse sync(XmlRequest request, String responseKey, Class<? extends XmlResponse> responseClass) throws ApiException;
 	
 	/**
 	 * 
 	 * @param request
 	 * @param callback
+	 * @param String responseKey
 	 * @param responseClass
 	 */
-	void async(XmlRequest request, Callback callback, Class<? extends XmlResponse> responseClass);
+	void async(XmlRequest request, Callback callback, String responseKey, Class<? extends XmlResponse> responseClass);
 	
 	/**
 	 * 
 	 * @param request
 	 * @param callback
 	 * @param context
+	 * @param String responseKey
 	 * @param responseClass
 	 */
-	void async(XmlRequest request, Callback callback, Object context, Class<? extends XmlResponse> responseClass);
+	void async(XmlRequest request, Callback callback, Object context, String responseKey, Class<? extends XmlResponse> responseClass);
 }

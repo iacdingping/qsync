@@ -165,8 +165,8 @@ public class JkfClientOverFtp implements JkfClient {
 	}
 	
 	@Override
-	public XmlResponse sync(XmlRequest request, Class<? extends XmlResponse> responseClass) throws ApiException {
-		PendingRequest pr = this.pendingRequest(request, null, null, responseClass);
+	public XmlResponse sync(XmlRequest request, String responseKey, Class<? extends XmlResponse> responseClass) throws ApiException {
+		PendingRequest pr = this.pendingRequest(request, null, null, responseKey, responseClass);
 		// 同步等待
 		synchronized(pr) {
 			//
@@ -184,14 +184,14 @@ public class JkfClientOverFtp implements JkfClient {
 	}
 
 	@Override
-	public void async(XmlRequest request, Callback callback, Class<? extends XmlResponse> responseClass) {
+	public void async(XmlRequest request, Callback callback, String responseKey, Class<? extends XmlResponse> responseClass) {
 		async(request, callback, null, responseClass);
 	}
 	
 	@Override
-	public void async(XmlRequest request, Callback callback, Object context, Class<? extends XmlResponse> responseClass) {
+	public void async(XmlRequest request, Callback callback, Object context, String responseKey, Class<? extends XmlResponse> responseClass) {
 		try {
-			this.pendingRequest(request, callback, context, responseClass);
+			this.pendingRequest(request, callback, context, responseKey, responseClass);
 		} catch (ApiException e) {
 			callback.onFailed(e, context);
 		}
@@ -352,11 +352,11 @@ public class JkfClientOverFtp implements JkfClient {
 	 * @return
 	 * @throws ApiException
 	 */
-	private PendingRequest pendingRequest(XmlRequest request, Callback callback, Object context, Class<? extends XmlResponse> responseClass) throws ApiException {
+	private PendingRequest pendingRequest(XmlRequest request, Callback callback, Object context, String responseKey, Class<? extends XmlResponse> responseClass) throws ApiException {
 				
 		String sequence = generateSequence();
 		String requestFileName = generateRequestFileName(sequence);
-		PendingRequest pr = new PendingRequest(request, requestFileName, responseClass, callback, context);
+		PendingRequest pr = new PendingRequest(request, requestFileName, responseKey,  responseClass, callback, context);
 		
 		try {
 			buffer.put(pr);
@@ -364,7 +364,7 @@ public class JkfClientOverFtp implements JkfClient {
 		} catch (InterruptedException e) {
 			// 清理
 			buffer.remove(pr);
-			pendingRequests.remove(pr.responseFileNameKey);
+			pendingRequests.remove(pr.responseKey);
 			// 
 			Thread.currentThread().interrupt();
 			throw new ApiException(e);
@@ -429,7 +429,7 @@ public class JkfClientOverFtp implements JkfClient {
 						_retry:
 							if(ftp.storeFile(pr.requestFileName, stream)) {
 								logger.info("stored file to ftp server:" + pr.requestFileName);
-								pendingRequests.put(pr.responseFileNameKey, pr);
+								pendingRequests.put(pr.responseKey, pr);
 								// 
 								pr.commitedTimestamp = System.currentTimeMillis();
 							} else {
@@ -700,7 +700,7 @@ public class JkfClientOverFtp implements JkfClient {
 	private class PendingRequest {
 		XmlRequest request;
 		String requestFileName;
-		String businessNo;
+		String responseKey;
 		
 		Class<? extends XmlResponse> responseClass;
 		
@@ -716,23 +716,26 @@ public class JkfClientOverFtp implements JkfClient {
 		 * @param request
 		 * @param requestFileName
 		 * @param responseFileNameKey
+		 * @param responseKey
 		 * @parma responseClass
 		 */
-		public PendingRequest(XmlRequest request, String requestFileName, Class<? extends XmlResponse> responseClass) {
-			this(request, requestFileName, responseClass, null, null);
+		public PendingRequest(XmlRequest request, String requestFileName, String responseKey, Class<? extends XmlResponse> responseClass) {
+			this(request, requestFileName, responseKey, responseClass, null, null);
 		}
 		
 		/**
 		 * 
 		 * @param request
 		 * @param requestFileName
-		 * @param responseFileNameKey
+		 * @param responseKey
+		 * @param responseClass
 		 * @param callback
 		 * @param context
 		 */
-		public PendingRequest(XmlRequest request, String requestFileName, Class<? extends XmlResponse> responseClass, Callback callback, Object context) {
+		public PendingRequest(XmlRequest request, String requestFileName, String responseKey, Class<? extends XmlResponse> responseClass, Callback callback, Object context) {
 			this.request = request;
 			this.requestFileName = requestFileName;
+			this.responseKey = responseKey;
 			this.responseClass = responseClass;
 			this.callback = callback;
 			this.context = context;

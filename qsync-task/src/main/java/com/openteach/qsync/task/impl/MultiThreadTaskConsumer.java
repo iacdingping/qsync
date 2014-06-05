@@ -149,7 +149,7 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 				LOGGER.error("Wrong task type for consume, task id:" + t.getId());
 				continue;
 			}
-			jkfClient.async((XmlRequest)a[0], callback, t, (Class<? extends XmlResponse>)a[1]);
+			jkfClient.async((XmlRequest)a[0], callback, t, t.getBusinessNo(), (Class<? extends XmlResponse>)a[1]);
 			t.setStatus(TaskStatus.DOING.name());
 			storage.update(t);
 		}
