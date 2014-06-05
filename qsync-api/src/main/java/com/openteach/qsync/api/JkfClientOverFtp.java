@@ -27,6 +27,7 @@ import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.commons.net.ftp.FTPFile;
+import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.ftp.parser.ParserInitializationException;
 import org.apache.commons.net.io.CopyStreamException;
 import org.jsoup.Jsoup;
@@ -328,7 +329,12 @@ public class JkfClientOverFtp implements JkfClient {
 	 */
 	private FTPClient initializeFtpClient(String ip, int port, String username, String password) throws IOException {
 		FTPClient ftp = new FTPClient();
+		ftp.setListHiddenFiles(true);
 		ftp.connect(ip, port);
+		if(!FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
+            ftp.disconnect();
+            throw new IllegalArgumentException(String.format("Can not login ftp by username: %s, password: %s, FTP server refused connection", username, password));
+        }
 		if(!ftp.login(username, password)) {
 			throw new IllegalArgumentException(String.format("Can not login ftp by username: %s, password: %s", username, password));
 		}
@@ -462,6 +468,16 @@ public class JkfClientOverFtp implements JkfClient {
 		public void stop() {
 			// TODO 优雅停止
 			thread.interrupt();
+			try {
+				ftp.logout();
+			} catch (IOException e) {
+				logger.error("logout failed", e);
+			}
+			try {
+				ftp.disconnect();
+			} catch (IOException e) {
+				logger.error("disconnect failed", e);
+			}
 		}
 		
 		private void initializeFtp() {
@@ -597,6 +613,16 @@ public class JkfClientOverFtp implements JkfClient {
 		public void stop() {
 			// TODO 优雅停止
 			thread.interrupt();
+			try {
+				ftp.logout();
+			} catch (IOException e) {
+				logger.error("logout failed", e);
+			}
+			try {
+				ftp.disconnect();
+			} catch (IOException e) {
+				logger.error("disconnect failed", e);
+			}
 		}
 		
 		private void initializeFtp() {
