@@ -69,7 +69,7 @@ public class JkfResult {
 	 * 
 	 */
 	@XmlElementWrapper
-	@XmlElement(required = false)
+	@XmlElement(required = false, name="jkfResultDetail")
 	private List<JkfResultDetail> resultList;
 
 	public String getCompanyCode() {

@@ -75,3 +75,5 @@ CREATE TABLE `cc_sync_taks` (
 
 ALTER TABLE `cc_sync_taks` ADD `order_id` BIGINT(22) COMMENT '订单ID';
 ALTER TABLE `cc_sync_taks` MODIFY COLUMN `type` VARCHAR(50);
+ALTER TABLE `cc_sync_taks` ADD `business_no` VARCHAR(50) COMMENT '业务编号';
+

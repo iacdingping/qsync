@@ -1,5 +1,7 @@
 package com.openteach.qsync.api;
 
+import javax.xml.bind.annotation.XmlAttribute;
+
 import com.openteach.qsync.api.utils.JaxbUtils;
 
 
@@ -12,10 +14,8 @@ public abstract class XmlRequest {
 	
 	public static final String DEFAULT_VERSION = "1.0.0";
 	
-	/**
-	 * 
-	 */
-	private String responseFileNameKey;
+	@XmlAttribute(required = true)
+	private String version = DEFAULT_VERSION;
 	
 	/**
 	 * 
@@ -23,13 +23,5 @@ public abstract class XmlRequest {
 	 */
 	public String toXml() {
 		return JaxbUtils.convertToXml(this);
-	}
-	
-	public String getResponseFileNameKey() {
-		return responseFileNameKey;
-	}
-
-	public void setResponseFileNameKey(String responseFileNameKey) {
-		this.responseFileNameKey = responseFileNameKey;
 	}
 }
