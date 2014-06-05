@@ -45,7 +45,7 @@ public class JkfClientOverFtpTest {
 	}
 	
 	@Test
-	public void testSyncRequest() throws ApiException {
+	public void testSyncRequest() throws Exception {
 		JkfSign jkfSign = new JkfSign();
 		ImportCompany im = new ImportCompany();
 		XmlRecordRequestBody body = new XmlRecordRequestBody();
@@ -55,6 +55,8 @@ public class JkfClientOverFtpTest {
 		request.setBody(body);
 		XmlResponse response = jkfClient.sync(request, "fdsfsdfdsf", XmlRecordResponse.class);
 		System.out.println(JaxbUtils.convertToXml(response));
+		
+		Thread.sleep(1000000);
 	}
 
 	@Test

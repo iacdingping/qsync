@@ -55,7 +55,7 @@
 		<sox.version>0.0.1-SNAPSHOT</sox.version>
 		<xstream.version>1.2</xstream.version>
 		<jaxb-impl.version>2.2.6</jaxb-impl.version>
-		<commons-net.version>2.0</commons-net.version>
+		<commons-net.version>3.3</commons-net.version>
 		<downloadSources>true</downloadSources>
 		<junit.version>4.11</junit.version>
 		<mockito.version>1.9.5</mockito.version>
