@@ -553,7 +553,7 @@ public class JkfClientOverFtp implements JkfClient {
 									continue;
 								}
 							
-								xml = getAndDeleteFile(f.getName());
+								xml = getRemoteFile(f.getName());
 								if(null == xml) {
 									logger.error("Get content of file:" + f.getName() + " from ftp failed");
 									continue;
@@ -565,9 +565,12 @@ public class JkfClientOverFtp implements JkfClient {
 								}
 								pr = pendingRequests.get(key);
 								
-								pr.response = JaxbUtils.converyToJavaBean(xml, pr.responseClass);
-								pr.response.setFileName(key);
-								pr.completed();
+								if(null != pr) {
+									deleteFile(f.getName());
+									pr.response = JaxbUtils.converyToJavaBean(xml, pr.responseClass);
+									pr.response.setFileName(key);
+									pr.completed();
+								}
 							}
 							/*
 							for(Iterator<String> it = pendingRequests.keySet().iterator(); it.hasNext();) {
@@ -653,16 +656,11 @@ public class JkfClientOverFtp implements JkfClient {
 			}
 		}
 		
-		private String getAndDeleteFile(String fileName) throws IOException {
+		private String getRemoteFile(String fileName) throws IOException {
 			ByteArrayOutputStream bo = null;
 			try {
 				bo = new ByteArrayOutputStream();
 				if(ftp.retrieveFile(fileName, bo)) {
-					try {
-						ftp.deleteFile(fileName);
-					} catch (FTPConnectionClosedException e) {
-						//
-					}
 					return bo.toString("gbk");
 				} else {
 					return null;
@@ -671,6 +669,22 @@ public class JkfClientOverFtp implements JkfClient {
 				if(null != bo) {
 					bo.close();
 				}
+			}
+		}
+		
+		/**
+		 * 
+		 * @param fileName
+		 */
+		private void deleteFile(String fileName) {
+			try {
+				ftp.deleteFile(fileName);
+			} catch (FTPConnectionClosedException e) {
+				//
+				logger.error(e);
+			} catch (IOException e) {
+				//
+				logger.error(e);
 			}
 		}
 	}
