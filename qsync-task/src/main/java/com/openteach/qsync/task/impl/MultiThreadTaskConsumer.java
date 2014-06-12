@@ -5,12 +5,12 @@ import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.openteach.qcity.qsync.common.lifecycle.AbstractLifeCycle;
-import com.openteach.qsync.api.CommonXmlResponse;
 import com.openteach.qsync.api.JkfClient;
 import com.openteach.qsync.api.JkfClient.Callback;
 import com.openteach.qsync.api.XmlRequest;
@@ -20,13 +20,12 @@ import com.openteach.qsync.api.goods.request.XmlGoodsDeclarRequest;
 import com.openteach.qsync.api.logistics.request.XmlLogisticsRequest;
 import com.openteach.qsync.api.order.request.XmlOrderRequest;
 import com.openteach.qsync.api.utils.JaxbUtils;
-import com.openteach.qsync.api.waybill.request.XmlWaybillRequest;
 import com.openteach.qsync.core.TaskStatus;
-import com.openteach.qsync.core.TaskType;
 import com.openteach.qsync.core.entity.system.CcSyncTaks;
 import com.openteach.qsync.core.query.system.CcSyncTaksQuery;
 import com.openteach.qsync.task.TaskConsumer;
 import com.openteach.qsync.task.TaskStorage;
+import com.openteach.qsync.task.TaskUtils;
 
 /**
  * 
@@ -65,11 +64,18 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 	 */
 	private JkfClient.Callback callback;
 	
+	/**
+	 * 
+	 */
+	private CountDownLatch latch;
+	
 	@Override
 	public void initialize() {
 		super.initialize();
+		
+		latch = new CountDownLatch(threadCount);
 		threads = new Thread[threadCount];
-		for(int i = 0; i < threadCount; i++) {
+		for(int i = 0; i < threadCount; i++) { 
 			CcSyncTaksQuery query = new CcSyncTaksQuery();
 			query.setWorkerSize(threadCount);
 			query.setInStatus(Arrays.asList(TaskStatus.UNDO.name(), TaskStatus.FAILED.name()));
@@ -140,15 +146,15 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 	/**
 	 * 
 	 */
-	private int consume(CcSyncTaksQuery query) {
+	private int consume(CcSyncTaksQuery query, boolean isRecovered) {
 		List<CcSyncTaks> tList = storage.query(query);
 		for(CcSyncTaks t : tList) {
-			Object[] a = formXml(t);
+			Object[] a = TaskUtils.formXml(t);
 			if(null == a) {
 				LOGGER.error("Wrong task type for consume, task id:" + t.getId());
 				continue;
 			}
-			jkfClient.async((XmlRequest)a[0], callback, t, t.getBusinessNo(), (Class<? extends XmlResponse>)a[1]);
+			jkfClient.async((XmlRequest)a[0], callback, t, t.getBusinessNo(), (Class<? extends XmlResponse>)a[1], isRecovered);
 			t.setStatus(TaskStatus.DOING.name());
 			storage.update(t);
 		}
@@ -157,6 +163,7 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 	
 	/**
 	 * 
+<<<<<<< HEAD
 	 * @param t
 	 * @return
 	 */
@@ -185,6 +192,8 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 	
 	/**
 	 * 
+=======
+>>>>>>> 17d0b5bbf2dfaed4ff13b5f7a8cdcab41e86b021
 	 * @author rqq
 	 *
 	 */
@@ -199,9 +208,22 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 		
 		@Override
 		public void run() {
+			
+			//
+			recover();
+			latch.countDown();
+			// wait other threads
+			
+			try {
+				latch.await();
+			} catch (InterruptedException e) {
+				LOGGER.error("wait other threads recover failed", e);
+				Thread.currentThread().interrupt();
+			}
+			
 			while(!Thread.currentThread().isInterrupted()) {
 				try {
-					if(0 == consume(this.query)) {
+					if(0 == consume(this.query, false)) {
 						// 休息一下
 						Thread.sleep(retryPeriod);
 					}
@@ -212,6 +234,15 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 					LOGGER.error("consume task failed", t);
 				}
 			}
+		}
+		
+		private void recover() {
+			CcSyncTaksQuery query = new CcSyncTaksQuery();
+			query.setWorkerSize(this.query.getWorkerSize());
+			query.setInStatus(Arrays.asList(TaskStatus.DOING.name()));
+			query.setMode(this.query.getMode());
+			
+			while(consume(query, true) > 0);
 		}
 	}
 }

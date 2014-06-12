@@ -165,8 +165,8 @@ public class JkfClientOverFtp implements JkfClient {
 	}
 	
 	@Override
-	public XmlResponse sync(XmlRequest request, String responseKey, Class<? extends XmlResponse> responseClass) throws ApiException {
-		PendingRequest pr = this.pendingRequest(request, null, null, responseKey, responseClass);
+	public XmlResponse sync(XmlRequest request, String responseKey, Class<? extends XmlResponse> responseClass, boolean isRecovered) throws ApiException {
+		PendingRequest pr = this.pendingRequest(request, null, null, responseKey, responseClass, isRecovered);
 		// 同步等待
 		synchronized(pr) {
 			//
@@ -184,14 +184,14 @@ public class JkfClientOverFtp implements JkfClient {
 	}
 
 	@Override
-	public void async(XmlRequest request, Callback callback, String responseKey, Class<? extends XmlResponse> responseClass) {
-		async(request, callback, null, responseClass);
+	public void async(XmlRequest request, Callback callback, String responseKey, Class<? extends XmlResponse> responseClass, boolean isRecovered) {
+		async(request, callback, null, responseClass, isRecovered);
 	}
 	
 	@Override
-	public void async(XmlRequest request, Callback callback, Object context, String responseKey, Class<? extends XmlResponse> responseClass) {
+	public void async(XmlRequest request, Callback callback, Object context, String responseKey, Class<? extends XmlResponse> responseClass, boolean isRecovered) {
 		try {
-			this.pendingRequest(request, callback, context, responseKey, responseClass);
+			this.pendingRequest(request, callback, context, responseKey, responseClass, isRecovered);
 		} catch (ApiException e) {
 			callback.onFailed(e, context);
 		}
@@ -349,14 +349,17 @@ public class JkfClientOverFtp implements JkfClient {
 	 * @param request
 	 * @param callback
 	 * @param context
+	 * @param responseKey
+	 * @param responseClass
+	 * @param isRecovered
 	 * @return
 	 * @throws ApiException
 	 */
-	private PendingRequest pendingRequest(XmlRequest request, Callback callback, Object context, String responseKey, Class<? extends XmlResponse> responseClass) throws ApiException {
+	private PendingRequest pendingRequest(XmlRequest request, Callback callback, Object context, String responseKey, Class<? extends XmlResponse> responseClass, boolean isRecovered) throws ApiException {
 				
 		String sequence = generateSequence();
 		String requestFileName = generateRequestFileName(sequence);
-		PendingRequest pr = new PendingRequest(request, requestFileName, responseKey,  responseClass, callback, context);
+		PendingRequest pr = new PendingRequest(request, requestFileName, responseKey,  responseClass, callback, context, isRecovered);
 		
 		try {
 			buffer.put(pr);
@@ -425,6 +428,10 @@ public class JkfClientOverFtp implements JkfClient {
 						InputStream stream = null;
 						try {
 							PendingRequest pr = buffer.take();
+							// 
+							if(pr.isRecovered) {
+								continue;
+							}
 							stream = pr.getInputStream();
 						_retry:
 							if(ftp.storeFile(pr.requestFileName, stream)) {
@@ -554,7 +561,7 @@ public class JkfClientOverFtp implements JkfClient {
 									continue;
 								}
 							
-								xml = getAndDeleteFile(f.getName());
+								xml = getRemoteFile(f.getName());
 								if(null == xml) {
 									logger.error("Get content of file:" + f.getName() + " from ftp failed");
 									continue;
@@ -566,9 +573,12 @@ public class JkfClientOverFtp implements JkfClient {
 								}
 								pr = pendingRequests.get(key);
 								
-								pr.response = JaxbUtils.converyToJavaBean(xml, pr.responseClass);
-								pr.response.setFileName(key);
-								pr.completed();
+								if(null != pr) {
+									deleteFile(f.getName());
+									pr.response = JaxbUtils.converyToJavaBean(xml, pr.responseClass);
+									pr.response.setFileName(key);
+									pr.completed();
+								}
 							}
 							/*
 							for(Iterator<String> it = pendingRequests.keySet().iterator(); it.hasNext();) {
@@ -654,16 +664,11 @@ public class JkfClientOverFtp implements JkfClient {
 			}
 		}
 		
-		private String getAndDeleteFile(String fileName) throws IOException {
+		private String getRemoteFile(String fileName) throws IOException {
 			ByteArrayOutputStream bo = null;
 			try {
 				bo = new ByteArrayOutputStream();
 				if(ftp.retrieveFile(fileName, bo)) {
-					try {
-						ftp.deleteFile(fileName);
-					} catch (FTPConnectionClosedException e) {
-						//
-					}
 					return bo.toString("gbk");
 				} else {
 					return null;
@@ -672,6 +677,22 @@ public class JkfClientOverFtp implements JkfClient {
 				if(null != bo) {
 					bo.close();
 				}
+			}
+		}
+		
+		/**
+		 * 
+		 * @param fileName
+		 */
+		private void deleteFile(String fileName) {
+			try {
+				ftp.deleteFile(fileName);
+			} catch (FTPConnectionClosedException e) {
+				//
+				logger.error(e);
+			} catch (IOException e) {
+				//
+				logger.error(e);
 			}
 		}
 	}
@@ -710,6 +731,8 @@ public class JkfClientOverFtp implements JkfClient {
 		Callback callback;
 		Object context;
 		
+		boolean isRecovered;
+		
 		long commitedTimestamp;
 		
 		/**
@@ -720,8 +743,8 @@ public class JkfClientOverFtp implements JkfClient {
 		 * @param responseKey
 		 * @parma responseClass
 		 */
-		public PendingRequest(XmlRequest request, String requestFileName, String responseKey, Class<? extends XmlResponse> responseClass) {
-			this(request, requestFileName, responseKey, responseClass, null, null);
+		public PendingRequest(XmlRequest request, String requestFileName, String responseKey, Class<? extends XmlResponse> responseClass, boolean isRecovered) {
+			this(request, requestFileName, responseKey, responseClass, null, null, isRecovered);
 		}
 		
 		/**
@@ -733,13 +756,14 @@ public class JkfClientOverFtp implements JkfClient {
 		 * @param callback
 		 * @param context
 		 */
-		public PendingRequest(XmlRequest request, String requestFileName, String responseKey, Class<? extends XmlResponse> responseClass, Callback callback, Object context) {
+		public PendingRequest(XmlRequest request, String requestFileName, String responseKey, Class<? extends XmlResponse> responseClass, Callback callback, Object context, boolean isRecovered) {
 			this.request = request;
 			this.requestFileName = requestFileName;
 			this.responseKey = responseKey;
 			this.responseClass = responseClass;
 			this.callback = callback;
 			this.context = context;
+			this.isRecovered = isRecovered;
 			this.commitedTimestamp = System.currentTimeMillis();
 		}
 		
