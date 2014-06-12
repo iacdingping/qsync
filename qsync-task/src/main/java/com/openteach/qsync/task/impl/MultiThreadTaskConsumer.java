@@ -17,7 +17,6 @@ import com.openteach.qsync.api.XmlRequest;
 import com.openteach.qsync.api.XmlResponse;
 import com.openteach.qsync.api.exception.ApiException;
 import com.openteach.qsync.api.goods.request.XmlGoodsDeclarRequest;
-import com.openteach.qsync.api.goods.response.XmlGoodsDeclarResponse;
 import com.openteach.qsync.api.logistics.request.XmlLogisticsRequest;
 import com.openteach.qsync.api.order.request.XmlOrderRequest;
 import com.openteach.qsync.api.utils.JaxbUtils;
@@ -167,7 +166,7 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 		TaskType type = TaskType.valueOf(t.getType());
 		if(TaskType.GOODS_DECLARE == type) {
 			r = JaxbUtils.converyToJavaBean(t.getXmlRequest(), XmlGoodsDeclarRequest.class);
-			clazz = XmlGoodsDeclarResponse.class;
+			clazz = CommonXmlResponse.class;
 		} else if(TaskType.LOGISTICS_DECLARE == type) {
 			r = JaxbUtils.converyToJavaBean(t.getXmlRequest(), XmlLogisticsRequest.class);
 			clazz = CommonXmlResponse.class;

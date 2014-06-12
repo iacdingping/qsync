@@ -58,6 +58,12 @@ public class JkfOrderImportHead {
 	 */
 	@XmlElement(required = true)
 	private Double orderTaxAmount;
+	
+	/**
+	 * 订单货款 文档字段含义里漏掉了
+	 */
+	@XmlElement(required = true)
+	private Double orderGoodsAmount;
 	/**
 	 * 运费 非必填
 	 */
@@ -215,6 +221,12 @@ public class JkfOrderImportHead {
 	}
 	public void setOrderTaxAmount(Double orderTaxAmount) {
 		this.orderTaxAmount = orderTaxAmount;
+	}
+	public Double getOrderGoodsAmount() {
+		return orderGoodsAmount;
+	}
+	public void setOrderGoodsAmount(Double orderGoodsAmount) {
+		this.orderGoodsAmount = orderGoodsAmount;
 	}
 	public Double getFeeAmount() {
 		return feeAmount;

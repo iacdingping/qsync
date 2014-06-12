@@ -428,7 +428,7 @@ public class JkfClientOverFtp implements JkfClient {
 							stream = pr.getInputStream();
 						_retry:
 							if(ftp.storeFile(pr.requestFileName, stream)) {
-								logger.info("stored file to ftp server:" + pr.requestFileName);
+								logger.info("stored file to ftp server:" + pr.requestFileName + " businessNo:" + pr.responseKey);
 								pendingRequests.put(pr.responseKey, pr);
 								// 
 								pr.commitedTimestamp = System.currentTimeMillis();
@@ -547,6 +547,7 @@ public class JkfClientOverFtp implements JkfClient {
 					String xml = null;
 					while(!Thread.currentThread().isInterrupted()) {
 						try {
+							
 							FTPFile[] files = ftp.listFiles();
 							for(FTPFile f : files) {
 								if(null == f || null == f.getName() || f.isDirectory()) {
