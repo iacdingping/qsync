@@ -11,6 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.openteach.qcity.qsync.common.lifecycle.AbstractLifeCycle;
+import com.openteach.qsync.api.CommonXmlResponse;
 import com.openteach.qsync.api.JkfClient;
 import com.openteach.qsync.api.JkfClient.Callback;
 import com.openteach.qsync.api.XmlRequest;
@@ -20,7 +21,9 @@ import com.openteach.qsync.api.goods.request.XmlGoodsDeclarRequest;
 import com.openteach.qsync.api.logistics.request.XmlLogisticsRequest;
 import com.openteach.qsync.api.order.request.XmlOrderRequest;
 import com.openteach.qsync.api.utils.JaxbUtils;
+import com.openteach.qsync.api.waybill.request.XmlWaybillRequest;
 import com.openteach.qsync.core.TaskStatus;
+import com.openteach.qsync.core.TaskType;
 import com.openteach.qsync.core.entity.system.CcSyncTaks;
 import com.openteach.qsync.core.query.system.CcSyncTaksQuery;
 import com.openteach.qsync.task.TaskConsumer;
@@ -163,7 +166,6 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 	
 	/**
 	 * 
-<<<<<<< HEAD
 	 * @param t
 	 * @return
 	 */
@@ -192,8 +194,6 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 	
 	/**
 	 * 
-=======
->>>>>>> 17d0b5bbf2dfaed4ff13b5f7a8cdcab41e86b021
 	 * @author rqq
 	 *
 	 */

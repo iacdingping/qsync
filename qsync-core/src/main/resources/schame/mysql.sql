@@ -77,4 +77,3 @@ ALTER TABLE `cc_sync_taks` ADD `order_id` BIGINT(22) COMMENT '订单ID';
 ALTER TABLE `cc_sync_taks` MODIFY COLUMN `type` VARCHAR(50);
 ALTER TABLE `cc_sync_taks` ADD `business_no` VARCHAR(50) COMMENT '业务编号';
 ALTER TABLE `kata_kplus_member` MODIFY `certificates_type` VARCHAR(5) COMMENT '证件类型 1:身份证（试点期间只能是身份证） 2:护照 3:其他';
-
