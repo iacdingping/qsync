@@ -143,7 +143,7 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 	/**
 	 * 
 	 */
-	private int consume(CcSyncTaksQuery query) {
+	private int consume(CcSyncTaksQuery query, boolean isRecovered) {
 		List<CcSyncTaks> tList = storage.query(query);
 		for(CcSyncTaks t : tList) {
 			Object[] a = TaskUtils.formXml(t);
@@ -151,7 +151,7 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 				LOGGER.error("Wrong task type for consume, task id:" + t.getId());
 				continue;
 			}
-			jkfClient.async((XmlRequest)a[0], callback, t, t.getBusinessNo(), (Class<? extends XmlResponse>)a[1]);
+			jkfClient.async((XmlRequest)a[0], callback, t, t.getBusinessNo(), (Class<? extends XmlResponse>)a[1], isRecovered);
 			t.setStatus(TaskStatus.DOING.name());
 			storage.update(t);
 		}
@@ -189,7 +189,7 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 			
 			while(!Thread.currentThread().isInterrupted()) {
 				try {
-					if(0 == consume(this.query)) {
+					if(0 == consume(this.query, false)) {
 						// 休息一下
 						Thread.sleep(retryPeriod);
 					}
@@ -208,7 +208,7 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 			query.setInStatus(Arrays.asList(TaskStatus.DOING.name()));
 			query.setMode(this.query.getMode());
 			
-			while(consume(query) > 0);
+			while(consume(query, true) > 0);
 		}
 	}
 }

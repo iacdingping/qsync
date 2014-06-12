@@ -53,7 +53,7 @@ public class JkfClientOverFtpTest {
 		body.setImportCompanyList(Arrays.asList(im));
 		XmlRecordRequest request = new XmlRecordRequest();
 		request.setBody(body);
-		XmlResponse response = jkfClient.sync(request, "fdsfsdfdsf", XmlRecordResponse.class);
+		XmlResponse response = jkfClient.sync(request, "fdsfsdfdsf", XmlRecordResponse.class, false);
 		System.out.println(JaxbUtils.convertToXml(response));
 		
 		Thread.sleep(1000000);
