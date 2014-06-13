@@ -43,6 +43,6 @@ public class TaskUtils {
 		if(null == r || null == clazz) {
 			return null;
 		}
-		return new Object[]{r, clazz};
+		return new Object[]{type, r, clazz};
 	}
 }
