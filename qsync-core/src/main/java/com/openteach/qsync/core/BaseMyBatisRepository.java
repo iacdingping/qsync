@@ -18,4 +18,5 @@ public interface BaseMyBatisRepository<E, K> {
 	public void deleteById(K k);
 	public Long count(PageQuery query);
 	public List<E> list(PageQuery query);
+	public List<E> findPage(PageQuery query);
 }

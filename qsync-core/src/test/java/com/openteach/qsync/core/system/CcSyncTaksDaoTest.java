@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 
+import com.openteach.qsync.core.PageList;
 import com.openteach.qsync.core.SpringTransactionalTestCase;
 import com.openteach.qsync.core.dao.system.CcSyncTaksDao;
 import com.openteach.qsync.core.entity.system.CcSyncTaks;
@@ -32,7 +33,7 @@ public class CcSyncTaksDaoTest extends SpringTransactionalTestCase{
 	 * 因为对删除使用到count方法计数进行对比
 	 * @throws Exception
 	 */
-	@Test
+	//@Test
 	public void ccSyncTaksCurl() throws Exception {
 		CcSyncTaksQuery query = new CcSyncTaksQuery();
 		long startRows = ccSyncTaksDao.count(query);
@@ -112,11 +113,22 @@ public class CcSyncTaksDaoTest extends SpringTransactionalTestCase{
 		assertEquals(startRows, deleteRows);
 	}
 	
-	@Test
+	//@Test
 	public void ccSyncTaksQueryTest() {
 		CcSyncTaksQuery query = new CcSyncTaksQuery();
 		query.setInStatus(Arrays.asList("abc", "多状态查询"));
 		long c = ccSyncTaksDao.count(query);
 		assertEquals(c, 0L);
 	}
+	
+	@Test
+	public void findPageTest() {
+		CcSyncTaksQuery query = new CcSyncTaksQuery();
+		query.setInStatus(Arrays.asList("DOING", "多状态查询"));
+		query.setPage(3);
+		query.setPageSize(2);
+		List<CcSyncTaks> c = ccSyncTaksDao.findPage(query);
+		System.out.println(c.size());
+	}
+	
 }

@@ -39,4 +39,8 @@ public class CommonXmlResponse extends XmlResponse {
 	public void setBody(CommonXmlResponseBody body) {
 		this.body = body;
 	}
+	
+	public Boolean getIsSuccess() {
+		
+	}
 }

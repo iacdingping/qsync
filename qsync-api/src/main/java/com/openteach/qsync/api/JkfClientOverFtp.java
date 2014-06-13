@@ -430,6 +430,7 @@ public class JkfClientOverFtp implements JkfClient {
 							PendingRequest pr = buffer.take();
 							// 
 							if(pr.isRecovered) {
+								pendingRequests.put(pr.responseKey, pr);
 								continue;
 							}
 							stream = pr.getInputStream();
@@ -562,12 +563,14 @@ public class JkfClientOverFtp implements JkfClient {
 								}
 							
 								xml = getRemoteFile(f.getName());
+								
 								if(null == xml) {
 									logger.error("Get content of file:" + f.getName() + " from ftp failed");
 									continue;
 								}
 								
 								key = getKey(xml);
+								//logger.info(" xml businessNo :" + key);
 								if(null == key) {
 									logger.error("Content of file:" + f.getName() + " wrong, not contains businessNo element");
 								}

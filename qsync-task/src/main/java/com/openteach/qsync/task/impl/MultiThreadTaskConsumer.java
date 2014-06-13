@@ -91,7 +91,7 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 			@Override
 			public void onSucceed(XmlResponse response, Object context) {
 				CcSyncTaks task = (CcSyncTaks)context;
-				task.setStatus(TaskStatus.DONE.name());
+				task.setStatus(response.get);
 				task.setXmlResponse(JaxbUtils.convertToXml(response));
 				task.setGmtModified(new Date());
 				storage.update(task);
@@ -241,8 +241,16 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 			query.setWorkerSize(this.query.getWorkerSize());
 			query.setInStatus(Arrays.asList(TaskStatus.DOING.name()));
 			query.setMode(this.query.getMode());
+			query.setSortColumns("id ASC");
+			LOGGER.warn("Consumer : " + Thread.currentThread().getName() + ", mode : " + query.getMode() + " try to recover");
 			
-			while(consume(query, true) > 0);
+			int total = 0;
+			int count = 0;
+			while((count = consume(query, true))> 0) {
+				total += count;
+				query.setPage(query.getPage() + 1);
+			}
+			LOGGER.warn("Consumer : " + Thread.currentThread().getName() + ", mode : " + query.getMode() + " , " + total + " recover completed");
 		}
 	}
 }

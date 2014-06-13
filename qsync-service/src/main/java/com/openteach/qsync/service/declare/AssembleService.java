@@ -184,6 +184,7 @@ public class AssembleService {
 	/**
 	 * 获取物流报关报文
 	 * @param order
+	 * @deprecated 物流数据由ems申报 不需要我们报关
 	 * @return
 	 */
 	public XmlLogisticsRequest getLogisticsXmlRequest(Order order) {
@@ -281,7 +282,7 @@ public class AssembleService {
 		goodsDeclar.setSenderCity(order.getOrderTransportObject().getAddressorCity());	//cc_kata_kplus_order_transport.addressor_city
 		goodsDeclar.setReceiverPapersType(order.getMemberObject().getCertificatesType().substring(1));	//???kata_kplus_member.certificates_type
 		goodsDeclar.setReceiverPapersNo(order.getMemberObject().getCertificates());	//???kata_kplus_member.certificates
-		
+		//worth见302
 		goodsDeclar.setCurrency(configService.getDeclareCurrency());
 		
 		List<TransportCommodity> transportCommoditiyList = order.getOrderTransportObject().getTransportCommodityList();
