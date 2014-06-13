@@ -58,7 +58,7 @@ public class XmlGoodsDeclarRequest extends XmlRequest {
 		gd.setAccountBookNo("fdsfsre");
 		gd.setApplicationFormNo("dsfsdfsfrewr");
 		gd.setCurrency("dfsfd");
-		gd.setInOutDatStr(new Date());
+		gd.setInOutDateStr(new Date());
 		m.setGoodsDeclar(gd);
 		body.setGoodsDeclarModuleList(Arrays.asList(m));
 		request.setHead(head);

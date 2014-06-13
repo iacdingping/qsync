@@ -11,12 +11,17 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.openteach.qcity.qsync.common.lifecycle.AbstractLifeCycle;
+import com.openteach.qsync.api.CommonXmlResponse;
 import com.openteach.qsync.api.JkfClient;
 import com.openteach.qsync.api.JkfClient.Callback;
 import com.openteach.qsync.api.XmlRequest;
 import com.openteach.qsync.api.XmlResponse;
 import com.openteach.qsync.api.exception.ApiException;
+import com.openteach.qsync.api.goods.request.XmlGoodsDeclarRequest;
+import com.openteach.qsync.api.logistics.request.XmlLogisticsRequest;
+import com.openteach.qsync.api.order.request.XmlOrderRequest;
 import com.openteach.qsync.api.utils.JaxbUtils;
+import com.openteach.qsync.api.waybill.request.XmlWaybillRequest;
 import com.openteach.qsync.core.TaskStatus;
 import com.openteach.qsync.core.TaskType;
 import com.openteach.qsync.core.entity.system.CcSyncTaks;
@@ -165,6 +170,34 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 			storage.update(t);
 		}
 		return tList.size();
+	}
+	
+	/**
+	 * 
+	 * @param t
+	 * @return
+	 */
+	private Object[] formXml(CcSyncTaks t) {
+		XmlRequest r = null;
+		Class<? extends XmlResponse> clazz = null;
+		TaskType type = TaskType.valueOf(t.getType());
+		if(TaskType.GOODS_DECLARE == type) {
+			r = JaxbUtils.converyToJavaBean(t.getXmlRequest(), XmlGoodsDeclarRequest.class);
+			clazz = CommonXmlResponse.class;
+		} else if(TaskType.LOGISTICS_DECLARE == type) {
+			r = JaxbUtils.converyToJavaBean(t.getXmlRequest(), XmlLogisticsRequest.class);
+			clazz = CommonXmlResponse.class;
+		} else if(TaskType.ORDER_DECLARE == type) {
+			r = JaxbUtils.converyToJavaBean(t.getXmlRequest(), XmlOrderRequest.class);
+			clazz = CommonXmlResponse.class;
+		} else if(TaskType.WAY_BILL_DECLARE == type) {
+			r = JaxbUtils.converyToJavaBean(t.getXmlRequest(), XmlWaybillRequest.class);
+			clazz = CommonXmlResponse.class;
+		}
+		if(null == r || null == clazz) {
+			return null;
+		}
+		return new Object[]{r, clazz};
 	}
 	
 	/**

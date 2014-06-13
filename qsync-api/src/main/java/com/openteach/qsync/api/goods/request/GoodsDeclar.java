@@ -36,7 +36,7 @@ public class GoodsDeclar {
 	
 	@XmlElement(required = true)
 	@XmlJavaTypeAdapter(JaxbDateSerializer.class)
-	private Date inOutDatStr;
+	private Date inOutDateStr;
 	
 	@XmlElement(required = true)
 	private String inOutPortNumber;
@@ -178,12 +178,12 @@ public class GoodsDeclar {
 		this.importType = importType;
 	}
 
-	public Date getInOutDatStr() {
-		return inOutDatStr;
+	public Date getInOutDateStr() {
+		return inOutDateStr;
 	}
 
-	public void setInOutDatStr(Date inOutDatStr) {
-		this.inOutDatStr = inOutDatStr;
+	public void setInOutDateStr(Date inOutDateStr) {
+		this.inOutDateStr = inOutDateStr;
 	}
 
 	public String getInOutPortNumber() {
