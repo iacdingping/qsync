@@ -18,6 +18,7 @@ import com.openteach.qsync.api.XmlResponse;
 import com.openteach.qsync.api.exception.ApiException;
 import com.openteach.qsync.api.utils.JaxbUtils;
 import com.openteach.qsync.core.TaskStatus;
+import com.openteach.qsync.core.TaskType;
 import com.openteach.qsync.core.entity.system.CcSyncTaks;
 import com.openteach.qsync.core.query.system.CcSyncTaksQuery;
 import com.openteach.qsync.task.TaskConsumer;
@@ -151,7 +152,15 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 				LOGGER.error("Wrong task type for consume, task id:" + t.getId());
 				continue;
 			}
-			jkfClient.async((XmlRequest)a[0], callback, t, t.getBusinessNo(), (Class<? extends XmlResponse>)a[1], isRecovered);
+			
+			if(TaskType.WAY_BILL_DECLARE == (TaskType)a[0]) {
+				t.setStatus(TaskStatus.IGNORE.name());
+				t.setGmtModified(new Date());
+				storage.update(t);
+				continue;
+			}
+			
+			jkfClient.async((XmlRequest)a[1], callback, t, t.getBusinessNo(), (Class<? extends XmlResponse>)a[2], isRecovered);
 			t.setStatus(TaskStatus.DOING.name());
 			storage.update(t);
 		}
