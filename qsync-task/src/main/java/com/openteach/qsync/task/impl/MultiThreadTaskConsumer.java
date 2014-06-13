@@ -91,7 +91,7 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 			@Override
 			public void onSucceed(XmlResponse response, Object context) {
 				CcSyncTaks task = (CcSyncTaks)context;
-				task.setStatus(response.get);
+				task.setStatus(response.getSuccess() ? TaskStatus.DECLARE_SUCCESS.name() : TaskStatus.DECLARE_FAILED.name());
 				task.setXmlResponse(JaxbUtils.convertToXml(response));
 				task.setGmtModified(new Date());
 				storage.update(task);

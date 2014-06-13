@@ -60,6 +60,9 @@ public class JkfClientOverFtp implements JkfClient {
 	
 	private static final Log logger = LogFactory.getLog(JkfClientOverFtp.class);
 
+	@Value("${sync.responseSuccessInfo}")
+	private String responseSuccessInfo;
+	
 	@Value("${sync.customs.pusher.ftp.server}")
 	private String pusherFtpServer;
 	
@@ -578,7 +581,16 @@ public class JkfClientOverFtp implements JkfClient {
 								
 								if(null != pr) {
 									deleteFile(f.getName());
+									Boolean success = false;
+									for(String str : responseSuccessInfo.split("\\|")) {
+										if(xml.indexOf(str) > -1 && StringUtils.isNotBlank(str)) {
+											success = true;
+											break;
+										}
+									}
+									logger.info("businessNo: " + pr.responseKey + " declare result : "+ success + "  responseSuccessInfo:" + responseSuccessInfo); 
 									pr.response = JaxbUtils.converyToJavaBean(xml, pr.responseClass);
+									pr.response.setSuccess(success);
 									pr.response.setFileName(key);
 									pr.completed();
 								}

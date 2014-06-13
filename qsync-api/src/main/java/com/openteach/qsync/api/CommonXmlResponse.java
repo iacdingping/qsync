@@ -6,8 +6,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import com.openteach.qsync.api.XmlResponse;
-
 /**
  * 
  * @author sihai
@@ -23,7 +21,7 @@ public class CommonXmlResponse extends XmlResponse {
 	
 	@XmlElement(required = true)
 	private CommonXmlResponseBody body;
-
+	
 	public CommonXmlResponseHead getHead() {
 		return head;
 	}
@@ -38,9 +36,5 @@ public class CommonXmlResponse extends XmlResponse {
 
 	public void setBody(CommonXmlResponseBody body) {
 		this.body = body;
-	}
-	
-	public Boolean getIsSuccess() {
-		
 	}
 }
