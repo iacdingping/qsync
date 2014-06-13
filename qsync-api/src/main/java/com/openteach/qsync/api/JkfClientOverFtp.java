@@ -588,7 +588,6 @@ public class JkfClientOverFtp implements JkfClient {
 											break;
 										}
 									}
-									logger.info("businessNo: " + pr.responseKey + " declare result : "+ success + "  responseSuccessInfo:" + responseSuccessInfo); 
 									pr.response = JaxbUtils.converyToJavaBean(xml, pr.responseClass);
 									pr.response.setSuccess(success);
 									pr.response.setFileName(key);
