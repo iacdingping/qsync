@@ -158,7 +158,7 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 				continue;
 			}
 			
-			if(TaskType.WAY_BILL_DECLARE == (TaskType)a[0]) {
+			if(TaskType.LOGISTICS_DECLARE == (TaskType)a[0]) {
 				t.setStatus(TaskStatus.IGNORE.name());
 				t.setGmtModified(new Date());
 				storage.update(t);

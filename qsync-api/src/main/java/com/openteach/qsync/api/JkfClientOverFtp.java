@@ -558,17 +558,16 @@ public class JkfClientOverFtp implements JkfClient {
 					String xml = null;
 					while(!Thread.currentThread().isInterrupted()) {
 						try {
-							
 							FTPFile[] files = ftp.listFiles();
 							for(FTPFile f : files) {
 								if(null == f || null == f.getName() || f.isDirectory()) {
 									continue;
 								}
-							
+								
 								xml = getRemoteFile(f.getName());
 								
 								if(null == xml) {
-									logger.error("Get content of file:" + f.getName() + " from ftp failed");
+									logger.warn("Get content of file:" + f.getName() + " from ftp failed");
 									continue;
 								}
 								
@@ -581,6 +580,7 @@ public class JkfClientOverFtp implements JkfClient {
 								
 								if(null != pr) {
 									deleteFile(f.getName());
+									logger.info("Notice file name:" + f.getName() + " businessNo:" + key);
 									Boolean success = false;
 									for(String str : responseSuccessInfo.split("\\|")) {
 										if(xml.indexOf(str) > -1 && StringUtils.isNotBlank(str)) {
@@ -615,8 +615,11 @@ public class JkfClientOverFtp implements JkfClient {
 								}
 							}
 							*/
+							
+							Thread.sleep(1000 * 10);
 						} catch (FTPConnectionClosedException e) {
 							// 重新初始化ftp呗
+							logger.error("ftpCloed error", e);
 							reInitializeFtp();
 							//goto _retry;
 						} catch (ParserInitializationException e) {
@@ -626,6 +629,9 @@ public class JkfClientOverFtp implements JkfClient {
 							// 重新初始化ftp呗
 							reInitializeFtp();
 							//goto _retry;
+						} catch (InterruptedException e) {
+							logger.error("Interrupted", e);
+							Thread.currentThread().interrupt();
 						} catch (Throwable t) {
 							logger.error("Exception", t);
 						}
