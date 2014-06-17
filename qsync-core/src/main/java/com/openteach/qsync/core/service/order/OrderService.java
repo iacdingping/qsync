@@ -74,7 +74,7 @@ public class OrderService {
 		int totalGoodsCount = 0;
 		double totalGoodsWeight = 0.0;
 		for(TransportCommodity tc : transportCommodityList) {
-			Commsku commsku = commskuManager.getByIdMappedCommodity(tc.getSkuId());
+			Commsku commsku = commskuManager.getByIdMappedCommodityAndCategory(tc.getSkuId());
 			tc.setCommskuObject(commsku);
 			//计算总件数与总重量
 			totalGoodsCount += tc.getDelivernum() == null ? 0 : tc.getDelivernum().intValue();

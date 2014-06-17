@@ -62,6 +62,9 @@ public class JkfClientOverFtp implements JkfClient {
 	
 	private static final Log logger = LogFactory.getLog(JkfClientOverFtp.class);
 
+	@Value("${sync.responseSuccessInfo}")
+	private String responseSuccessInfo;
+	
 	@Value("${sync.customs.pusher.ftp.server}")
 	private String pusherFtpServer;
 	
@@ -512,6 +515,7 @@ public class JkfClientOverFtp implements JkfClient {
 							PendingRequest pr = buffer.take();
 							// 
 							if(pr.isRecovered) {
+								pendingRequests.put(pr.responseKey, pr);
 								continue;
 							}
 							stream = pr.getInputStream();
@@ -640,14 +644,16 @@ public class JkfClientOverFtp implements JkfClient {
 								if(null == f || null == f.getName() || f.isDirectory()) {
 									continue;
 								}
-							
+								
 								xml = getRemoteFile(f.getName());
+								
 								if(null == xml) {
-									logger.error("Get content of file:" + f.getName() + " from ftp failed");
+									logger.warn("Get content of file:" + f.getName() + " from ftp failed");
 									continue;
 								}
 								
 								key = getKey(xml);
+								//logger.info(" xml businessNo :" + key);
 								if(null == key) {
 									logger.error("Content of file:" + f.getName() + " wrong, not contains businessNo element");
 								}
@@ -655,7 +661,16 @@ public class JkfClientOverFtp implements JkfClient {
 								
 								if(null != pr) {
 									deleteFile(f.getName());
+									logger.info("Notice file name:" + f.getName() + " businessNo:" + key);
+									Boolean success = false;
+									for(String str : responseSuccessInfo.split("\\|")) {
+										if(xml.indexOf(str) > -1 && StringUtils.isNotBlank(str)) {
+											success = true;
+											break;
+										}
+									}
 									pr.response = JaxbUtils.converyToJavaBean(xml, pr.responseClass);
+									pr.response.setSuccess(success);
 									pr.response.setFileName(key);
 									pr.completed();
 								}
@@ -681,8 +696,11 @@ public class JkfClientOverFtp implements JkfClient {
 								}
 							}
 							*/
+							
+							Thread.sleep(1000 * 10);
 						} catch (FTPConnectionClosedException e) {
 							// 重新初始化ftp呗
+							logger.error("ftpCloed error", e);
 							reInitializeFtp();
 							//goto _retry;
 						} catch (ParserInitializationException e) {
@@ -692,6 +710,9 @@ public class JkfClientOverFtp implements JkfClient {
 							// 重新初始化ftp呗
 							reInitializeFtp();
 							//goto _retry;
+						} catch (InterruptedException e) {
+							logger.error("Interrupted", e);
+							Thread.currentThread().interrupt();
 						} catch (Throwable t) {
 							logger.error("Exception", t);
 						}

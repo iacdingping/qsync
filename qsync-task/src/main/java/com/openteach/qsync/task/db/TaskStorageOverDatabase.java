@@ -29,7 +29,7 @@ public class TaskStorageOverDatabase implements TaskStorage {
 	
 	@Override
 	public List<CcSyncTaks> query(CcSyncTaksQuery query) {
-		return ccSyncTaksManager.list(query);
+		return ccSyncTaksManager.findPage(query).getItems();
 	}
 
 	@Override

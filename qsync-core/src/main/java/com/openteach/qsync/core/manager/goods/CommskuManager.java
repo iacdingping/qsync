@@ -9,6 +9,7 @@ import org.springframework.util.Assert;
 
 import com.openteach.qsync.core.PageList;
 import com.openteach.qsync.core.PageQuery;
+import com.openteach.qsync.core.dao.goods.CategoryDao;
 import com.openteach.qsync.core.dao.goods.CommodityDao;
 import com.openteach.qsync.core.dao.goods.CommskuDao;
 import com.openteach.qsync.core.entity.goods.Commodity;
@@ -30,6 +31,8 @@ public class CommskuManager {
 	private CommskuDao commskuDao;
 	@Autowired
 	private CommodityDao commodityDao;
+	@Autowired
+	private CategoryDao categoryDao;
 	
 	/**增加setXXXX()方法,spring就可以通过autowire自动设置对象属性,请注意大小写*/
 	public void setCommskuDao(CommskuDao dao) {
@@ -92,9 +95,12 @@ public class CommskuManager {
 				query.getPage(), query.getPageSize(), count(query));
 	}
 
-	public Commsku getByIdMappedCommodity(Long skuId) {
+	public Commsku getByIdMappedCommodityAndCategory(Long skuId) {
 		Commsku commsku = getById(skuId);
 		Commodity commodity = commodityDao.getById(commsku.getItemId());
+		
+		commodity.setCategoryObject(categoryDao.getById(commodity.getCategoryId()));
+		
 		commsku.setCommodityObject(commodity);;
 		return commsku;
 	}

@@ -11,5 +11,9 @@ public enum TaskStatus {
 	DOING,
 	DONE,
 	FAILED,
-	DATA_ERROR;
+	IGNORE,
+	DATA_ERROR,
+	DECLARE_FAILED,
+	DECLARE_SUCCESS
+	;
 }

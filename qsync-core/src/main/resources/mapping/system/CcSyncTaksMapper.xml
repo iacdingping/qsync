@@ -114,13 +114,14 @@
     	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
     -->
     <select id="findPage" resultType="CcSyncTaks">
-    	SELECT <include refid="system-CcSyncTaks-columns" />
-	    FROM cc_sync_taks 
+    	SELECT <include refid="system-CcSyncTaks-columns" /> from
+	    (select * FROM cc_sync_taks 
 		<include refid="CcSyncTaks-where"/>
 		
 		<if test="sortColumns != null">
 			ORDER BY ${sortColumns}
-		</if>
+		</if>) a
+		limit ${offset}, ${pageSize}
     </select>
 	
 	<select id="list" resultType="CcSyncTaks">

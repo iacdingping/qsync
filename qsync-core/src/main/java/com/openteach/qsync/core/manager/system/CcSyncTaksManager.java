@@ -82,7 +82,7 @@ public class CcSyncTaksManager {
 	@Transactional(readOnly=true)
 	public PageList<CcSyncTaks> findPage(CcSyncTaksQuery query) {
 	    Assert.notNull(query,"'query' must be not null");
-		return new PageList<CcSyncTaks>(list(query), 
+		return new PageList<CcSyncTaks>(ccSyncTaksDao.findPage(query), 
 				query.getPage(), query.getPageSize(), count(query));
 	}
 }
