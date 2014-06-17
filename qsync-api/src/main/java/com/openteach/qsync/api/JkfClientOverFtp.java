@@ -52,6 +52,8 @@ public class JkfClientOverFtp implements JkfClient {
 	
 	public static final int DEFAULT_COUNT = 4;
 	
+	public static final int DEFAULT_RESTART_PEROID = 60;
+	
 	public static final int DEFAULT_BUFFER_SIZE = 1024;
 	
 	public static final int DEFAULT_TIMEOUT = 1800;
@@ -95,6 +97,12 @@ public class JkfClientOverFtp implements JkfClient {
 	 */
 	@Value("${sync.customs.puller.count}")
 	private int pullerCount = DEFAULT_COUNT;
+
+	/**
+	 * 
+	 */
+	@Value("${sync.customs.worker.restart.peroid}")
+	private int restartPeroid = DEFAULT_RESTART_PEROID;
 	
 	private Pusher[] pushers;
 	
@@ -117,6 +125,11 @@ public class JkfClientOverFtp implements JkfClient {
 	 * 看门狗
 	 */
 	private ScheduledExecutorService scheduledExecutorService;
+	
+	/**
+	 * 
+	 */
+	private ScheduledExecutorService daemonScheduledExecutorService;
 	
 	/**
 	 * 
@@ -146,6 +159,7 @@ public class JkfClientOverFtp implements JkfClient {
 			initializePushers();
 			initializePullers();
 			initializeWatchdog();
+			initializeDaemon();
 		} catch (IOException e) {
 			throw new IllegalArgumentException("Can not connect ftp server", e);
 		}
@@ -160,6 +174,7 @@ public class JkfClientOverFtp implements JkfClient {
 		releasePushers();
 		releasePullers();
 		shutdownWatchdog();
+		shutdonwDaemon();
 		buffer.clear();
 		pendingRequests.clear();
 	}
@@ -269,7 +284,7 @@ public class JkfClientOverFtp implements JkfClient {
 	 * 
 	 */
 	private void initializeWatchdog() {
-		scheduledExecutorService = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("mtop-trace-timer"));
+		scheduledExecutorService = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("qsync-watchdog"));
 		scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
 
 			@Override
@@ -286,6 +301,38 @@ public class JkfClientOverFtp implements JkfClient {
 			}
 			
 		}, timeout, timeout, TimeUnit.SECONDS);
+	}
+	
+	/**
+	 * 
+	 */
+	private void initializeDaemon() {
+		daemonScheduledExecutorService = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory("qsync-daemon"));
+		daemonScheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+
+			@Override
+			public void run() {
+				for(Puller p : pullers) {
+					if(p.isNeedRestart()) {
+						try {
+							p.restart();
+						} catch (Throwable t) {
+							logger.error("restart failed", t);
+						}
+					}
+				}
+				for(Pusher p : pushers) {
+					if(p.isNeedRestart()) {
+						try {
+							p.restart();
+						} catch (Throwable t) {
+							logger.error("restart failed", t);
+						}
+					}
+				}
+			}
+			
+		}, this.restartPeroid, this.restartPeroid, TimeUnit.SECONDS);
 	}
 	
 	/**
@@ -316,6 +363,15 @@ public class JkfClientOverFtp implements JkfClient {
 	private void shutdownWatchdog() {
 		if(null != scheduledExecutorService) {
 			scheduledExecutorService.shutdown();
+		}
+	}
+	
+	/**
+	 * 
+	 */
+	private void shutdonwDaemon() {
+		if(null != this.daemonScheduledExecutorService) {
+			this.daemonScheduledExecutorService.shutdown();
 		}
 	}
 	
@@ -396,7 +452,30 @@ public class JkfClientOverFtp implements JkfClient {
 	 * @author sihai
 	 *
 	 */
-	private class Pusher {
+	private abstract class Restartable {
+		
+		private long lastActivitedTimestamp = System.currentTimeMillis();
+		
+		public void alive() {
+			this.lastActivitedTimestamp = System.currentTimeMillis();
+		}
+		
+		public boolean isNeedRestart() {
+			return System.currentTimeMillis() - this.lastActivitedTimestamp > JkfClientOverFtp.this.restartPeroid;
+		}
+		
+		/**
+		 * 
+		 */
+		public abstract void restart();
+	}
+	
+	/**
+	 * 
+	 * @author sihai
+	 *
+	 */
+	private class Pusher extends Restartable {
 		
 		private int no;
 		
@@ -415,16 +494,19 @@ public class JkfClientOverFtp implements JkfClient {
 			this.port = port;
 			this.username = username;
 			this.password = password;
-			// 快速失败
-			initializeFtp();
 		}
 		
 		public void start() {
+			//
+			initializeFtp();
 			thread = new Thread(new Runnable() {
 
 				@Override
 				public void run() {
 					while(!Thread.currentThread().isInterrupted()) {
+						//
+						alive();
+						//
 						InputStream stream = null;
 						try {
 							PendingRequest pr = buffer.take();
@@ -477,16 +559,7 @@ public class JkfClientOverFtp implements JkfClient {
 		public void stop() {
 			// TODO 优雅停止
 			thread.interrupt();
-			try {
-				ftp.logout();
-			} catch (IOException e) {
-				logger.error("logout failed", e);
-			}
-			try {
-				ftp.disconnect();
-			} catch (IOException e) {
-				logger.error("disconnect failed", e);
-			}
+			releaseFtp();
 		}
 		
 		private void initializeFtp() {
@@ -514,6 +587,11 @@ public class JkfClientOverFtp implements JkfClient {
 				
 			}
 		}
+		
+		public void restart() {
+			stop();
+			start();
+		}
 	}
 	
 	/**
@@ -521,7 +599,7 @@ public class JkfClientOverFtp implements JkfClient {
 	 * @author sihai
 	 *
 	 */
-	private class Puller {
+	private class Puller extends Restartable {
 		
 		private int no;
 		
@@ -540,11 +618,11 @@ public class JkfClientOverFtp implements JkfClient {
 			this.port = port;
 			this.username = username;
 			this.password = password;
-			// 快速失败
-			initializeFtp();
 		}
 		
 		public void start() {
+			//
+			initializeFtp();
 			thread = new Thread(new Runnable() {
 
 				@Override
@@ -554,7 +632,9 @@ public class JkfClientOverFtp implements JkfClient {
 					String xml = null;
 					while(!Thread.currentThread().isInterrupted()) {
 						try {
-							
+							//
+							alive();
+							//
 							FTPFile[] files = ftp.listFiles();
 							for(FTPFile f : files) {
 								if(null == f || null == f.getName() || f.isDirectory()) {
@@ -626,16 +706,12 @@ public class JkfClientOverFtp implements JkfClient {
 		public void stop() {
 			// TODO 优雅停止
 			thread.interrupt();
-			try {
-				ftp.logout();
-			} catch (IOException e) {
-				logger.error("logout failed", e);
-			}
-			try {
-				ftp.disconnect();
-			} catch (IOException e) {
-				logger.error("disconnect failed", e);
-			}
+			releaseFtp();
+		}
+		
+		public void restart() {
+			stop();
+			start();
 		}
 		
 		private void initializeFtp() {
