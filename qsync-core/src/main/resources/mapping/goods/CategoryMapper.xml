@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.openteach.qsync.core.dao.goods.CategoryDao">
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goods-Category-columns">
+	    <![CDATA[
+		`id` as `id`, `name` as `name`, `picurl` as `picurl`, `pic` as `pic`, `isparent` as `isparent`, `isshow` as `isshow`, `listorder` as `listorder`, `isdeleted` as `isdeleted`, `cid` as `cid`, `source` as `source`, `highid` as `highid`, `creatoradmin` as `creatoradmin`, `modifieradmin` as `modifieradmin`, `createdatetime` as `createdatetime`, `updatedatetime` as `updatedatetime`, `seokeyword` as `seokeyword`, `seodescription` as `seodescription`, `taxrate` as `taxrate`, `tariff` as `tariff`
+	    ]]>
+	</sql>	
+
+	<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+	<insert id="save" useGeneratedKeys="true" keyProperty="id">
+    <![CDATA[
+        INSERT INTO cc_kata_kplus_category (
+        `id`, `name`, `picurl`, `pic`, `isparent`, `isshow`, `listorder`, `isdeleted`, `cid`, `source`, `highid`, `creatoradmin`, `modifieradmin`, `createdatetime`, `updatedatetime`, `seokeyword`, `seodescription`, `taxrate`, `tariff`
+        ) VALUES (
+        #{id}, #{name}, #{picurl}, #{pic}, #{isparent}, #{isshow}, #{listorder}, #{isdeleted}, #{cid}, #{source}, #{highid}, #{creatoradmin}, #{modifieradmin}, #{createdatetime}, #{updatedatetime}, #{seokeyword}, #{seodescription}, #{taxrate}, #{tariff}        
+        )
+    ]]>
+		<!--	
+			oracle: order="BEFORE" SELECT sequenceName.nextval AS ID FROM DUAL 
+			DB2: order="BEFORE"" values nextval for sequenceName
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="userId">
+			SELECT sequenceName.nextval AS ID FROM DUAL 
+        </selectKey>
+		-->
+	</insert>
+    
+	<update id="update">
+    <![CDATA[
+        UPDATE cc_kata_kplus_category SET
+	        `name` = #{name} , `picurl` = #{picurl} , `pic` = #{pic} , `isparent` = #{isparent} , `isshow` = #{isshow} , `listorder` = #{listorder} , `isdeleted` = #{isdeleted} , `cid` = #{cid} , `source` = #{source} , `highid` = #{highid} , `creatoradmin` = #{creatoradmin} , `modifieradmin` = #{modifieradmin} , `createdatetime` = #{createdatetime} , `updatedatetime` = #{updatedatetime} , `seokeyword` = #{seokeyword} , `seodescription` = #{seodescription} , `taxrate` = #{taxrate} , `tariff` = #{tariff}  
+        WHERE 
+        	id = #{id}  	        
+    ]]>
+	</update>
+
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM cc_kata_kplus_category WHERE
+        `id` = #{id} 
+    ]]>
+    </delete>
+    
+    <select id="getById" resultType="Category">
+		SELECT <include refid="goods-Category-columns" />
+	    <![CDATA[
+		    FROM cc_kata_kplus_category 
+	        WHERE 
+		        `id` = #{id} 
+	    ]]>
+	</select>
+	
+	<sql id="Category-where">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+	       <if test="id">
+				AND `id` = #{id}
+			</if>
+	       <if test="name">
+				AND `name` = #{name}
+			</if>
+	       <if test="picurl">
+				AND `picurl` = #{picurl}
+			</if>
+	       <if test="pic">
+				AND `pic` = #{pic}
+			</if>
+	       <if test="isparent">
+				AND `isparent` = #{isparent}
+			</if>
+	       <if test="isshow">
+				AND `isshow` = #{isshow}
+			</if>
+	       <if test="listorder">
+				AND `listorder` = #{listorder}
+			</if>
+	       <if test="isdeleted">
+				AND `isdeleted` = #{isdeleted}
+			</if>
+	       <if test="cid">
+				AND `cid` = #{cid}
+			</if>
+	       <if test="source">
+				AND `source` = #{source}
+			</if>
+	       <if test="highid">
+				AND `highid` = #{highid}
+			</if>
+	       <if test="creatoradmin">
+				AND `creatoradmin` = #{creatoradmin}
+			</if>
+	       <if test="modifieradmin">
+				AND `modifieradmin` = #{modifieradmin}
+			</if>
+	       <if test="createdatetimeBegin != null">
+				AND `createdatetime` >= #{createdatetimeBegin}
+		   </if>
+		   <if test="createdatetimeEnd != null">
+				AND `createdatetime` &lt;= #{createdatetimeEnd}
+		   </if>
+	       <if test="updatedatetimeBegin != null">
+				AND `updatedatetime` >= #{updatedatetimeBegin}
+		   </if>
+		   <if test="updatedatetimeEnd != null">
+				AND `updatedatetime` &lt;= #{updatedatetimeEnd}
+		   </if>
+	       <if test="seokeyword">
+				AND `seokeyword` = #{seokeyword}
+			</if>
+	       <if test="seodescription">
+				AND `seodescription` = #{seodescription}
+			</if>
+	       <if test="taxrate">
+				AND `taxrate` = #{taxrate}
+			</if>
+	       <if test="tariff">
+				AND `tariff` = #{tariff}
+			</if>
+		</where>
+	</sql>
+		
+    <select id="count" resultType="long">
+        SELECT count(*) FROM cc_kata_kplus_category 
+		<include refid="Category-where"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="findPage" resultType="Category">
+    	SELECT <include refid="goods-Category-columns" />
+	    FROM cc_kata_kplus_category 
+		<include refid="Category-where"/>
+		
+		<if test="sortColumns != null">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	
+	<select id="list" resultType="Category">
+    	SELECT <include refid="goods-Category-columns" />
+	    FROM cc_kata_kplus_category 
+		<include refid="Category-where"/>
+		
+		<if test="sortColumns != null">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+
+	
+</mapper>
+

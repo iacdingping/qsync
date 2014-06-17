@@ -1,5 +1,6 @@
 package com.openteach.qsync.core.entity.goods;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 
@@ -64,7 +65,6 @@ public class Commodity {
 	public static final String ALIAS_WIDTH = "width";
 	public static final String ALIAS_HEIGHT = "height";
 	public static final String ALIAS_WEIGHT = "weight";
-	public static final String ALIAS_TARIFF = "行邮税号 必须已备案，且与参数说明文档中的行邮税号中的税号一致";
 	public static final String ALIAS_SALES_COUNTRY = "产销国";
 	public static final String ALIAS_UNIT = "申报计量单位 见计量单位代码";
 	public static final String ALIAS_UNIT_DESC = "申报计量单位描述";
@@ -133,6 +133,9 @@ public class Commodity {
      * categoryId       db_column: category_id 
      */	
 	private java.lang.Long categoryId;
+	@NotNull
+	@Valid
+	private Category categoryObject;
     /**
      * originalprice       db_column: originalprice 
      */	
@@ -275,11 +278,6 @@ public class Commodity {
 	@NotNull
 	private java.lang.Integer weight;
     /**
-     * 行邮税号 必须已备案，且与参数说明文档中的行邮税号中的税号一致       db_column: tariff 
-     */	
-	@NotNull
-	private java.lang.String tariff;
-    /**
      * 产销国       db_column: sales_country 
      */	
 	@NotNull
@@ -399,6 +397,12 @@ public class Commodity {
 	}
 	public java.lang.Long getCategoryId() {
 		return this.categoryId;
+	}
+	public Category getCategoryObject() {
+		return categoryObject;
+	}
+	public void setCategoryObject(Category categoryObject) {
+		this.categoryObject = categoryObject;
 	}
 	public void setOriginalprice(java.lang.Double value) {
 		this.originalprice = value;
@@ -610,13 +614,6 @@ public class Commodity {
 	@NotNull
 	public java.lang.Integer getWeight() {
 		return this.weight;
-	}
-	public void setTariff(java.lang.String value) {
-		this.tariff = value;
-	}
-	@NotNull
-	public java.lang.String getTariff() {
-		return this.tariff;
 	}
 	@NotNull
 	public java.lang.Long getSalesCountry() {

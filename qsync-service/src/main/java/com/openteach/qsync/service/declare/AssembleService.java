@@ -139,7 +139,7 @@ public class AssembleService {
 			JkfOrderDetail jkfOrderDetail = new JkfOrderDetail();
 			jkfOrderDetail.setGoodsOrder(i);
 			jkfOrderDetail.setGoodsName(commsku.getName());
-			jkfOrderDetail.setGoodsNo(commsku.getCommodityObject().getTariff());	//cc_kata_kplus_commodity.tariff
+			jkfOrderDetail.setGoodsNo(commsku.getCommodityObject().getCategoryObject().getTariff());	//cc_kata_kplus_category.tariff
 			jkfOrderDetail.setGoodsModel(commsku.getCommodityObject().getItemcode());
 			Country country2 = countryManager.getById(commsku.getCommodityObject().getSalesCountry());
 			if(country2 == null) {
@@ -161,7 +161,7 @@ public class AssembleService {
 		jkfGoodsPurchaser.setId(order.getMember().toString());
 		jkfGoodsPurchaser.setName(order.getMemberObject().getTruename());
 		jkfGoodsPurchaser.setEmail(order.getMemberObject().getEmail());
-		jkfGoodsPurchaser.setTelNumber(StringUtils.defaultIfEmpty(order.getMemberObject().getHandphone(), order.getMemberObject().getPhonenumber()));
+		jkfGoodsPurchaser.setTelNumber(order.getMemberObject().getPhonenumber());
 		jkfGoodsPurchaser.setPaperType(order.getMemberObject().getCertificatesType());	//kata_kplus_member.certificates_type
 		jkfGoodsPurchaser.setPaperNumber(order.getMemberObject().getCertificates());	//kata_kplus_member.certificates
 		jkfGoodsPurchaser.setAddress(order.getMemberObject().getAddress());
@@ -307,7 +307,7 @@ public class AssembleService {
 			Commsku commsku = tc.getCommskuObject();
 			GoodsDeclarDetail cdd = new GoodsDeclarDetail();
 			cdd.setGoodsOrder(i);
-			cdd.setMailTaxNo(commsku.getCommodityObject().getTariff());	//cc_kata_kplus_commodity.tariff
+			cdd.setMailTaxNo(commsku.getCommodityObject().getCategoryObject().getTariff());	//cc_kata_kplus_category.tariff
 			cdd.setGoodsItemNo(tc.getGoodsItemNo()); // 由仓储提供 cc_kata_kplus_transport_commodity.goods_item_no
 			cdd.setGoodsName(commsku.getName());
 			cdd.setGoodsSpecification(commsku.getCommodityObject().getSpecification());	//cc_kata_kplus_commodity.specification
@@ -328,10 +328,10 @@ public class AssembleService {
 			cdd.setDeclareCount(tc.getDelivernum());
 			cdd.setDeclareMeasureUnit(commsku.getCommodityObject().getUnit());	//cc_kata_kplus_commodity.unit
 			cdd.setGoodsRoughWeight(commsku.getCommodityObject().getWeight());
-			cdd.setFirstUnit(commsku.getCommodityObject().getUnitDesc());	//cc_kata_kplus_commodity.unit_desc
+			cdd.setFirstUnit(commsku.getCommodityObject().getUnit());	//cc_kata_kplus_commodity.unit_desc
 			cdd.setFirstCount(tc.getDelivernum());
 			
-			cdd.setSecondUnit(commsku.getCommodityObject().getUnitDesc());	// 第一单位与第二单位一样???
+			cdd.setSecondUnit(commsku.getCommodityObject().getUnit());	// 第一单位与第二单位一样???
 			cdd.setSecondCount(tc.getDelivernum());			//同上 ???
 			goodsDeclarDetails.add(cdd);
 		}

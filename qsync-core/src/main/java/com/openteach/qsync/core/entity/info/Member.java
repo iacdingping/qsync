@@ -140,6 +140,7 @@ public class Member {
     /**
      * telephone       db_column: telephone 
      */	
+	@NotNull
 	private java.lang.String telephone;
     /**
      * payamount       db_column: payamount 

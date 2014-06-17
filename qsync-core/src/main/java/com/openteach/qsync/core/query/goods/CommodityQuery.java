@@ -120,8 +120,6 @@ public class CommodityQuery extends PageQuery {
 	private java.lang.Double height;
 	/** weight */
 	private java.lang.Integer weight;
-	/** 行邮税号 必须已备案，且与参数说明文档中的行邮税号中的税号一致 */
-	private java.lang.String tariff;
 	/** 产销国 */
 	private java.lang.Long salesCountry;
 	/** 申报计量单位 见计量单位代码 */
@@ -569,14 +567,6 @@ public class CommodityQuery extends PageQuery {
 	
 	public void setWeight(java.lang.Integer value) {
 		this.weight = value;
-	}
-	
-	public java.lang.String getTariff() {
-		return this.tariff;
-	}
-	
-	public void setTariff(java.lang.String value) {
-		this.tariff = value;
 	}
 	
 	public java.lang.Long getSalesCountry() {

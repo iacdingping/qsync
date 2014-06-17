@@ -77,3 +77,7 @@ ALTER TABLE `cc_sync_taks` ADD `order_id` BIGINT(22) COMMENT '订单ID';
 ALTER TABLE `cc_sync_taks` MODIFY COLUMN `type` VARCHAR(50);
 ALTER TABLE `cc_sync_taks` ADD `business_no` VARCHAR(50) COMMENT '业务编号';
 ALTER TABLE `kata_kplus_member` MODIFY `certificates_type` VARCHAR(5) COMMENT '证件类型 1:身份证（试点期间只能是身份证） 2:护照 3:其他';
+
+-- 行油税号 移动到cc_kata_kplus_category类目表
+ALTER TABLE `cc_kata_kplus_category` ADD `tariff` VARCHAR(20) COMMENT '行邮税号 必须已备案，且与参数说明文档中的行邮税号中的税号一致';
+ALTER TABLE `cc_kata_kplus_commodity` DROP COLUMN `tariff`

@@ -133,8 +133,6 @@ public class CommodityDaoTest extends SpringTransactionalTestCase{
 		/** height */
 		/** weight */
 		commodity.setWeight(1);
-		/** 行邮税号 必须已备案，且与参数说明文档中的行邮税号中的税号一致 */
-		commodity.setTariff("1");
 		/** 产销国 */
 		commodity.setSalesCountry(1L);
 		/** 申报计量单位 见计量单位代码 */
@@ -205,7 +203,6 @@ public class CommodityDaoTest extends SpringTransactionalTestCase{
 			assertEquals(commodityQueried.getWidth(), commodity.getWidth());
 			assertEquals(commodityQueried.getHeight(), commodity.getHeight());
 			assertEquals(commodityQueried.getWeight(), commodity.getWeight());
-			assertEquals(commodityQueried.getTariff(), commodity.getTariff());
 			assertEquals(commodityQueried.getSalesCountry(), commodity.getSalesCountry());
 			assertEquals(commodityQueried.getUnit(), commodity.getUnit());
 			assertEquals(commodityQueried.getUnitDesc(), commodity.getUnitDesc());
@@ -304,8 +301,6 @@ public class CommodityDaoTest extends SpringTransactionalTestCase{
 		/** height */
 		/** weight */
 		commodity.setWeight(2);
-		/** 行邮税号 必须已备案，且与参数说明文档中的行邮税号中的税号一致 */
-		commodity.setTariff("2");
 		/** 产销国 */
 		commodity.setSalesCountry(2L);
 		/** 申报计量单位 见计量单位代码 */
@@ -371,7 +366,6 @@ public class CommodityDaoTest extends SpringTransactionalTestCase{
 		assertEquals(commodityUpdated.getWidth(), commodity.getWidth());
 		assertEquals(commodityUpdated.getHeight(), commodity.getHeight());
 		assertEquals(commodityUpdated.getWeight(), commodity.getWeight());
-		assertEquals(commodityUpdated.getTariff(), commodity.getTariff());
 		assertEquals(commodityUpdated.getSalesCountry(), commodity.getSalesCountry());
 		assertEquals(commodityUpdated.getUnit(), commodity.getUnit());
 		assertEquals(commodityUpdated.getUnitDesc(), commodity.getUnitDesc());
