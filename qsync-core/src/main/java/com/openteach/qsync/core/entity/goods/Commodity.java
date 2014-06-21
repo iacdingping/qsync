@@ -66,9 +66,7 @@ public class Commodity {
 	public static final String ALIAS_HEIGHT = "height";
 	public static final String ALIAS_WEIGHT = "weight";
 	public static final String ALIAS_SALES_COUNTRY = "产销国";
-	public static final String ALIAS_UNIT = "申报计量单位 见计量单位代码";
-	public static final String ALIAS_UNIT_DESC = "申报计量单位描述";
-	public static final String ALIAS_SPECIFICATION = "商品规格、型号";
+	public static final String ALIAS_UNIT_ID = "申报计量单位 见计量单位代码";
 	
 	//可以直接使用: @Length(max=50,message="用户名长度不能大于50")显示错误消息
 	//columns START
@@ -283,7 +281,7 @@ public class Commodity {
 	@NotNull
 	private java.lang.Long salesCountry;
     /**
-     * 申报计量单位 见计量单位代码       db_column: unit 
+     * 申报计量单位 见计量单位代码       db_column: unit_id
      */	
 	@NotNull
 	private java.lang.Long unitId;
@@ -627,4 +625,3 @@ public class Commodity {
 		UnitObject = unitObject;
 	}
 }
-
