@@ -354,6 +354,7 @@ public class Member {
     /**
      * phonenumber       db_column: phonenumber 
      */	
+	@NotNull
 	private java.lang.String phonenumber;
     /**
      * ccity       db_column: ccity 

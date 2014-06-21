@@ -47,7 +47,8 @@ public class ConfigService {
 	//关区代码
 	@Value("${declare.customsCode}")
 	private String declareCustomsCode;
-	
+	@Value("${declare.goodsYardCode}")
+	private String declareGoodsYardCode;
 	public String getDeclareCompanyCode() {
 		return declareCompanyCode;
 	}
@@ -132,5 +133,11 @@ public class ConfigService {
 	}
 	public void setDeclareAccountBookNo(String declareAccountBookNo) {
 		this.declareAccountBookNo = declareAccountBookNo;
+	}
+	public String getDeclareGoodsYardCode() {
+		return declareGoodsYardCode;
+	}
+	public void setDeclareGoodsYardCode(String declareGoodsYardCode) {
+		this.declareGoodsYardCode = declareGoodsYardCode;
 	}
 }

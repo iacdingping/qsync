@@ -268,7 +268,7 @@ public class AssembleService {
 		goodsDeclar.setEnteringPerson("9999");
 		goodsDeclar.setEnteringCompanyName("9999");
 		goodsDeclar.setDeclarantCode("");
-		goodsDeclar.setGoodsYardCode(configService.getDeclareArrivedPort());
+		goodsDeclar.setGoodsYardCode(configService.getDeclareGoodsYardCode());
 		goodsDeclar.setSender(order.getOrderTransportObject().getAddressorName());	// cc_kata_kplus_order_transport.addressor_name
 		goodsDeclar.setReceiver(order.getOrderTransportObject().getCongsignee());
 		Country senderCountry = countryManager.getById(order.getOrderTransportObject().getAddressorCountry());
@@ -308,7 +308,7 @@ public class AssembleService {
 			GoodsDeclarDetail cdd = new GoodsDeclarDetail();
 			cdd.setGoodsOrder(i);
 			cdd.setMailTaxNo(commsku.getCommodityObject().getCategoryObject().getTariff());	//cc_kata_kplus_category.tariff
-			cdd.setGoodsItemNo(tc.getGoodsItemNo()); // 由仓储提供 cc_kata_kplus_transport_commodity.goods_item_no
+			cdd.setGoodsItemNo(tc.getGoodsItemNo()); // 由仓储提供 cc_kata_kplus_transport_commodity.goods_item_no   保税区 出物品   
 			cdd.setGoodsName(commsku.getName());
 			cdd.setGoodsSpecification(commsku.getCommodityObject().getSpecification());	//cc_kata_kplus_commodity.specification
 			Country country = countryManager.getById(commsku.getCommodityObject().getSalesCountry());

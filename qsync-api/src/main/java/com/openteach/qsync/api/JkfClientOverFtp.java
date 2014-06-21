@@ -464,7 +464,7 @@ public class JkfClientOverFtp implements JkfClient {
 		}
 		
 		public boolean isNeedRestart() {
-			return System.currentTimeMillis() - this.lastActivitedTimestamp > JkfClientOverFtp.this.restartPeroid;
+			return (System.currentTimeMillis() - this.lastActivitedTimestamp) > (1000 * JkfClientOverFtp.this.restartPeroid);
 		}
 		
 		/**

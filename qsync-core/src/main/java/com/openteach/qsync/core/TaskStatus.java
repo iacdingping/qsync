@@ -9,11 +9,10 @@ public enum TaskStatus {
 
 	UNDO,
 	DOING,
-	DONE,
-	FAILED,
-	IGNORE,
+	LAUNCH_FAILED,
 	DATA_ERROR,
 	DECLARE_FAILED,
+	IGNORE,
 	DECLARE_SUCCESS
 	;
 }

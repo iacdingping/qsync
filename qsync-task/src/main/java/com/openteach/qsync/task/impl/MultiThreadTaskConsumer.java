@@ -81,7 +81,7 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 		for(int i = 0; i < threadCount; i++) { 
 			CcSyncTaksQuery query = new CcSyncTaksQuery();
 			query.setWorkerSize(threadCount);
-			query.setInStatus(Arrays.asList(TaskStatus.UNDO.name(), TaskStatus.FAILED.name()));
+			query.setInStatus(Arrays.asList(TaskStatus.UNDO.name(), TaskStatus.LAUNCH_FAILED.name()));
 			query.setMode(i);
 			threads[i] = new Worker(query);
 		}
@@ -100,7 +100,7 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 			@Override
 			public void onFailed(ApiException exception, Object context) {
 				CcSyncTaks task = (CcSyncTaks)context;
-				task.setStatus(TaskStatus.FAILED.name());
+				task.setStatus(TaskStatus.LAUNCH_FAILED.name());
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw); 
 				exception.printStackTrace(pw);
