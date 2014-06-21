@@ -64,11 +64,6 @@ public class Transportation {
      */	
 	private java.util.Date updatedatetime;
     /**
-     * 1 邮政小包 2 快件 3 EMS       db_column: type 
-     */	
-	@NotNull
-	private java.lang.Integer type;
-    /**
      * 运输工具航次(班)号       db_column: tool_flt_no 
      */	
 	private java.lang.String toolFltNo;
@@ -147,12 +142,6 @@ public class Transportation {
 	}
 	public java.util.Date getUpdatedatetime() {
 		return this.updatedatetime;
-	}
-	public void setType(java.lang.Integer value) {
-		this.type = value;
-	}
-	public java.lang.Integer getType() {
-		return this.type;
 	}
 	public void setToolFltNo(java.lang.String value) {
 		this.toolFltNo = value;

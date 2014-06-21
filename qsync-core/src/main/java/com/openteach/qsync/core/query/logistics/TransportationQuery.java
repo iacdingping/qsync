@@ -33,8 +33,6 @@ public class TransportationQuery extends PageQuery {
 	/** updatedatetime */
 	private java.util.Date updatedatetimeBegin;
 	private java.util.Date updatedatetimeEnd;
-	/** 1 邮政小包 2 快件 3 EMS */
-	private java.lang.Integer type;
 	/** 运输工具航次(班)号 */
 	private java.lang.String toolFltNo;
 	/** 参照运输方式代码表(TRANSF) */
@@ -124,14 +122,6 @@ public class TransportationQuery extends PageQuery {
 	
 	public void setUpdatedatetimeEnd(java.util.Date value) {
 		this.updatedatetimeEnd = value;
-	}
-	
-	public java.lang.Integer getType() {
-		return this.type;
-	}
-	
-	public void setType(java.lang.Integer value) {
-		this.type = value;
 	}
 	
 	public java.lang.String getToolFltNo() {

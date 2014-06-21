@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 
-import com.openteach.qsync.core.PageList;
 import com.openteach.qsync.core.SpringTransactionalTestCase;
 import com.openteach.qsync.core.dao.system.CcSyncTaksDao;
 import com.openteach.qsync.core.entity.system.CcSyncTaks;

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.openteach.qsync.core.dao.goods.UnitDao">
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goods-Unit-columns">
+	    <![CDATA[
+		`id` as `id`, `name` as `name`, `code` as `code`, `sort` as `sort`, `account` as `account`, `createdate` as `createdate`, `isdeleted` as `isdeleted`
+	    ]]>
+	</sql>	
+
+	<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+	<insert id="save" useGeneratedKeys="true" keyProperty="id">
+    <![CDATA[
+        INSERT INTO cc_kata_kplus_unit (
+        `id`, `name`, `code`, `sort`, `account`, `createdate`, `isdeleted`
+        ) VALUES (
+        #{id}, #{name}, #{code}, #{sort}, #{account}, #{createdate}, #{isdeleted}        
+        )
+    ]]>
+		<!--	
+			oracle: order="BEFORE" SELECT sequenceName.nextval AS ID FROM DUAL 
+			DB2: order="BEFORE"" values nextval for sequenceName
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="userId">
+			SELECT sequenceName.nextval AS ID FROM DUAL 
+        </selectKey>
+		-->
+	</insert>
+    
+	<update id="update">
+    <![CDATA[
+        UPDATE cc_kata_kplus_unit SET
+	        `name` = #{name} , `code` = #{code} , `sort` = #{sort} , `account` = #{account} , `createdate` = #{createdate} , `isdeleted` = #{isdeleted}  
+        WHERE 
+        	id = #{id}  	        
+    ]]>
+	</update>
+
+    <delete id="deleteById">
+    <![CDATA[
+        DELETE FROM cc_kata_kplus_unit WHERE
+        `id` = #{id} 
+    ]]>
+    </delete>
+    
+    <select id="getById" resultType="Unit">
+		SELECT <include refid="goods-Unit-columns" />
+	    <![CDATA[
+		    FROM cc_kata_kplus_unit 
+	        WHERE 
+		        `id` = #{id} 
+	    ]]>
+	</select>
+	
+	<sql id="Unit-where">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+	       <if test="id">
+				AND `id` = #{id}
+			</if>
+	       <if test="name">
+				AND `name` = #{name}
+			</if>
+	       <if test="code">
+				AND `code` = #{code}
+			</if>
+	       <if test="sort">
+				AND `sort` = #{sort}
+			</if>
+	       <if test="account">
+				AND `account` = #{account}
+			</if>
+	       <if test="createdateBegin != null">
+				AND `createdate` >= #{createdateBegin}
+		   </if>
+		   <if test="createdateEnd != null">
+				AND `createdate` &lt;= #{createdateEnd}
+		   </if>
+	       <if test="isdeleted">
+				AND `isdeleted` = #{isdeleted}
+			</if>
+		</where>
+	</sql>
+		
+    <select id="count" resultType="long">
+        SELECT count(*) FROM cc_kata_kplus_unit 
+		<include refid="Unit-where"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="findPage" resultType="Unit">
+    	SELECT <include refid="goods-Unit-columns" />
+	    FROM cc_kata_kplus_unit 
+		<include refid="Unit-where"/>
+		
+		<if test="sortColumns != null">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	
+	<select id="list" resultType="Unit">
+    	SELECT <include refid="goods-Unit-columns" />
+	    FROM cc_kata_kplus_unit 
+		<include refid="Unit-where"/>
+		
+		<if test="sortColumns != null">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+
+	
+</mapper>
+

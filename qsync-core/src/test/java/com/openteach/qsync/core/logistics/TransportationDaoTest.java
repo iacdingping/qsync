@@ -54,8 +54,6 @@ public class TransportationDaoTest extends SpringTransactionalTestCase{
 		transportation.setCreateDatetime(new java.util.Date());
 		/** updatedatetime */
 		transportation.setUpdatedatetime(new java.util.Date());
-		/** 1 邮政小包 2 快件 3 EMS */
-		transportation.setType(1);
 		/** 运输工具航次(班)号 */
 		transportation.setToolFltNo("1");
 		/** 参照运输方式代码表(TRANSF) */
@@ -81,7 +79,6 @@ public class TransportationDaoTest extends SpringTransactionalTestCase{
 				DateUtil.format(transportation.getCreateDatetime(), "yyyy-mm-dd HH:MM"));
 			assertEquals(DateUtil.format(transportationQueried.getUpdatedatetime(), "yyyy-mm-dd HH:MM"), 
 				DateUtil.format(transportation.getUpdatedatetime(), "yyyy-mm-dd HH:MM"));
-			assertEquals(transportationQueried.getType(), transportation.getType());
 			assertEquals(transportationQueried.getToolFltNo(), transportation.getToolFltNo());
 			assertEquals(transportationQueried.getTypeCode(), transportation.getTypeCode());
 			assertEquals(transportationQueried.getFromCountry(), transportation.getFromCountry());
@@ -102,8 +99,6 @@ public class TransportationDaoTest extends SpringTransactionalTestCase{
 		transportation.setCreateDatetime(new java.util.Date());
 		/** updatedatetime */
 		transportation.setUpdatedatetime(new java.util.Date());
-		/** 1 邮政小包 2 快件 3 EMS */
-		transportation.setType(2);
 		/** 运输工具航次(班)号 */
 		transportation.setToolFltNo("2");
 		/** 参照运输方式代码表(TRANSF) */
@@ -124,7 +119,6 @@ public class TransportationDaoTest extends SpringTransactionalTestCase{
 			DateUtil.format(transportationUpdated.getCreateDatetime(), "yyyy-mm-dd HH:MM"));
 		assertEquals(DateUtil.format(transportationUpdated.getUpdatedatetime(), "yyyy-mm-dd HH:MM"), 
 			DateUtil.format(transportationUpdated.getUpdatedatetime(), "yyyy-mm-dd HH:MM"));
-		assertEquals(transportationUpdated.getType(), transportation.getType());
 		assertEquals(transportationUpdated.getToolFltNo(), transportation.getToolFltNo());
 		assertEquals(transportationUpdated.getTypeCode(), transportation.getTypeCode());
 		assertEquals(transportationUpdated.getFromCountry(), transportation.getFromCountry());

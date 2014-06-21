@@ -286,17 +286,11 @@ public class Commodity {
      * 申报计量单位 见计量单位代码       db_column: unit 
      */	
 	@NotNull
-	private java.lang.String unit;
-    /**
-     * 申报计量单位描述       db_column: unit_desc 
-     */	
+	private java.lang.Long unitId;
+	
+	@Valid
 	@NotNull
-	private java.lang.String unitDesc;
-    /**
-     * 商品规格、型号       db_column: specification 
-     */	
-	@NotNull
-	private java.lang.String specification;
+	private Unit UnitObject;
 	//columns END
 
 	public Commodity(){
@@ -611,37 +605,26 @@ public class Commodity {
 	public void setWeight(java.lang.Integer value) {
 		this.weight = value;
 	}
-	@NotNull
 	public java.lang.Integer getWeight() {
 		return this.weight;
 	}
-	@NotNull
 	public java.lang.Long getSalesCountry() {
 		return salesCountry;
 	}
 	public void setSalesCountry(java.lang.Long salesCountry) {
 		this.salesCountry = salesCountry;
 	}
-	public void setUnit(java.lang.String value) {
-		this.unit = value;
+	public java.lang.Long getUnitId() {
+		return unitId;
 	}
-	@NotNull
-	public java.lang.String getUnit() {
-		return this.unit;
+	public void setUnitId(java.lang.Long unitId) {
+		this.unitId = unitId;
 	}
-	public void setUnitDesc(java.lang.String value) {
-		this.unitDesc = value;
+	public Unit getUnitObject() {
+		return UnitObject;
 	}
-	@NotNull
-	public java.lang.String getUnitDesc() {
-		return this.unitDesc;
-	}
-	public void setSpecification(java.lang.String value) {
-		this.specification = value;
-	}
-	@NotNull
-	public java.lang.String getSpecification() {
-		return this.specification;
+	public void setUnitObject(Unit unitObject) {
+		UnitObject = unitObject;
 	}
 }
 

@@ -109,8 +109,6 @@ public class OrderDaoTest extends SpringTransactionalTestCase {
 		order.setUpdatedatetime(new java.util.Date());
 		/** ordertransport */
 		order.setOrdertransport(1L);
-		/** statementId */
-		order.setStatementId(1L);
 		/** isstatemented */
 		order.setIsstatemented(1);
 		/** ccgroupId */
@@ -215,7 +213,6 @@ public class OrderDaoTest extends SpringTransactionalTestCase {
 				"yyyy-mm-dd HH:MM"));
 		assertEquals(orderQueried.getOrdertransport(),
 				order.getOrdertransport());
-		assertEquals(orderQueried.getStatementId(), order.getStatementId());
 		assertEquals(orderQueried.getIsstatemented(), order.getIsstatemented());
 		assertEquals(orderQueried.getCcgroupId(), order.getCcgroupId());
 		assertEquals(orderQueried.getOrdertype(), order.getOrdertype());
@@ -320,8 +317,6 @@ public class OrderDaoTest extends SpringTransactionalTestCase {
 		order.setUpdatedatetime(new java.util.Date());
 		/** ordertransport */
 		order.setOrdertransport(2L);
-		/** statementId */
-		order.setStatementId(2L);
 		/** isstatemented */
 		order.setIsstatemented(2);
 		/** ccgroupId */
@@ -421,7 +416,6 @@ public class OrderDaoTest extends SpringTransactionalTestCase {
 				orderUpdated.getUpdatedatetime(), "yyyy-mm-dd HH:MM"));
 		assertEquals(orderUpdated.getOrdertransport(),
 				order.getOrdertransport());
-		assertEquals(orderUpdated.getStatementId(), order.getStatementId());
 		assertEquals(orderUpdated.getIsstatemented(), order.getIsstatemented());
 		assertEquals(orderUpdated.getCcgroupId(), order.getCcgroupId());
 		assertEquals(orderUpdated.getOrdertype(), order.getOrdertype());

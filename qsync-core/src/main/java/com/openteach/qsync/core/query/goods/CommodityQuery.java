@@ -123,11 +123,7 @@ public class CommodityQuery extends PageQuery {
 	/** 产销国 */
 	private java.lang.Long salesCountry;
 	/** 申报计量单位 见计量单位代码 */
-	private java.lang.String unit;
-	/** 申报计量单位描述 */
-	private java.lang.String unitDesc;
-	/** 商品规格、型号 */
-	private java.lang.String specification;
+	private java.lang.Long unitId;
 
 	public java.lang.Long getId() {
 		return this.id;
@@ -577,30 +573,13 @@ public class CommodityQuery extends PageQuery {
 		this.salesCountry = salesCountry;
 	}
 
-	public java.lang.String getUnit() {
-		return this.unit;
+	public java.lang.Long getUnitId() {
+		return unitId;
 	}
-	
-	public void setUnit(java.lang.String value) {
-		this.unit = value;
+
+	public void setUnitId(java.lang.Long unitId) {
+		this.unitId = unitId;
 	}
-	
-	public java.lang.String getUnitDesc() {
-		return this.unitDesc;
-	}
-	
-	public void setUnitDesc(java.lang.String value) {
-		this.unitDesc = value;
-	}
-	
-	public java.lang.String getSpecification() {
-		return this.specification;
-	}
-	
-	public void setSpecification(java.lang.String value) {
-		this.specification = value;
-	}
-	
 
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this,ToStringStyle.MULTI_LINE_STYLE);

@@ -51,7 +51,6 @@ public class Order {
 	public static final String ALIAS_CREATEDATETIME = "createdatetime";
 	public static final String ALIAS_UPDATEDATETIME = "updatedatetime";
 	public static final String ALIAS_ORDERTRANSPORT = "ordertransport";
-	public static final String ALIAS_STATEMENT_ID = "statementId";
 	public static final String ALIAS_ISSTATEMENTED = "isstatemented";
 	public static final String ALIAS_CCGROUP_ID = "ccgroupId";
 	public static final String ALIAS_ORDERTYPE = "ordertype";
@@ -221,10 +220,6 @@ public class Order {
 	@Valid
 	private OrderTransport orderTransportObject;
     /**
-     * statementId       db_column: statement_id 
-     */	
-	private java.lang.Long statementId;
-    /**
      * isstatemented       db_column: isstatemented 
      */	
 	private java.lang.Integer isstatemented;
@@ -333,22 +328,22 @@ public class Order {
     /**
      * 支付类型 01:银行卡支付 02:余额支付 03:其他       db_column: declare_pay_type 
      */	
-	@NotNull
+	@NotNull(message = "支付类型不能为空")
 	private java.lang.String declarePayType;
     /**
      * 支付公司编码       db_column: pay_company_code 
      */	
-	@NotNull
+	@NotNull(message = "支付公司编码不能为空")
 	private java.lang.String payCompanyCode;
     /**
      * 支付单号       db_column: pay_number 
      */	
-	@NotNull
+	@NotNull(message = "支付单号不能为空")
 	private java.lang.String payNumber;
     /**
      * 订单税款       db_column: order_tax_amount 
      */	
-	@NotNull
+	@NotNull(message = "订单税款不能为空")
 	private java.lang.Double orderTaxAmount;
 	/**
 	 * 报关状态 初始状态 00000 从左到右 
@@ -356,6 +351,8 @@ public class Order {
 	 * 报关状态 0 未开始 1 报关中 2 报关完成 3 报关失败
 	 */
 	private java.lang.String declareStatus;
+	@NotNull(message = "运输类型不能为空")
+	private Integer transportationType;
 	//columns END
 	@NotNull
 	private Integer totalGoodsCount;
@@ -580,12 +577,6 @@ public class Order {
 	public void setOrderTransportObject(OrderTransport orderTransportObject) {
 		this.orderTransportObject = orderTransportObject;
 	}
-	public void setStatementId(java.lang.Long value) {
-		this.statementId = value;
-	}
-	public java.lang.Long getStatementId() {
-		return this.statementId;
-	}
 	public void setIsstatemented(java.lang.Integer value) {
 		this.isstatemented = value;
 	}
@@ -799,6 +790,14 @@ public class Order {
 
 	public void setDeclareStatus(java.lang.String declareStatus) {
 		this.declareStatus = declareStatus;
+	}
+
+	public Integer getTransportationType() {
+		return transportationType;
+	}
+
+	public void setTransportationType(Integer transportationType) {
+		this.transportationType = transportationType;
 	}
 
 }

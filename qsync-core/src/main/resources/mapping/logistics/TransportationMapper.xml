@@ -9,7 +9,7 @@
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="logistics-Transportation-columns">
 	    <![CDATA[
-		`id` as `id`, `name` as `name`, `picurl` as `picurl`, `remark` as `remark`, `freeshipping` as `freeshipping`, `isdeleted` as `isdeleted`, `createDatetime` as `createDatetime`, `updatedatetime` as `updatedatetime`, `type` as `type`, `tool_flt_no` as `toolFltNo`, `type_code` as `typeCode`, `from_country` as `fromCountry`, `pack_type` as `packType`, `application_form_no` as `applicationFormNo`
+		`id` as `id`, `name` as `name`, `picurl` as `picurl`, `remark` as `remark`, `freeshipping` as `freeshipping`, `isdeleted` as `isdeleted`, `createDatetime` as `createDatetime`, `updatedatetime` as `updatedatetime`, `tool_flt_no` as `toolFltNo`, `type_code` as `typeCode`, `from_country` as `fromCountry`, `pack_type` as `packType`, `application_form_no` as `applicationFormNo`
 	    ]]>
 	</sql>	
 
@@ -17,9 +17,9 @@
 	<insert id="save" useGeneratedKeys="true" keyProperty="id">
     <![CDATA[
         INSERT INTO cc_kata_kplus_transportation (
-        `id`, `name`, `picurl`, `remark`, `freeshipping`, `isdeleted`, `createDatetime`, `updatedatetime`, `type`, `tool_flt_no`, `type_code`, `from_country`, `pack_type`, `application_form_no`
+        `id`, `name`, `picurl`, `remark`, `freeshipping`, `isdeleted`, `createDatetime`, `updatedatetime`, `tool_flt_no`, `type_code`, `from_country`, `pack_type`, `application_form_no`
         ) VALUES (
-        #{id}, #{name}, #{picurl}, #{remark}, #{freeshipping}, #{isdeleted}, #{createDatetime}, #{updatedatetime}, #{type}, #{toolFltNo}, #{typeCode}, #{fromCountry}, #{packType}, #{applicationFormNo}        
+        #{id}, #{name}, #{picurl}, #{remark}, #{freeshipping}, #{isdeleted}, #{createDatetime}, #{updatedatetime}, #{toolFltNo}, #{typeCode}, #{fromCountry}, #{packType}, #{applicationFormNo}        
         )
     ]]>
 		<!--	
@@ -34,7 +34,7 @@
 	<update id="update">
     <![CDATA[
         UPDATE cc_kata_kplus_transportation SET
-	        `name` = #{name} , `picurl` = #{picurl} , `remark` = #{remark} , `freeshipping` = #{freeshipping} , `isdeleted` = #{isdeleted} , `createDatetime` = #{createDatetime} , `updatedatetime` = #{updatedatetime} , `type` = #{type} , `tool_flt_no` = #{toolFltNo} , `type_code` = #{typeCode} , `from_country` = #{fromCountry} , `pack_type` = #{packType} , `application_form_no` = #{applicationFormNo}  
+	        `name` = #{name} , `picurl` = #{picurl} , `remark` = #{remark} , `freeshipping` = #{freeshipping} , `isdeleted` = #{isdeleted} , `createDatetime` = #{createDatetime} , `updatedatetime` = #{updatedatetime} , `tool_flt_no` = #{toolFltNo} , `type_code` = #{typeCode} , `from_country` = #{fromCountry} , `pack_type` = #{packType} , `application_form_no` = #{applicationFormNo}  
         WHERE 
         	id = #{id}  	        
     ]]>
@@ -89,9 +89,6 @@
 		   <if test="updatedatetimeEnd != null">
 				AND `updatedatetime` &lt;= #{updatedatetimeEnd}
 		   </if>
-	       <if test="type">
-				AND `type` = #{type}
-			</if>
 	       <if test="toolFltNo">
 				AND `tool_flt_no` = #{toolFltNo}
 			</if>

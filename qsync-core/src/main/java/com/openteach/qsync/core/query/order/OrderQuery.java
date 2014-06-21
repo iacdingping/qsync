@@ -83,8 +83,6 @@ public class OrderQuery extends PageQuery {
 	private java.util.Date updatedatetimeEnd;
 	/** ordertransport */
 	private java.lang.Long ordertransport;
-	/** statementId */
-	private java.lang.Long statementId;
 	/** isstatemented */
 	private java.lang.Integer isstatemented;
 	/** ccgroupId */
@@ -146,6 +144,7 @@ public class OrderQuery extends PageQuery {
 	private java.lang.Double orderTaxAmount;
 	/** 报关状态 */
 	private String declareStatus;
+	private Integer transportationType;
 
 	public java.lang.Long getId() {
 		return this.id;
@@ -435,14 +434,6 @@ public class OrderQuery extends PageQuery {
 		this.ordertransport = value;
 	}
 	
-	public java.lang.Long getStatementId() {
-		return this.statementId;
-	}
-	
-	public void setStatementId(java.lang.Long value) {
-		this.statementId = value;
-	}
-	
 	public java.lang.Integer getIsstatemented() {
 		return this.isstatemented;
 	}
@@ -697,6 +688,14 @@ public class OrderQuery extends PageQuery {
 
 	public void setDeclareStatus(String declareStatus) {
 		this.declareStatus = declareStatus;
+	}
+
+	public Integer getTransportationType() {
+		return transportationType;
+	}
+
+	public void setTransportationType(Integer transportationType) {
+		this.transportationType = transportationType;
 	}
 
 	public String toString() {

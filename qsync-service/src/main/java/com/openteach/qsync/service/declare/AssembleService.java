@@ -115,7 +115,7 @@ public class AssembleService {
 		jkfOrderImportHead.setConsigneeAddress(StringUtils.defaultIfEmpty(
 				order.getOrderTransportObject().getAddress1(), order.getOrderTransportObject().getAddress2()));
 		jkfOrderImportHead.setTotalCount(order.getTotalGoodsCount());
-		jkfOrderImportHead.setPostMode(order.getTransportationObject().getType().toString());	//transportaion.type
+		jkfOrderImportHead.setPostMode(order.getTransportationType().toString());	//cc_kata_kplus_order transportaion_type
 		Country country = countryManager.getById(order.getOrderTransportObject().getAddressorCountry());
 		if(country == null) {
 			throw new DataAssembleException("order.orderTransportObject.addressorCountry may not be null");
@@ -151,7 +151,7 @@ public class AssembleService {
 			jkfOrderDetail.setCountryCode(country2.getCountryCode());	//cc_kata_kplus_commodity.sales_country
 			jkfOrderDetail.setUnitPrice(tc.getPrice());
 			jkfOrderDetail.setGoodsCount(tc.getDelivernum().doubleValue());
-			jkfOrderDetail.setGoodsUnit(commsku.getCommodityObject().getUnit());	//cc_kata_kplus_commodity.unit
+			jkfOrderDetail.setGoodsUnit(commsku.getCommodityObject().getUnitObject().getCode());	//cc_kata_kplus_unit.code
 			jkfOrderDetail.setWeight(commsku.getCommodityObject().getWeight().doubleValue());
 			jkfOrderDetailList.add(jkfOrderDetail);
 		}
@@ -310,7 +310,7 @@ public class AssembleService {
 			cdd.setMailTaxNo(commsku.getCommodityObject().getCategoryObject().getTariff());	//cc_kata_kplus_category.tariff
 			cdd.setGoodsItemNo(tc.getGoodsItemNo()); // 由仓储提供 cc_kata_kplus_transport_commodity.goods_item_no   保税区 出物品   
 			cdd.setGoodsName(commsku.getName());
-			cdd.setGoodsSpecification(commsku.getCommodityObject().getSpecification());	//cc_kata_kplus_commodity.specification
+			cdd.setGoodsSpecification(commsku.getProperties());	//cc_kata_kplus_commodity.properties
 			Country country = countryManager.getById(commsku.getCommodityObject().getSalesCountry());
 			if(country == null) {
 				throw new DataAssembleException("order.orderTransportObject.transportCommodityList(i).commsku.commodityObject.salesCountry may not be null");
@@ -326,12 +326,12 @@ public class AssembleService {
 			worth += cdd.getDeclareTotalPrices();
 			cdd.setPurpose("");
 			cdd.setDeclareCount(tc.getDelivernum());
-			cdd.setDeclareMeasureUnit(commsku.getCommodityObject().getUnit());	//cc_kata_kplus_commodity.unit
+			cdd.setDeclareMeasureUnit(commsku.getCommodityObject().getUnitObject().getCode());	//cc_kata_kplus_unit.code
 			cdd.setGoodsRoughWeight(commsku.getCommodityObject().getWeight());
-			cdd.setFirstUnit(commsku.getCommodityObject().getUnit());	//cc_kata_kplus_commodity.unit_desc
+			cdd.setFirstUnit(commsku.getCommodityObject().getUnitObject().getCode());	//cc_kata_kplus_unit.code
 			cdd.setFirstCount(tc.getDelivernum());
 			
-			cdd.setSecondUnit(commsku.getCommodityObject().getUnit());	// 第一单位与第二单位一样???
+			cdd.setSecondUnit(commsku.getCommodityObject().getUnitObject().getCode());	// 第一单位与第二单位一样???
 			cdd.setSecondCount(tc.getDelivernum());			//同上 ???
 			goodsDeclarDetails.add(cdd);
 		}

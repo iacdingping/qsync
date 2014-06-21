@@ -135,12 +135,6 @@ public class CommodityDaoTest extends SpringTransactionalTestCase{
 		commodity.setWeight(1);
 		/** 产销国 */
 		commodity.setSalesCountry(1L);
-		/** 申报计量单位 见计量单位代码 */
-		commodity.setUnit("1");
-		/** 申报计量单位描述 */
-		commodity.setUnitDesc("1");
-		/** 商品规格、型号 */
-		commodity.setSpecification("1");
 		
 		commodityDao.save(commodity);
 		long saveRows = commodityDao.count(query);
@@ -204,9 +198,6 @@ public class CommodityDaoTest extends SpringTransactionalTestCase{
 			assertEquals(commodityQueried.getHeight(), commodity.getHeight());
 			assertEquals(commodityQueried.getWeight(), commodity.getWeight());
 			assertEquals(commodityQueried.getSalesCountry(), commodity.getSalesCountry());
-			assertEquals(commodityQueried.getUnit(), commodity.getUnit());
-			assertEquals(commodityQueried.getUnitDesc(), commodity.getUnitDesc());
-			assertEquals(commodityQueried.getSpecification(), commodity.getSpecification());
 		
 		/** name */
 		commodity.setName("2");
@@ -303,12 +294,6 @@ public class CommodityDaoTest extends SpringTransactionalTestCase{
 		commodity.setWeight(2);
 		/** 产销国 */
 		commodity.setSalesCountry(2L);
-		/** 申报计量单位 见计量单位代码 */
-		commodity.setUnit("2");
-		/** 申报计量单位描述 */
-		commodity.setUnitDesc("2");
-		/** 商品规格、型号 */
-		commodity.setSpecification("2");
 		
 		commodityDao.update(commodity);
 		Commodity commodityUpdated = commodityDao.getById(commodity.getId());
@@ -367,9 +352,6 @@ public class CommodityDaoTest extends SpringTransactionalTestCase{
 		assertEquals(commodityUpdated.getHeight(), commodity.getHeight());
 		assertEquals(commodityUpdated.getWeight(), commodity.getWeight());
 		assertEquals(commodityUpdated.getSalesCountry(), commodity.getSalesCountry());
-		assertEquals(commodityUpdated.getUnit(), commodity.getUnit());
-		assertEquals(commodityUpdated.getUnitDesc(), commodity.getUnitDesc());
-		assertEquals(commodityUpdated.getSpecification(), commodity.getSpecification());
 		
 		//delete
 		commodityDao.deleteById(commodity.getId());
