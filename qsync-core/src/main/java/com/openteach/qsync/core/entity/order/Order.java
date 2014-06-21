@@ -1,6 +1,5 @@
 package com.openteach.qsync.core.entity.order;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.openteach.qsync.core.entity.info.Member;
@@ -89,7 +88,6 @@ public class Order {
     /**
      * code       db_column: code 
      */	
-	@NotNull
 	private java.lang.String code;
     /**
      * appraise       db_column: appraise 
@@ -102,7 +100,6 @@ public class Order {
     /**
      * ordertime       db_column: ordertime 
      */	
-	@NotNull
 	private java.util.Date ordertime;
     /**
      * remark       db_column: remark 
@@ -115,7 +112,6 @@ public class Order {
     /**
      * amount       db_column: amount 
      */	
-	@NotNull
 	private java.lang.Double amount;
     /**
      * cutamount       db_column: cutamount 
@@ -156,7 +152,6 @@ public class Order {
     /**
      * transPrice       db_column: trans_price 
      */	
-	@NotNull
 	private java.lang.Double transPrice;
     /**
      * isBigOrder       db_column: is_big_order 
@@ -191,7 +186,6 @@ public class Order {
      */	
 	private java.lang.Long member;
 	
-	@Valid
 	private Member memberObject;
     /**
      * shopId       db_column: shop_id 
@@ -217,7 +211,6 @@ public class Order {
      * ordertransport       db_column: ordertransport 
      */	
 	private java.lang.Long ordertransport;
-	@Valid
 	private OrderTransport orderTransportObject;
     /**
      * isstatemented       db_column: isstatemented 
@@ -291,20 +284,16 @@ public class Order {
      * transportationId       db_column: transportation_id 
      */	
 	private java.lang.Long transportationId;
-	@Valid
 	private Transportation transportationObject;
     /**
      * transportationcompanyId       db_column: transportationcompany_id 
      */	
 	private java.lang.Long transportationcompanyId;
 	
-	@Valid
-	@NotNull
 	private Transportationcompany transportationcompanyObject;
     /**
      * transportnumber       db_column: transportnumber 
      */	
-	@NotNull
 	private java.lang.String transportnumber;
     /**
      * transportremark       db_column: transportremark 
@@ -313,17 +302,14 @@ public class Order {
 	/**
      * 物流跟踪状态 10 启运 20 抵港 30 到货 40 离开 50 签收       db_column: logistics_state 
      */	
-	@NotNull
 	private java.lang.Integer logisticsState;
     /**
      * 场站代码       db_column: station_code 
      */	
-	@NotNull
 	private java.lang.String stationCode;
     /**
      * 车牌号码       db_column: license_plate_number 
      */	
-	@NotNull
 	private java.lang.String licensePlateNumber;
     /**
      * 支付类型 01:银行卡支付 02:余额支付 03:其他       db_column: declare_pay_type 
@@ -354,402 +340,491 @@ public class Order {
 	@NotNull(message = "运输类型不能为空")
 	private Integer transportationType;
 	//columns END
-	@NotNull
 	private Integer totalGoodsCount;
-	@NotNull
 	private Double totalGoodsWeight;
 	
 	public Order(){
 	}
 
-	public Order(
-		java.lang.Long id
-	){
+	public java.lang.Long getId() {
+		return id;
+	}
+
+	public void setId(java.lang.Long id) {
 		this.id = id;
 	}
 
-	public void setId(java.lang.Long value) {
-		this.id = value;
-	}
-	public java.lang.Long getId() {
-		return this.id;
-	}
-	public void setCode(java.lang.String value) {
-		this.code = value;
-	}
-	@NotNull
 	public java.lang.String getCode() {
-		return this.code;
+		return code;
 	}
-	public void setAppraise(java.lang.Integer value) {
-		this.appraise = value;
+
+	public void setCode(java.lang.String code) {
+		this.code = code;
 	}
+
 	public java.lang.Integer getAppraise() {
-		return this.appraise;
+		return appraise;
 	}
-	public void setContent(java.lang.String value) {
-		this.content = value;
+
+	public void setAppraise(java.lang.Integer appraise) {
+		this.appraise = appraise;
 	}
+
 	public java.lang.String getContent() {
-		return this.content;
+		return content;
 	}
-	public void setOrdertime(java.util.Date value) {
-		this.ordertime = value;
+
+	public void setContent(java.lang.String content) {
+		this.content = content;
 	}
-	
-	@NotNull
+
 	public java.util.Date getOrdertime() {
-		return this.ordertime;
+		return ordertime;
 	}
-	public void setRemark(java.lang.String value) {
-		this.remark = value;
+
+	public void setOrdertime(java.util.Date ordertime) {
+		this.ordertime = ordertime;
 	}
+
 	public java.lang.String getRemark() {
-		return this.remark;
+		return remark;
 	}
-	public void setGift(java.lang.String value) {
-		this.gift = value;
+
+	public void setRemark(java.lang.String remark) {
+		this.remark = remark;
 	}
+
 	public java.lang.String getGift() {
-		return this.gift;
+		return gift;
 	}
-	public void setAmount(java.lang.Double value) {
-		this.amount = value;
+
+	public void setGift(java.lang.String gift) {
+		this.gift = gift;
 	}
+
 	public java.lang.Double getAmount() {
-		return this.amount;
+		return amount;
 	}
-	public void setCutamount(java.lang.Double value) {
-		this.cutamount = value;
+
+	public void setAmount(java.lang.Double amount) {
+		this.amount = amount;
 	}
+
 	public java.lang.Double getCutamount() {
-		return this.cutamount;
+		return cutamount;
 	}
-	public void setInvoicetype(java.lang.Integer value) {
-		this.invoicetype = value;
+
+	public void setCutamount(java.lang.Double cutamount) {
+		this.cutamount = cutamount;
 	}
+
 	public java.lang.Integer getInvoicetype() {
-		return this.invoicetype;
+		return invoicetype;
 	}
-	public void setInvoicecontent(java.lang.String value) {
-		this.invoicecontent = value;
+
+	public void setInvoicetype(java.lang.Integer invoicetype) {
+		this.invoicetype = invoicetype;
 	}
+
 	public java.lang.String getInvoicecontent() {
-		return this.invoicecontent;
+		return invoicecontent;
 	}
-	public void setIscoupon(java.lang.String value) {
-		this.iscoupon = value;
+
+	public void setInvoicecontent(java.lang.String invoicecontent) {
+		this.invoicecontent = invoicecontent;
 	}
+
 	public java.lang.String getIscoupon() {
-		return this.iscoupon;
+		return iscoupon;
 	}
-	public void setPaytime(java.util.Date value) {
-		this.paytime = value;
+
+	public void setIscoupon(java.lang.String iscoupon) {
+		this.iscoupon = iscoupon;
 	}
+
 	public java.util.Date getPaytime() {
-		return this.paytime;
+		return paytime;
 	}
-	public void setOnlinepay(java.lang.Integer value) {
-		this.onlinepay = value;
+
+	public void setPaytime(java.util.Date paytime) {
+		this.paytime = paytime;
 	}
+
 	public java.lang.Integer getOnlinepay() {
-		return this.onlinepay;
+		return onlinepay;
 	}
-	public void setReturnStatus(java.lang.Integer value) {
-		this.returnStatus = value;
+
+	public void setOnlinepay(java.lang.Integer onlinepay) {
+		this.onlinepay = onlinepay;
 	}
+
 	public java.lang.Integer getReturnStatus() {
-		return this.returnStatus;
+		return returnStatus;
 	}
-	public void setPayStatus(java.lang.Integer value) {
-		this.payStatus = value;
+
+	public void setReturnStatus(java.lang.Integer returnStatus) {
+		this.returnStatus = returnStatus;
 	}
+
 	public java.lang.Integer getPayStatus() {
-		return this.payStatus;
+		return payStatus;
 	}
-	public void setPayType(java.lang.Integer value) {
-		this.payType = value;
+
+	public void setPayStatus(java.lang.Integer payStatus) {
+		this.payStatus = payStatus;
 	}
+
 	public java.lang.Integer getPayType() {
-		return this.payType;
+		return payType;
 	}
-	public void setTransPrice(java.lang.Double value) {
-		this.transPrice = value;
+
+	public void setPayType(java.lang.Integer payType) {
+		this.payType = payType;
 	}
+
 	public java.lang.Double getTransPrice() {
-		return this.transPrice;
+		return transPrice;
 	}
-	public void setIsBigOrder(java.lang.String value) {
-		this.isBigOrder = value;
+
+	public void setTransPrice(java.lang.Double transPrice) {
+		this.transPrice = transPrice;
 	}
+
 	public java.lang.String getIsBigOrder() {
-		return this.isBigOrder;
+		return isBigOrder;
 	}
-	public void setIsPackage(java.lang.String value) {
-		this.isPackage = value;
+
+	public void setIsBigOrder(java.lang.String isBigOrder) {
+		this.isBigOrder = isBigOrder;
 	}
+
 	public java.lang.String getIsPackage() {
-		return this.isPackage;
+		return isPackage;
 	}
-	public void setStatus(java.lang.Integer value) {
-		this.status = value;
+
+	public void setIsPackage(java.lang.String isPackage) {
+		this.isPackage = isPackage;
 	}
+
 	public java.lang.Integer getStatus() {
-		return this.status;
+		return status;
 	}
-	public void setSource(java.lang.Integer value) {
-		this.source = value;
+
+	public void setStatus(java.lang.Integer status) {
+		this.status = status;
 	}
+
 	public java.lang.Integer getSource() {
-		return this.source;
+		return source;
 	}
-	public void setReplacement(java.lang.Integer value) {
-		this.replacement = value;
+
+	public void setSource(java.lang.Integer source) {
+		this.source = source;
 	}
+
 	public java.lang.Integer getReplacement() {
-		return this.replacement;
+		return replacement;
 	}
-	public void setIsuserevaluate(java.lang.String value) {
-		this.isuserevaluate = value;
+
+	public void setReplacement(java.lang.Integer replacement) {
+		this.replacement = replacement;
 	}
+
 	public java.lang.String getIsuserevaluate() {
-		return this.isuserevaluate;
+		return isuserevaluate;
 	}
-	public void setIsshopevaluate(java.lang.String value) {
-		this.isshopevaluate = value;
+
+	public void setIsuserevaluate(java.lang.String isuserevaluate) {
+		this.isuserevaluate = isuserevaluate;
 	}
+
 	public java.lang.String getIsshopevaluate() {
-		return this.isshopevaluate;
+		return isshopevaluate;
 	}
-	public void setMember(java.lang.Long value) {
-		this.member = value;
+
+	public void setIsshopevaluate(java.lang.String isshopevaluate) {
+		this.isshopevaluate = isshopevaluate;
 	}
+
 	public java.lang.Long getMember() {
-		return this.member;
+		return member;
 	}
-	@NotNull
+
+	public void setMember(java.lang.Long member) {
+		this.member = member;
+	}
+
 	public Member getMemberObject() {
 		return memberObject;
 	}
+
 	public void setMemberObject(Member memberObject) {
 		this.memberObject = memberObject;
 	}
-	public void setShopId(java.lang.Long value) {
-		this.shopId = value;
-	}
+
 	public java.lang.Long getShopId() {
-		return this.shopId;
+		return shopId;
 	}
-	public void setCreatoradmin(java.lang.Long value) {
-		this.creatoradmin = value;
+
+	public void setShopId(java.lang.Long shopId) {
+		this.shopId = shopId;
 	}
+
 	public java.lang.Long getCreatoradmin() {
-		return this.creatoradmin;
+		return creatoradmin;
 	}
-	public void setModifieradmin(java.lang.Long value) {
-		this.modifieradmin = value;
+
+	public void setCreatoradmin(java.lang.Long creatoradmin) {
+		this.creatoradmin = creatoradmin;
 	}
+
 	public java.lang.Long getModifieradmin() {
-		return this.modifieradmin;
+		return modifieradmin;
 	}
-	public void setCreatedatetime(java.util.Date value) {
-		this.createdatetime = value;
+
+	public void setModifieradmin(java.lang.Long modifieradmin) {
+		this.modifieradmin = modifieradmin;
 	}
+
 	public java.util.Date getCreatedatetime() {
-		return this.createdatetime;
+		return createdatetime;
 	}
-	public void setUpdatedatetime(java.util.Date value) {
-		this.updatedatetime = value;
+
+	public void setCreatedatetime(java.util.Date createdatetime) {
+		this.createdatetime = createdatetime;
 	}
+
 	public java.util.Date getUpdatedatetime() {
-		return this.updatedatetime;
+		return updatedatetime;
 	}
-	public void setOrdertransport(java.lang.Long value) {
-		this.ordertransport = value;
+
+	public void setUpdatedatetime(java.util.Date updatedatetime) {
+		this.updatedatetime = updatedatetime;
 	}
+
 	public java.lang.Long getOrdertransport() {
-		return this.ordertransport;
+		return ordertransport;
 	}
-	@NotNull
+
+	public void setOrdertransport(java.lang.Long ordertransport) {
+		this.ordertransport = ordertransport;
+	}
+
 	public OrderTransport getOrderTransportObject() {
 		return orderTransportObject;
 	}
+
 	public void setOrderTransportObject(OrderTransport orderTransportObject) {
 		this.orderTransportObject = orderTransportObject;
 	}
-	public void setIsstatemented(java.lang.Integer value) {
-		this.isstatemented = value;
-	}
+
 	public java.lang.Integer getIsstatemented() {
-		return this.isstatemented;
+		return isstatemented;
 	}
-	public void setCcgroupId(java.lang.Long value) {
-		this.ccgroupId = value;
+
+	public void setIsstatemented(java.lang.Integer isstatemented) {
+		this.isstatemented = isstatemented;
 	}
+
 	public java.lang.Long getCcgroupId() {
-		return this.ccgroupId;
+		return ccgroupId;
 	}
-	public void setOrdertype(java.lang.Integer value) {
-		this.ordertype = value;
+
+	public void setCcgroupId(java.lang.Long ccgroupId) {
+		this.ccgroupId = ccgroupId;
 	}
+
 	public java.lang.Integer getOrdertype() {
-		return this.ordertype;
+		return ordertype;
 	}
-	public void setAutocanceltime(java.util.Date value) {
-		this.autocanceltime = value;
+
+	public void setOrdertype(java.lang.Integer ordertype) {
+		this.ordertype = ordertype;
 	}
+
 	public java.util.Date getAutocanceltime() {
-		return this.autocanceltime;
+		return autocanceltime;
 	}
-	public void setCancelsentdtime(java.util.Date value) {
-		this.cancelsentdtime = value;
+
+	public void setAutocanceltime(java.util.Date autocanceltime) {
+		this.autocanceltime = autocanceltime;
 	}
+
 	public java.util.Date getCancelsentdtime() {
-		return this.cancelsentdtime;
+		return cancelsentdtime;
 	}
-	public void setYesnumber(java.lang.Integer value) {
-		this.yesnumber = value;
+
+	public void setCancelsentdtime(java.util.Date cancelsentdtime) {
+		this.cancelsentdtime = cancelsentdtime;
 	}
+
 	public java.lang.Integer getYesnumber() {
-		return this.yesnumber;
+		return yesnumber;
 	}
-	public void setNonumber(java.lang.Integer value) {
-		this.nonumber = value;
+
+	public void setYesnumber(java.lang.Integer yesnumber) {
+		this.yesnumber = yesnumber;
 	}
+
 	public java.lang.Integer getNonumber() {
-		return this.nonumber;
+		return nonumber;
 	}
-	public void setCommodityId(java.lang.Long value) {
-		this.commodityId = value;
+
+	public void setNonumber(java.lang.Integer nonumber) {
+		this.nonumber = nonumber;
 	}
+
 	public java.lang.Long getCommodityId() {
-		return this.commodityId;
+		return commodityId;
 	}
-	public void setShopcontent(java.lang.String value) {
-		this.shopcontent = value;
+
+	public void setCommodityId(java.lang.Long commodityId) {
+		this.commodityId = commodityId;
 	}
+
 	public java.lang.String getShopcontent() {
-		return this.shopcontent;
+		return shopcontent;
 	}
-	public void setStarlevel(java.lang.Integer value) {
-		this.starlevel = value;
+
+	public void setShopcontent(java.lang.String shopcontent) {
+		this.shopcontent = shopcontent;
 	}
+
 	public java.lang.Integer getStarlevel() {
-		return this.starlevel;
+		return starlevel;
 	}
-	public void setCaneltime(java.lang.String value) {
-		this.caneltime = value;
+
+	public void setStarlevel(java.lang.Integer starlevel) {
+		this.starlevel = starlevel;
 	}
+
 	public java.lang.String getCaneltime() {
-		return this.caneltime;
+		return caneltime;
 	}
-	public void setShouldpaymoney(java.lang.Double value) {
-		this.shouldpaymoney = value;
+
+	public void setCaneltime(java.lang.String caneltime) {
+		this.caneltime = caneltime;
 	}
+
 	public java.lang.Double getShouldpaymoney() {
-		return this.shouldpaymoney;
+		return shouldpaymoney;
 	}
-	public void setIscanfinal(java.lang.String value) {
-		this.iscanfinal = value;
+
+	public void setShouldpaymoney(java.lang.Double shouldpaymoney) {
+		this.shouldpaymoney = shouldpaymoney;
 	}
+
 	public java.lang.String getIscanfinal() {
-		return this.iscanfinal;
+		return iscanfinal;
 	}
-	public void setPayfreighttime(java.util.Date value) {
-		this.payfreighttime = value;
+
+	public void setIscanfinal(java.lang.String iscanfinal) {
+		this.iscanfinal = iscanfinal;
 	}
+
 	public java.util.Date getPayfreighttime() {
-		return this.payfreighttime;
+		return payfreighttime;
 	}
-	public void setTotalamout(java.lang.Double value) {
-		this.totalamout = value;
+
+	public void setPayfreighttime(java.util.Date payfreighttime) {
+		this.payfreighttime = payfreighttime;
 	}
-	@NotNull
+
 	public java.lang.Double getTotalamout() {
-		return this.totalamout;
+		return totalamout;
 	}
-	public void setIsfreight(java.lang.String value) {
-		this.isfreight = value;
+
+	public void setTotalamout(java.lang.Double totalamout) {
+		this.totalamout = totalamout;
 	}
+
 	public java.lang.String getIsfreight() {
-		return this.isfreight;
+		return isfreight;
 	}
-	public void setPayfreight(java.lang.String value) {
-		this.payfreight = value;
+
+	public void setIsfreight(java.lang.String isfreight) {
+		this.isfreight = isfreight;
 	}
+
 	public java.lang.String getPayfreight() {
-		return this.payfreight;
+		return payfreight;
 	}
-	public void setTransportationId(java.lang.Long value) {
-		this.transportationId = value;
+
+	public void setPayfreight(java.lang.String payfreight) {
+		this.payfreight = payfreight;
 	}
+
 	public java.lang.Long getTransportationId() {
-		return this.transportationId;
+		return transportationId;
 	}
-	@NotNull
+
+	public void setTransportationId(java.lang.Long transportationId) {
+		this.transportationId = transportationId;
+	}
+
 	public Transportation getTransportationObject() {
 		return transportationObject;
 	}
+
 	public void setTransportationObject(Transportation transportationObject) {
 		this.transportationObject = transportationObject;
 	}
-	public void setTransportationcompanyId(java.lang.Long value) {
-		this.transportationcompanyId = value;
-	}
+
 	public java.lang.Long getTransportationcompanyId() {
-		return this.transportationcompanyId;
+		return transportationcompanyId;
 	}
+
+	public void setTransportationcompanyId(java.lang.Long transportationcompanyId) {
+		this.transportationcompanyId = transportationcompanyId;
+	}
+
 	public Transportationcompany getTransportationcompanyObject() {
 		return transportationcompanyObject;
 	}
+
 	public void setTransportationcompanyObject(
 			Transportationcompany transportationcompanyObject) {
 		this.transportationcompanyObject = transportationcompanyObject;
 	}
-	public void setTransportnumber(java.lang.String value) {
-		this.transportnumber = value;
-	}
-	@NotNull
+
 	public java.lang.String getTransportnumber() {
-		return this.transportnumber;
+		return transportnumber;
 	}
-	public void setTransportremark(java.lang.String value) {
-		this.transportremark = value;
+
+	public void setTransportnumber(java.lang.String transportnumber) {
+		this.transportnumber = transportnumber;
 	}
+
 	public java.lang.String getTransportremark() {
-		return this.transportremark;
+		return transportremark;
 	}
-	public void setLogisticsState(java.lang.Integer value) {
-		this.logisticsState = value;
+
+	public void setTransportremark(java.lang.String transportremark) {
+		this.transportremark = transportremark;
 	}
+
 	public java.lang.Integer getLogisticsState() {
-		return this.logisticsState;
+		return logisticsState;
 	}
-	public void setStationCode(java.lang.String value) {
-		this.stationCode = value;
+
+	public void setLogisticsState(java.lang.Integer logisticsState) {
+		this.logisticsState = logisticsState;
 	}
+
 	public java.lang.String getStationCode() {
-		return this.stationCode;
+		return stationCode;
 	}
-	public void setLicensePlateNumber(java.lang.String value) {
-		this.licensePlateNumber = value;
+
+	public void setStationCode(java.lang.String stationCode) {
+		this.stationCode = stationCode;
 	}
+
 	public java.lang.String getLicensePlateNumber() {
-		return this.licensePlateNumber;
+		return licensePlateNumber;
 	}
-	@NotNull
-	public Integer getTotalGoodsCount() {
-		return totalGoodsCount;
-	}
-	public void setTotalGoodsCount(Integer totalGoodsCount) {
-		this.totalGoodsCount = totalGoodsCount;
-	}
-	@NotNull
-	public Double getTotalGoodsWeight() {
-		return totalGoodsWeight;
-	}
-	public void setTotalGoodsWeight(Double totalGoodsWeight) {
-		this.totalGoodsWeight = totalGoodsWeight;
+
+	public void setLicensePlateNumber(java.lang.String licensePlateNumber) {
+		this.licensePlateNumber = licensePlateNumber;
 	}
 
 	public java.lang.String getDeclarePayType() {
@@ -798,6 +873,22 @@ public class Order {
 
 	public void setTransportationType(Integer transportationType) {
 		this.transportationType = transportationType;
+	}
+
+	public Integer getTotalGoodsCount() {
+		return totalGoodsCount;
+	}
+
+	public void setTotalGoodsCount(Integer totalGoodsCount) {
+		this.totalGoodsCount = totalGoodsCount;
+	}
+
+	public Double getTotalGoodsWeight() {
+		return totalGoodsWeight;
+	}
+
+	public void setTotalGoodsWeight(Double totalGoodsWeight) {
+		this.totalGoodsWeight = totalGoodsWeight;
 	}
 
 }
