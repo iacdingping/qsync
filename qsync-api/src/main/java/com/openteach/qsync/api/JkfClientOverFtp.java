@@ -596,6 +596,11 @@ public class JkfClientOverFtp implements JkfClient {
 			stop();
 			start();
 		}
+
+		@Override
+		public boolean isNeedRestart() {
+			return !buffer.isEmpty() && super.isNeedRestart();
+		}
 	}
 	
 	/**
