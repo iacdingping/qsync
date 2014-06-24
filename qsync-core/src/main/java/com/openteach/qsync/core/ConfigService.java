@@ -11,6 +11,10 @@ public class ConfigService {
 	//电商平台名称
 	@Value("${declare.companyName}")
 	private String declareCompanyName;
+	@Value("${companyCode}")
+	private String companyCode;
+	@Value("companyName")
+	private String companyName;
 	//业务类型
 	@Value("${declare.businessType}")
 	private String declareBusinessType;
@@ -139,5 +143,17 @@ public class ConfigService {
 	}
 	public void setDeclareGoodsYardCode(String declareGoodsYardCode) {
 		this.declareGoodsYardCode = declareGoodsYardCode;
+	}
+	public String getCompanyCode() {
+		return companyCode;
+	}
+	public void setCompanyCode(String companyCode) {
+		this.companyCode = companyCode;
+	}
+	public String getCompanyName() {
+		return companyName;
+	}
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
 }

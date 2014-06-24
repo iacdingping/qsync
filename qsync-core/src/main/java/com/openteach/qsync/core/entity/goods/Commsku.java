@@ -63,6 +63,7 @@ public class Commsku {
     /**
      * properties       db_column: properties 
      */	
+	@NotNull
 	private java.lang.String properties;
     /**
      * quantity       db_column: quantity 

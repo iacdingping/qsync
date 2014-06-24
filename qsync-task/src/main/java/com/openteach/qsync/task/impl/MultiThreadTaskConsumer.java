@@ -181,7 +181,7 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 		XmlRequest r = null;
 		Class<? extends XmlResponse> clazz = null;
 		TaskType type = TaskType.valueOf(t.getType());
-		if(TaskType.GOODS_DECLARE == type) {
+		if(TaskType.PERSONAL_GOODS_DECLAR == type) {
 			r = JaxbUtils.converyToJavaBean(t.getXmlRequest(), XmlGoodsDeclarRequest.class);
 			clazz = CommonXmlResponse.class;
 		} else if(TaskType.LOGISTICS_DECLARE == type) {

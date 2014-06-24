@@ -25,7 +25,7 @@ public enum TaskType {
 	/**
 	 * 
 	 */
-	GOODS_DECLARE,
+	PERSONAL_GOODS_DECLAR,
 	
 	/**
 	 * 数据组装错误

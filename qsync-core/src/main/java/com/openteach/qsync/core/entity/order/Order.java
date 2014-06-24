@@ -313,17 +313,14 @@ public class Order {
 	/**
      * 物流跟踪状态 10 启运 20 抵港 30 到货 40 离开 50 签收       db_column: logistics_state 
      */	
-	@NotNull
 	private java.lang.Integer logisticsState;
     /**
      * 场站代码       db_column: station_code 
      */	
-	@NotNull
 	private java.lang.String stationCode;
     /**
      * 车牌号码       db_column: license_plate_number 
      */	
-	@NotNull
 	private java.lang.String licensePlateNumber;
     /**
      * 支付类型 01:银行卡支付 02:余额支付 03:其他       db_column: declare_pay_type 

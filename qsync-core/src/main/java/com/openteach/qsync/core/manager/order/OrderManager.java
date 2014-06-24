@@ -112,7 +112,7 @@ public class OrderManager {
 		case ORDER_DECLARE:
 			index = 1;
 			break;
-		case GOODS_DECLARE:
+		case PERSONAL_GOODS_DECLAR:
 			index = 2;
 			break;
 		case WAY_BILL_DECLARE:

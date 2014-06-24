@@ -93,8 +93,8 @@ public class AssembleService {
 		XmlOrderRequestBody body = new XmlOrderRequestBody();
 		OrderInfo orderInfo = new OrderInfo();
 		JkfOrderImportHead jkfOrderImportHead = new JkfOrderImportHead();
-		jkfOrderImportHead.setCompanyName(configService.getDeclareCompanyName());
-		jkfOrderImportHead.setCompanyCode(configService.getDeclareCompanyCode());
+		jkfOrderImportHead.setCompanyName(configService.getCompanyName());
+		jkfOrderImportHead.setCompanyCode(configService.getCompanyCode());
 		jkfOrderImportHead.setIeFlag("I");
 		jkfOrderImportHead.setPayType(order.getDeclarePayType());	//cc_kata_kplus_order.declare_pay_type
 		jkfOrderImportHead.setPayCompanyCode(order.getPayCompanyCode());		//cc_kata_kplus_order.pay_company_code
@@ -105,13 +105,13 @@ public class AssembleService {
 		jkfOrderImportHead.setOrderGoodsAmount(order.getAmount());	//订单货款
 		jkfOrderImportHead.setFeeAmount(order.getTransPrice());
 		jkfOrderImportHead.seteCommerceCode(configService.getDeclareRecordNo());
-		jkfOrderImportHead.seteCommerceName(configService.getDeclareCompanyName());
+		jkfOrderImportHead.seteCommerceName(configService.getDeclareRecordName());
 		jkfOrderImportHead.setTradeTime(DateUtil.format(order.getOrdertime()));
 		jkfOrderImportHead.setCurrCode(configService.getDeclareCurrency());
 		jkfOrderImportHead.setTotalAmount(order.getAmount() + order.getTransPrice() + order.getOrderTaxAmount()); // 成交总价 = 支付价格（订单价格）+ 运费 + 税款
 		jkfOrderImportHead.setConsigneeEmail(order.getOrderTransportObject().getConsigneeEmail());	//cc_kata_kplus_order_transport.consignee_email
 		jkfOrderImportHead.setConsigneeTel(order.getOrderTransportObject().getPhonenumber());
-		jkfOrderImportHead.setConsignee(order.getOrderTransportObject().getFirstname() + " " + order.getOrderTransportObject().getLastname());
+		jkfOrderImportHead.setConsignee(order.getOrderTransportObject().getCongsignee());
 		jkfOrderImportHead.setConsigneeAddress(StringUtils.defaultIfEmpty(
 				order.getOrderTransportObject().getAddress1(), order.getOrderTransportObject().getAddress2()));
 		jkfOrderImportHead.setTotalCount(order.getTotalGoodsCount());
@@ -170,7 +170,7 @@ public class AssembleService {
 		
 		JkfSign jkfSign = new JkfSign();
 		jkfSign.setBusinessType(configService.getDeclareBusinessType());
-		jkfSign.setCompanyCode(configService.getDeclareCompanyCode());
+		jkfSign.setCompanyCode(configService.getCompanyCode());
 		jkfSign.setDeclareType(configService.getDeclareType());
 		jkfSign.setBusinessNo(generateSequence());
 		orderInfo.setJkfSign(jkfSign);
@@ -205,7 +205,7 @@ public class AssembleService {
 		
 		JkfSign jkfSign = new JkfSign();
 		jkfSign.setBusinessType(configService.getDeclareBusinessType());
-		jkfSign.setCompanyCode(configService.getDeclareCompanyCode());
+		jkfSign.setCompanyCode(configService.getCompanyCode());
 		jkfSign.setDeclareType(configService.getDeclareType());
 		jkfSign.setBusinessNo(generateSequence());
 		jkfSign.setNote("物流数据报关备注");
@@ -340,7 +340,7 @@ public class AssembleService {
 		body.setGoodsDeclarModuleList(Arrays.asList(goodsDeclarModule));
 		JkfSign jkfSign = new JkfSign();
 		jkfSign.setBusinessType(configService.getDeclareBusinessType());
-		jkfSign.setCompanyCode(configService.getDeclareCompanyCode());
+		jkfSign.setCompanyCode(configService.getCompanyCode());
 		jkfSign.setDeclareType(configService.getDeclareType());
 		jkfSign.setBusinessNo(generateSequence());
 		jkfSign.setNote("个人物品报关");
@@ -392,7 +392,7 @@ public class AssembleService {
 		dto.setConsigneeArea(order.getOrderTransportObject().getAddressorCity());
 		dto.setConsigneeAddress(StringUtils.defaultIfEmpty(
 				order.getOrderTransportObject().getAddress1(), order.getOrderTransportObject().getAddress2()));
-		dto.setConsignee(order.getOrderTransportObject().getFirstname() + " " + order.getOrderTransportObject().getLastname());
+		dto.setConsignee(order.getOrderTransportObject().getCongsignee());
 		dto.setConsigneeTel(order.getOrderTransportObject().getPhonenumber());
 		dto.setZipCode(order.getOrderTransportObject().getZipCode());	//cc_kata_kplus_order_transport.zip_code
 		dto.setCustomsCode(configService.getDeclareCustomsCode());
@@ -402,7 +402,7 @@ public class AssembleService {
 		
 		JkfSign jkfSign = new JkfSign();
 		jkfSign.setBusinessType(configService.getDeclareBusinessType());
-		jkfSign.setCompanyCode(configService.getDeclareCompanyCode());
+		jkfSign.setCompanyCode(configService.getCompanyCode());
 		jkfSign.setDeclareType(configService.getDeclareType());
 		jkfSign.setBusinessNo(generateSequence());
 		wayBill.setJkfSign(jkfSign);

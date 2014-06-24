@@ -123,7 +123,7 @@ public class SingleThreadTaskGenerator extends AbstractLifeCycle implements Task
 					XmlWaybillRequest waybillRequest = assembleService.getWaybillXmlRequest(o);
 					storage.store(newTask(o.getId(), waybillRequest, TaskType.WAY_BILL_DECLARE, waybillRequest.getBody().getWayBillList().get(0).getJkfSign().getBusinessNo()));
 					XmlGoodsDeclarRequest goodsDeclarRequest = assembleService.getGoodsXmlRequest(o);
-					storage.store(newTask(o.getId(), goodsDeclarRequest, TaskType.GOODS_DECLARE, goodsDeclarRequest.getBody().getGoodsDeclarModuleList().get(0).getJkfSign().getBusinessNo()));
+					storage.store(newTask(o.getId(), goodsDeclarRequest, TaskType.PERSONAL_GOODS_DECLAR, goodsDeclarRequest.getBody().getGoodsDeclarModuleList().get(0).getJkfSign().getBusinessNo()));
 			} catch (Throwable t) {
 					storage.store(newErrorTask(o.getId(), Exceptions.getStackTraceAsString(t)));
 			}
