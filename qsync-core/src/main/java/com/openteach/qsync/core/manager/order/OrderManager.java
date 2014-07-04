@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import com.openteach.qcity.qsync.common.api.TaskStatus;
+import com.openteach.qcity.qsync.common.api.TaskType;
 import com.openteach.qsync.core.OrderDeclareStatus;
 import com.openteach.qsync.core.PageList;
 import com.openteach.qsync.core.PageQuery;
-import com.openteach.qsync.core.TaskStatus;
-import com.openteach.qsync.core.TaskType;
 import com.openteach.qsync.core.dao.order.OrderDao;
 import com.openteach.qsync.core.entity.order.Order;
 import com.openteach.qsync.core.query.order.OrderQuery;

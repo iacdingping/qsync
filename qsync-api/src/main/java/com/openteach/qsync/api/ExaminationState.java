@@ -1,5 +1,7 @@
 package com.openteach.qsync.api;
 
+import com.openteach.qcity.qsync.common.api.TaskStatus;
+
 public enum ExaminationState {
 
 	NOT_ACCESS(32, "不接受申报", false),
@@ -11,7 +13,7 @@ public enum ExaminationState {
 	HANDSEL_PASS(52, "手工放行", true),
 	UNKNOW(-999999, "未知状态", false);
 	
-	public ExaminationState getByState(Integer state) {
+	public static ExaminationState getByState(Integer state) {
 		for(ExaminationState es : ExaminationState.values()) {
 			if(es.getState().intValue() == state.intValue()) 
 				return es;
@@ -44,5 +46,8 @@ public enum ExaminationState {
 	}
 	public void setSuccess(boolean success) {
 		this.success = success;
+	}
+	public TaskStatus getStatus() {
+		return success ? TaskStatus.PASS : TaskStatus.NOT_PASS;
 	}
 }

@@ -1,5 +1,6 @@
 package com.openteach.qsync.api;
 
+import com.openteach.qcity.qsync.common.api.TaskStatus;
 import com.openteach.qsync.api.exception.ApiException;
 
 /**
@@ -18,17 +19,17 @@ public interface JkfClient {
 		
 		/**
 		 * 
-		 * @param response
-		 * @param context
-		 */
-		void onSucceed(XmlResponse response, Object context);
-		
-		/**
-		 * 
 		 * @param exception
 		 * @param context
 		 */
 		void onFailed(ApiException exception, Object context);
+		
+		/**
+		 * 需要设置response的taskStatus
+		 * @param response
+		 * @param context
+		 */
+		void onStateChanged(XmlResponse response, Object context);
 	}
 	
 	/**
@@ -62,4 +63,13 @@ public interface JkfClient {
 	 * @param isRecovered
 	 */
 	void async(XmlRequest request, Callback callback, Object context, String responseKey, Class<? extends XmlResponse> responseClass, boolean isRecovered);
+	
+	/**
+	 * 更新状态
+	 * @param businessNo
+	 * @param status
+	 * @param message
+	 * @return
+	 */
+	boolean updateStatus(String businessNo, TaskStatus status, String message);
 }

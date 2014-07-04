@@ -38,8 +38,10 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.openteach.qcity.qsync.common.api.TaskStatus;
 import com.openteach.qcity.qsync.common.lifecycle.NamedThreadFactory;
 import com.openteach.qsync.api.exception.ApiException;
+import com.openteach.qsync.api.goods.response.secondery.PersonalGoodsSeconderyResponse;
 import com.openteach.qsync.api.utils.JaxbUtils;
 
 /**
@@ -47,8 +49,7 @@ import com.openteach.qsync.api.utils.JaxbUtils;
  * @author sihai
  *
  */
-@Service
-public class JkfClientOverFtp implements JkfClient {
+public abstract class JkfClientOverFtp implements JkfClient {
 	
 	public static final int DEFAULT_COUNT = 4;
 	
@@ -662,7 +663,7 @@ public class JkfClientOverFtp implements JkfClient {
 								if(null == key) {
 									logger.error("Content of file:" + f.getName() + " wrong, not contains businessNo element");
 								}
-								pr = pendingRequests.get(key);
+								pr = pendingRequests.remove(key);
 								
 								if(null != pr) {
 									deleteFile(f.getName());
@@ -675,9 +676,25 @@ public class JkfClientOverFtp implements JkfClient {
 										}
 									}
 									pr.response = JaxbUtils.converyToJavaBean(xml, pr.responseClass);
+									if(pr.response == null) {
+										pr.response = JaxbUtils.converyToJavaBean(xml, PersonalGoodsSeconderyResponse.class);
+										PersonalGoodsSeconderyResponse re = (PersonalGoodsSeconderyResponse)pr.response;
+										ExaminationState state = ExaminationState.getByState(re.getJkfGoodsDeclar().getApproveResult());
+										pr.response.setStatus(state.getStatus());
+										success = state.isSuccess();
+									} else {
+										pr.response.setStatus(success ? TaskStatus.DECLARE_SUCCESS : TaskStatus.DECLARE_FAILED);
+									}
 									pr.response.setSuccess(success);
 									pr.response.setFileName(key);
 									pr.completed();
+								} else {
+									PersonalGoodsSeconderyResponse re = JaxbUtils.converyToJavaBean(xml, PersonalGoodsSeconderyResponse.class);
+									ExaminationState state = ExaminationState.getByState(re.getJkfGoodsDeclar().getApproveResult());
+									boolean result = updateStatus(re.getHead().getBusinessType(), state.getStatus(), re.getJkfGoodsDeclar().getApproveComment());
+									if(result) {
+										deleteFile(f.getName());
+									}
 								}
 							}
 							/*
@@ -884,7 +901,7 @@ public class JkfClientOverFtp implements JkfClient {
 		public void completed() {
 			if(null != callback) {
 				// async
-				callback.onSucceed(response, context);
+				callback.onStateChanged(response, context);
 			} else {
 				notifyCompleted();
 			}

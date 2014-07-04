@@ -63,6 +63,7 @@ public class CcSyncTaks {
      */	
 	private java.util.Date gmtModified;
 	private String businessNo;
+	private String message;
 	//columns END
 
 	public CcSyncTaks(){
@@ -139,6 +140,12 @@ public class CcSyncTaks {
 	}
 	public void setBusinessNo(String businessNo) {
 		this.businessNo = businessNo;
+	}
+	public String getMessage() {
+		return message;
+	}
+	public void setMessage(String message) {
+		this.message = message;
 	}
 }
 

@@ -62,3 +62,5 @@ ALTER TABLE `cc_sync_taks` ADD `business_no` VARCHAR(50) COMMENT '业务编号';
 ALTER TABLE `cc_kata_kplus_category` ADD `tariff` VARCHAR(20) COMMENT '行邮税号 必须已备案，且与参数说明文档中的行邮税号中的税号一致';
 ALTER TABLE `cc_kata_kplus_commodity` DROP COLUMN `tariff`
 ALTER TABLE `cc_kata_kplus_commodity` ADD `unit_id` BIGINT COMMENT '物品单位ID'
+
+ALTER TABLE `cc_sync_taks` ADD `message` BIGINT COMMENT '海关回执消息'

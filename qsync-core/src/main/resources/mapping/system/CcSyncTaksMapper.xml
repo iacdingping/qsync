@@ -9,7 +9,7 @@
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="system-CcSyncTaks-columns">
 	    <![CDATA[
-		`id` as `id`, `order_id` as orderId, `generator` as `generator`, `type` as `type`, `status` as `status`, `xml_request` as `xmlRequest`, `xml_response` as `xmlResponse`, `exception` as `exception`, `gmt_create` as `gmtCreate`, `gmt_modified` as `gmtModified`, `business_no` as `businessNo`
+		`id` as `id`, `order_id` as orderId, `generator` as `generator`, `type` as `type`, `status` as `status`, `xml_request` as `xmlRequest`, `xml_response` as `xmlResponse`, `exception` as `exception`, `gmt_create` as `gmtCreate`, `gmt_modified` as `gmtModified`, `business_no` as `businessNo`, `message` as message
 	    ]]>
 	</sql>	
 
@@ -17,9 +17,9 @@
 	<insert id="save" useGeneratedKeys="true" keyProperty="id">
     <![CDATA[
         INSERT INTO cc_sync_taks (
-        `id`, `order_id`, `generator`, `type`, `status`, `xml_request`, `xml_response`, `exception`, `gmt_create`, `gmt_modified`, `business_no`
+        `id`, `order_id`, `generator`, `type`, `status`, `xml_request`, `xml_response`, `exception`, `gmt_create`, `gmt_modified`, `business_no`, `message`
         ) VALUES (
-        #{id}, #{orderId}, #{generator}, #{type}, #{status}, #{xmlRequest}, #{xmlResponse}, #{exception}, #{gmtCreate}, #{gmtModified}, #{businessNo}    
+        #{id}, #{orderId}, #{generator}, #{type}, #{status}, #{xmlRequest}, #{xmlResponse}, #{exception}, #{gmtCreate}, #{gmtModified}, #{businessNo}, #{message}    
         )
     ]]>
 		<!--	
@@ -34,9 +34,20 @@
 	<update id="update">
     <![CDATA[
         UPDATE cc_sync_taks SET
-	        `order_id` = #{orderId}, `generator` = #{generator} , `type` = #{type} , `status` = #{status} , `xml_request` = #{xmlRequest} , `xml_response` = #{xmlResponse} , `exception` = #{exception} , `gmt_create` = #{gmtCreate} , `gmt_modified` = #{gmtModified}, `business_no` = #{businessNo}  
+	        `order_id` = #{orderId}, `generator` = #{generator} , `type` = #{type} , `status` = #{status} , `xml_request` = #{xmlRequest} , `xml_response` = #{xmlResponse} , `exception` = #{exception} , `gmt_create` = #{gmtCreate} , `gmt_modified` = #{gmtModified}, `business_no` = #{businessNo}, `message` = #{message}  
         WHERE 
         	id = #{id}  	        
+    ]]>
+	</update>
+	
+	<update id="updatePlatformStatus">
+    <![CDATA[
+        UPDATE cc_sync_taks SET
+	        `status` = #{status},
+	        `gmt_modified` = now(),
+	        `message` = CONCAT(`message`, #{message})
+        WHERE 
+        	`business_no` = #{businessNo}       
     ]]>
 	</update>
 

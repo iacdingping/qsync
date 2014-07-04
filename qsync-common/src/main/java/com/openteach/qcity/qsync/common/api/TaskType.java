@@ -1,4 +1,4 @@
-package com.openteach.qsync.core;
+package com.openteach.qcity.qsync.common.api;
 
 /**
  * 

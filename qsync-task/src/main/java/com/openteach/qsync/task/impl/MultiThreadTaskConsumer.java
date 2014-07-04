@@ -10,6 +10,8 @@ import java.util.concurrent.CountDownLatch;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.openteach.qcity.qsync.common.api.TaskStatus;
+import com.openteach.qcity.qsync.common.api.TaskType;
 import com.openteach.qcity.qsync.common.lifecycle.AbstractLifeCycle;
 import com.openteach.qsync.api.CommonXmlResponse;
 import com.openteach.qsync.api.JkfClient;
@@ -22,8 +24,6 @@ import com.openteach.qsync.api.logistics.request.XmlLogisticsRequest;
 import com.openteach.qsync.api.order.request.XmlOrderRequest;
 import com.openteach.qsync.api.utils.JaxbUtils;
 import com.openteach.qsync.api.waybill.request.XmlWaybillRequest;
-import com.openteach.qsync.core.TaskStatus;
-import com.openteach.qsync.core.TaskType;
 import com.openteach.qsync.core.entity.system.CcSyncTaks;
 import com.openteach.qsync.core.query.system.CcSyncTaksQuery;
 import com.openteach.qsync.task.TaskConsumer;
@@ -89,15 +89,6 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 		callback = new Callback() {
 
 			@Override
-			public void onSucceed(XmlResponse response, Object context) {
-				CcSyncTaks task = (CcSyncTaks)context;
-				task.setStatus(response.getSuccess() ? TaskStatus.DECLARE_SUCCESS.name() : TaskStatus.DECLARE_FAILED.name());
-				task.setXmlResponse(JaxbUtils.convertToXml(response));
-				task.setGmtModified(new Date());
-				storage.update(task);
-			}
-
-			@Override
 			public void onFailed(ApiException exception, Object context) {
 				CcSyncTaks task = (CcSyncTaks)context;
 				task.setStatus(TaskStatus.LAUNCH_FAILED.name());
@@ -106,8 +97,15 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 				exception.printStackTrace(pw);
 				task.setException(sw.toString());
 				task.setGmtModified(new Date());
-				
-				
+				storage.update(task);
+			}
+
+			@Override
+			public void onStateChanged(XmlResponse response, Object context) {
+				CcSyncTaks task = (CcSyncTaks)context;
+				task.setStatus(response.getStatus().name());
+				task.setXmlResponse(JaxbUtils.convertToXml(response));
+				task.setGmtModified(new Date());
 				storage.update(task);
 			}
 			

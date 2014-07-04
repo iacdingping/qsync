@@ -6,8 +6,8 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.openteach.qsync.core.TaskStatus;
-import com.openteach.qsync.core.TaskType;
+import com.openteach.qcity.qsync.common.api.TaskStatus;
+import com.openteach.qcity.qsync.common.api.TaskType;
 import com.openteach.qsync.core.entity.system.CcSyncTaks;
 import com.openteach.qsync.core.manager.order.OrderManager;
 import com.openteach.qsync.core.manager.system.CcSyncTaksManager;
@@ -47,5 +47,10 @@ public class TaskStorageOverDatabase implements TaskStorage {
 		TaskType taskType = TaskType.valueOf(task.getType());
 		orderManager.updateDeclareStatus(task.getOrderId(), taskType, taskStatus);
 		ccSyncTaksManager.update(task);
+	}
+
+	public boolean updateStatus(String businessNo, TaskStatus status,
+			String message) {
+		return ccSyncTaksManager.updateStatus(businessNo, status, message);
 	}
 }

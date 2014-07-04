@@ -1,5 +1,7 @@
 package com.openteach.qsync.core.dao.system;
 
+import java.util.Map;
+
 import com.openteach.qsync.core.BaseMyBatisRepository;
 import com.openteach.qsync.core.MyBatisRepository;
 import com.openteach.qsync.core.entity.system.CcSyncTaks;
@@ -14,5 +16,5 @@ import com.openteach.qsync.core.entity.system.CcSyncTaks;
 @MyBatisRepository
 public interface CcSyncTaksDao extends BaseMyBatisRepository<CcSyncTaks,java.lang.Long>{
 
-
+	Integer updatePlatformStatus(Map<String, Object> param);
 }

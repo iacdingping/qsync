@@ -137,12 +137,10 @@ public class OrderTransport {
     /**
      * firstname       db_column: firstname 
      */	
-	@NotNull
 	private java.lang.String firstname;
     /**
      * lastname       db_column: lastname 
      */	
-	@NotNull
 	private java.lang.String lastname;
     /**
      * address1       db_column: address1 
@@ -327,14 +325,12 @@ public class OrderTransport {
 	public void setFirstname(java.lang.String value) {
 		this.firstname = value;
 	}
-	@NotNull
 	public java.lang.String getFirstname() {
 		return this.firstname;
 	}
 	public void setLastname(java.lang.String value) {
 		this.lastname = value;
 	}
-	@NotNull
 	public java.lang.String getLastname() {
 		return this.lastname;
 	}

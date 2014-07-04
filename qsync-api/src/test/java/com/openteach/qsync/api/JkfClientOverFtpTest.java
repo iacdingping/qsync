@@ -24,19 +24,19 @@ public class JkfClientOverFtpTest {
 	
 	@Before
 	public void initialize() {
-		jkfClient = new JkfClientOverFtp();
-		jkfClient.setPusherCount(JkfClientOverFtp.DEFAULT_COUNT);
-		jkfClient.setPullerCount(JkfClientOverFtp.DEFAULT_COUNT);
-		jkfClient.setBufferSize(JkfClientOverFtp.DEFAULT_BUFFER_SIZE);
-		jkfClient.setPusherFtpServer("60.191.76.84");
-		jkfClient.setPusherFtpPort(21);
-		jkfClient.setPusherFtpUsername("newyork_pub");
-		jkfClient.setPusherFtpPassword("newyork_pub");
-		jkfClient.setPullerFtpServer("60.191.76.84");
-		jkfClient.setPullerFtpPort(21);
-		jkfClient.setPullerFtpUsername("newyork_pub");
-		jkfClient.setPullerFtpPassword("newyork_pub");
-		jkfClient.initialize();
+//		jkfClient = new JkfClientOverFtp();
+//		jkfClient.setPusherCount(JkfClientOverFtp.DEFAULT_COUNT);
+//		jkfClient.setPullerCount(JkfClientOverFtp.DEFAULT_COUNT);
+//		jkfClient.setBufferSize(JkfClientOverFtp.DEFAULT_BUFFER_SIZE);
+//		jkfClient.setPusherFtpServer("60.191.76.84");
+//		jkfClient.setPusherFtpPort(21);
+//		jkfClient.setPusherFtpUsername("newyork_pub");
+//		jkfClient.setPusherFtpPassword("newyork_pub");
+//		jkfClient.setPullerFtpServer("60.191.76.84");
+//		jkfClient.setPullerFtpPort(21);
+//		jkfClient.setPullerFtpUsername("newyork_pub");
+//		jkfClient.setPullerFtpPassword("newyork_pub");
+//		jkfClient.initialize();
 	}
 	
 	@After

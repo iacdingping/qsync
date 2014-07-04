@@ -1,5 +1,6 @@
 package com.openteach.qsync.task;
 
+import com.openteach.qcity.qsync.common.api.TaskType;
 import com.openteach.qsync.api.CommonXmlResponse;
 import com.openteach.qsync.api.XmlRequest;
 import com.openteach.qsync.api.XmlResponse;
@@ -8,7 +9,6 @@ import com.openteach.qsync.api.logistics.request.XmlLogisticsRequest;
 import com.openteach.qsync.api.order.request.XmlOrderRequest;
 import com.openteach.qsync.api.utils.JaxbUtils;
 import com.openteach.qsync.api.waybill.request.XmlWaybillRequest;
-import com.openteach.qsync.core.TaskType;
 import com.openteach.qsync.core.entity.system.CcSyncTaks;
 
 /**

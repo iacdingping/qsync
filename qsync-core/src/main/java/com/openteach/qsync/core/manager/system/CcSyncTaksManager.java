@@ -1,12 +1,15 @@
 package com.openteach.qsync.core.manager.system;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import com.openteach.qcity.qsync.common.api.TaskStatus;
 import com.openteach.qsync.core.PageList;
 import com.openteach.qsync.core.dao.system.CcSyncTaksDao;
 import com.openteach.qsync.core.entity.system.CcSyncTaks;
@@ -84,5 +87,15 @@ public class CcSyncTaksManager {
 	    Assert.notNull(query,"'query' must be not null");
 		return new PageList<CcSyncTaks>(ccSyncTaksDao.findPage(query), 
 				query.getPage(), query.getPageSize(), count(query));
+	}
+
+	public boolean updateStatus(String businessNo, TaskStatus status,
+			String message) {
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("businessNo", businessNo);
+		param.put("status", status.name());
+		param.put("message", message);
+		
+		return ccSyncTaksDao.updatePlatformStatus(param) > 0;
 	}
 }
