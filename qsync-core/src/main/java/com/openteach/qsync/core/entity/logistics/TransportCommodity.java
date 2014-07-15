@@ -65,6 +65,7 @@ public class TransportCommodity {
      */	
 	private java.lang.Long skuId;
 	@Valid
+	@NotNull
 	private Commsku commskuObject;
     /**
      * isreturn       db_column: isreturn 
@@ -73,6 +74,7 @@ public class TransportCommodity {
     /**
      * 商品货号 保税进口业务，货号需与电子账册一致由仓储提供       db_column: goods_item_no 
      */	
+	@NotNull
 	private java.lang.String goodsItemNo;
 	//columns END
 
@@ -106,14 +108,12 @@ public class TransportCommodity {
 	public void setPrice(java.lang.Double value) {
 		this.price = value;
 	}
-	@NotNull
 	public java.lang.Double getPrice() {
 		return this.price;
 	}
 	public void setDelivernum(java.lang.Integer value) {
 		this.delivernum = value;
 	}
-	@NotNull
 	public java.lang.Integer getDelivernum() {
 		return this.delivernum;
 	}
@@ -135,7 +135,6 @@ public class TransportCommodity {
 	public java.lang.Long getSkuId() {
 		return this.skuId;
 	}
-	@NotNull
 	public Commsku getCommskuObject() {
 		return commskuObject;
 	}
@@ -151,7 +150,6 @@ public class TransportCommodity {
 	public void setGoodsItemNo(java.lang.String value) {
 		this.goodsItemNo = value;
 	}
-	@NotNull
 	public java.lang.String getGoodsItemNo() {
 		return this.goodsItemNo;
 	}

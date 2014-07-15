@@ -15,7 +15,7 @@ public class JkClientOverFtpImpl extends JkfClientOverFtp{
 	
 	@Override
 	public boolean updateStatus(String businessNo, TaskStatus status,
-			String message) {
+			String message, String xmlResponse) {
 		return storage.updateStatus(businessNo, status, message);
 	}
 

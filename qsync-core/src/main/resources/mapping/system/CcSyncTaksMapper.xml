@@ -41,14 +41,17 @@
 	</update>
 	
 	<update id="updatePlatformStatus">
-    <![CDATA[
         UPDATE cc_sync_taks SET
 	        `status` = #{status},
 	        `gmt_modified` = now(),
-	        `message` = CONCAT(`message`, #{message})
+	        <if test="appendMessage">
+				`message` = CONCAT(`message`, #{message})
+			</if>
+			<if test="!appendMessage">
+				`message` = #{message}
+			</if>
         WHERE 
         	`business_no` = #{businessNo}       
-    ]]>
 	</update>
 
     <delete id="deleteById">

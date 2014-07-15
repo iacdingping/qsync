@@ -65,6 +65,7 @@ public class OrderTransport {
     /**
      * congsignee       db_column: congsignee 
      */	
+	@NotNull
 	private java.lang.String congsignee;
     /**
      * place       db_column: place 
@@ -73,6 +74,7 @@ public class OrderTransport {
     /**
      * waybillnumber       db_column: waybillnumber 
      */	
+	@NotNull
 	private java.lang.String waybillnumber;
     /**
      * postnumber       db_column: postnumber 
@@ -145,6 +147,7 @@ public class OrderTransport {
     /**
      * address1       db_column: address1 
      */	
+	@NotNull
 	private java.lang.String address1;
     /**
      * address2       db_column: address2 
@@ -171,6 +174,7 @@ public class OrderTransport {
     /**
      * 发件人城市       db_column: addressor_city 
      */	
+	@NotNull
 	private java.lang.String addressorCity;
     /**
      * 发件人姓名       db_column: addressor_name 
@@ -180,6 +184,7 @@ public class OrderTransport {
     /**
      * 收件人邮编       db_column: zip_code 
      */	
+	@NotNull
 	private java.lang.String zipCode;
     /**
      * 收件人邮箱       db_column: consignee_email 
@@ -215,7 +220,6 @@ public class OrderTransport {
 	public void setCongsignee(java.lang.String value) {
 		this.congsignee = value;
 	}
-	@NotNull
 	public java.lang.String getCongsignee() {
 		return this.congsignee;
 	}
@@ -228,7 +232,7 @@ public class OrderTransport {
 	public void setWaybillnumber(java.lang.String value) {
 		this.waybillnumber = value;
 	}
-	@NotNull
+	
 	public java.lang.String getWaybillnumber() {
 		return this.waybillnumber;
 	}
@@ -337,7 +341,6 @@ public class OrderTransport {
 	public void setAddress1(java.lang.String value) {
 		this.address1 = value;
 	}
-	@NotNull
 	public java.lang.String getAddress1() {
 		return this.address1;
 	}
@@ -362,35 +365,30 @@ public class OrderTransport {
 	public void setPhonenumber(java.lang.String value) {
 		this.phonenumber = value;
 	}
-	@NotNull
 	public java.lang.String getPhonenumber() {
 		return this.phonenumber;
 	}
 	public void setAddressorCountry(java.lang.Long value) {
 		this.addressorCountry = value;
 	}
-	@NotNull
 	public java.lang.Long getAddressorCountry() {
 		return this.addressorCountry;
 	}
 	public void setAddressorCity(java.lang.String value) {
 		this.addressorCity = value;
 	}
-	@NotNull
 	public java.lang.String getAddressorCity() {
 		return this.addressorCity;
 	}
 	public void setAddressorName(java.lang.String value) {
 		this.addressorName = value;
 	}
-	@NotNull
 	public java.lang.String getAddressorName() {
 		return this.addressorName;
 	}
 	public void setZipCode(java.lang.String value) {
 		this.zipCode = value;
 	}
-	@NotNull
 	public java.lang.String getZipCode() {
 		return this.zipCode;
 	}
@@ -400,7 +398,6 @@ public class OrderTransport {
 	public java.lang.String getConsigneeEmail() {
 		return this.consigneeEmail;
 	}
-	@NotNull
 	public List<TransportCommodity> getTransportCommodityList() {
 		return transportCommodityList;
 	}

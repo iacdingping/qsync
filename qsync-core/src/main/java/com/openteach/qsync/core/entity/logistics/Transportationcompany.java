@@ -1,5 +1,7 @@
 package com.openteach.qsync.core.entity.logistics;
 
+import javax.validation.constraints.NotNull;
+
 /**
  *
  * @author dingp email:dingp@51box.cn
@@ -34,6 +36,7 @@ public class Transportationcompany {
     /**
      * name       db_column: name 
      */	
+	@NotNull
 	private java.lang.String name;
     /**
      * day       db_column: day 
@@ -58,10 +61,12 @@ public class Transportationcompany {
     /**
      * 物流企业编号       db_column: code 
      */	
+	@NotNull
 	private java.lang.String code;
     /**
      * 物流企业邮编       db_column: zip_code 
      */	
+	@NotNull
 	private java.lang.String zipCode;
 	//columns END
 

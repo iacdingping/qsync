@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class DateUtil {
 	public static final String DEFAULT_FORMAT = "yyyy-MM-dd HH:mm:ss";

@@ -69,7 +69,8 @@ public interface JkfClient {
 	 * @param businessNo
 	 * @param status
 	 * @param message
+	 * @param responseXml
 	 * @return
 	 */
-	boolean updateStatus(String businessNo, TaskStatus status, String message);
+	boolean updateStatus(String businessNo, TaskStatus status, String message, String responseXml);
 }

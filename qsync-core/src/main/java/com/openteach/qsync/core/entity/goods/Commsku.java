@@ -127,6 +127,7 @@ public class Commsku {
      */	
 	private java.lang.Long itemId;
 	@Valid
+	@NotNull
 	private Commodity commodityObject;
     /**
      * isprice       db_column: isprice 
@@ -216,7 +217,6 @@ public class Commsku {
 	public void setName(java.lang.String value) {
 		this.name = value;
 	}
-	@NotNull
 	public java.lang.String getName() {
 		return this.name;
 	}
@@ -298,7 +298,6 @@ public class Commsku {
 	public java.lang.Long getItemId() {
 		return this.itemId;
 	}
-	@NotNull
 	public Commodity getCommodityObject() {
 		return commodityObject;
 	}

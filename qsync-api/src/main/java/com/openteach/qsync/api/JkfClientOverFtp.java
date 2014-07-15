@@ -36,13 +36,13 @@ import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 import com.openteach.qcity.qsync.common.api.TaskStatus;
 import com.openteach.qcity.qsync.common.lifecycle.NamedThreadFactory;
 import com.openteach.qsync.api.exception.ApiException;
 import com.openteach.qsync.api.goods.response.secondery.PersonalGoodsSeconderyResponse;
 import com.openteach.qsync.api.utils.JaxbUtils;
+import com.openteach.qsync.util.common.Collections3;
 
 /**
  * Over ftp
@@ -58,6 +58,9 @@ public abstract class JkfClientOverFtp implements JkfClient {
 	public static final int DEFAULT_BUFFER_SIZE = 1024;
 	
 	public static final int DEFAULT_TIMEOUT = 1800;
+	
+	public static final long DEFAULT_DELETE_FILE_INVALID_HOUR = 2;
+	public static final long DEFAULT_DELETE_FILE_TIME_INTERVAL = 1000L * 60 * 60 * DEFAULT_DELETE_FILE_INVALID_HOUR;
 	
 	private static final String SUFFIX = "PT14050401";
 	
@@ -154,7 +157,7 @@ public abstract class JkfClientOverFtp implements JkfClient {
 				InetAddress address = InetAddress.getLocalHost();
 				PREFIX = String.valueOf(address.hashCode() + System.currentTimeMillis());
 			} catch (UnknownHostException e) {
-				// XXX 还是失败了好, 后面很多都依赖这两个值
+				// 还是失败了好, 后面很多都依赖这两个值
 				throw new RuntimeException("Can not get host_name and host ip", e);
 			}
 			sequence = new AtomicLong(System.currentTimeMillis());
@@ -174,7 +177,7 @@ public abstract class JkfClientOverFtp implements JkfClient {
 	 */
 	@PreDestroy
 	public void release() {
-		// TODO 优雅的停下来
+		// 优雅的停下来
 		releasePushers();
 		releasePullers();
 		shutdownWatchdog();
@@ -400,6 +403,7 @@ public abstract class JkfClientOverFtp implements JkfClient {
 			throw new IllegalArgumentException(String.format("Can not login ftp by username: %s, password: %s", username, password));
 		}
 		ftp.enterLocalPassiveMode();
+		ftp.setDataTimeout(30000);
 		ftp.setFileType(FTP.BINARY_FILE_TYPE);
 		return ftp;
 	}
@@ -516,6 +520,7 @@ public abstract class JkfClientOverFtp implements JkfClient {
 							PendingRequest pr = buffer.take();
 							// 
 							if(pr.isRecovered) {
+								System.out.println("isRecovered just throw back to queue");
 								pendingRequests.put(pr.responseKey, pr);
 								continue;
 							}
@@ -527,7 +532,7 @@ public abstract class JkfClientOverFtp implements JkfClient {
 								// 
 								pr.commitedTimestamp = System.currentTimeMillis();
 							} else {
-								// TODO 存储失败
+								// 存储失败
 								pr.failed(new ApiException("Store file to ftp failed"));
 							}
 						} catch (InterruptedException e) {
@@ -562,7 +567,7 @@ public abstract class JkfClientOverFtp implements JkfClient {
 		}
 		
 		public void stop() {
-			// TODO 优雅停止
+			// 优雅停止
 			thread.interrupt();
 			releaseFtp();
 		}
@@ -658,16 +663,24 @@ public abstract class JkfClientOverFtp implements JkfClient {
 									continue;
 								}
 								
-								key = getKey(xml);
+								key = getSingleNode(xml, "businessNo");
 								//logger.info(" xml businessNo :" + key);
 								if(null == key) {
 									logger.error("Content of file:" + f.getName() + " wrong, not contains businessNo element");
 								}
-								pr = pendingRequests.remove(key);
 								
-								if(null != pr) {
-									deleteFile(f.getName());
-									logger.info("Notice file name:" + f.getName() + " businessNo:" + key);
+								TaskStatus status = null;
+								String message = "";
+								// parse xml file
+								if(xml.indexOf("approveResult") != -1) {
+									// 海关平台回执
+									PersonalGoodsSeconderyResponse response = JaxbUtils.converyToJavaBean(xml, PersonalGoodsSeconderyResponse.class);
+									ExaminationState state = ExaminationState.getByState(response.getJkfGoodsDeclar().getApproveResult());
+									status = state.getStatus();
+									message = response.getJkfGoodsDeclar().getApproveComment();
+								} else {
+									// 海关对外平台回执
+									CommonXmlResponse response = JaxbUtils.converyToJavaBean(xml, CommonXmlResponse.class);
 									Boolean success = false;
 									for(String str : responseSuccessInfo.split("\\|")) {
 										if(xml.indexOf(str) > -1 && StringUtils.isNotBlank(str)) {
@@ -675,50 +688,26 @@ public abstract class JkfClientOverFtp implements JkfClient {
 											break;
 										}
 									}
-									pr.response = JaxbUtils.converyToJavaBean(xml, pr.responseClass);
-									if(pr.response == null) {
-										pr.response = JaxbUtils.converyToJavaBean(xml, PersonalGoodsSeconderyResponse.class);
-										PersonalGoodsSeconderyResponse re = (PersonalGoodsSeconderyResponse)pr.response;
-										ExaminationState state = ExaminationState.getByState(re.getJkfGoodsDeclar().getApproveResult());
-										pr.response.setStatus(state.getStatus());
-										success = state.isSuccess();
-									} else {
-										pr.response.setStatus(success ? TaskStatus.DECLARE_SUCCESS : TaskStatus.DECLARE_FAILED);
-									}
-									pr.response.setSuccess(success);
-									pr.response.setFileName(key);
-									pr.completed();
-								} else {
-									PersonalGoodsSeconderyResponse re = JaxbUtils.converyToJavaBean(xml, PersonalGoodsSeconderyResponse.class);
-									ExaminationState state = ExaminationState.getByState(re.getJkfGoodsDeclar().getApproveResult());
-									boolean result = updateStatus(re.getHead().getBusinessType(), state.getStatus(), re.getJkfGoodsDeclar().getApproveComment());
-									if(result) {
-										deleteFile(f.getName());
-									}
+									status = success ? TaskStatus.DECLARE_SUCCESS : TaskStatus.DECLARE_FAILED;
+									message = Collections3.extractToString(response.getBody().getList().get(0).getResultList(), "resultInfo", ";");
 								}
+								
+								if(status.isEndState()) {
+									//队列里面的数据 用来检测超时
+									pr = pendingRequests.remove(key);
+								}
+								
+								//更新数据状态
+								boolean updated = updateStatus(key, status, message, xml);
+								boolean fileInvalid = (System.currentTimeMillis() - f.getTimestamp().getTimeInMillis()) > DEFAULT_DELETE_FILE_TIME_INTERVAL;
+								if(updated || fileInvalid) {
+									if(fileInvalid) {
+										logger.info("delete Notice file name:" + f.getName() + " businessNo:" + key + " which created " + DEFAULT_DELETE_FILE_INVALID_HOUR + " hour before");
+									}
+									deleteFile(f.getName());
+								}
+								
 							}
-							/*
-							for(Iterator<String> it = pendingRequests.keySet().iterator(); it.hasNext();) {
-								key = it.next();
-								pr = pendingRequests.get(key);
-								if(null == pr) {
-									continue;
-								}
-								if(pr.tryLock()) {
-									xml = getFile(key);
-									if(null == xml) {
-										// 还没审批
-										continue;
-									}
-									// remove
-									pendingRequests.remove(key);
-									pr.response = JaxbUtils.converyToJavaBean(xml, pr.responseClass);
-									pr.response.setFileName(key);
-									pr.completed();
-								}
-							}
-							*/
-							
 							Thread.sleep(1000 * 10);
 						} catch (FTPConnectionClosedException e) {
 							// 重新初始化ftp呗
@@ -747,7 +736,7 @@ public abstract class JkfClientOverFtp implements JkfClient {
 		}
 		
 		public void stop() {
-			// TODO 优雅停止
+			// 优雅停止
 			thread.interrupt();
 			releaseFtp();
 		}
@@ -821,15 +810,15 @@ public abstract class JkfClientOverFtp implements JkfClient {
 	 * @param xml
 	 * @return
 	 */
-	private static String getKey(String xml) {
+	private static String getSingleNode(String xml, String key) {
 		Document doc = Jsoup.parse(xml, "", Parser.xmlParser());
-		Elements es = doc.select("businessNo");
+		Elements es = doc.select(key);
 		if(es.isEmpty()) {
-			throw new IllegalArgumentException("Wrong response : " + xml);
+			throw new IllegalArgumentException(String.format("no Key[%s] found in response xml:\n %s", key, xml));
 		} else if(es.size() == 1) {
 			return StringUtils.trim(es.get(0).text());
 		} else {
-			throw new IllegalArgumentException("Wrong response, multi businessNo : " + xml);
+			throw new IllegalArgumentException("Wrong response, multi node [" + key + "] in xml: " + xml);
 		}
 	}
 	
@@ -942,7 +931,7 @@ public abstract class JkfClientOverFtp implements JkfClient {
 			
 			System.out.println();
 			
-			System.out.println(getKey(sb.toString()));
+			System.out.println(getSingleNode(sb.toString(), "businessNo"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {

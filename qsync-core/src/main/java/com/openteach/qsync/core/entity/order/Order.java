@@ -192,6 +192,7 @@ public class Order {
 	private java.lang.Long member;
 	
 	@Valid
+	@NotNull
 	private Member memberObject;
     /**
      * shopId       db_column: shop_id 
@@ -218,6 +219,7 @@ public class Order {
      */	
 	private java.lang.Long ordertransport;
 	@Valid
+	@NotNull
 	private OrderTransport orderTransportObject;
     /**
      * isstatemented       db_column: isstatemented 
@@ -278,6 +280,7 @@ public class Order {
     /**
      * totalamout       db_column: totalamout 
      */	
+	@NotNull
 	private java.lang.Double totalamout;
     /**
      * isfreight       db_column: isfreight 
@@ -292,6 +295,7 @@ public class Order {
      */	
 	private java.lang.Long transportationId;
 	@Valid
+	@NotNull
 	private Transportation transportationObject;
     /**
      * transportationcompanyId       db_column: transportationcompany_id 
@@ -304,7 +308,6 @@ public class Order {
     /**
      * transportnumber       db_column: transportnumber 
      */	
-	@NotNull
 	private java.lang.String transportnumber;
     /**
      * transportremark       db_column: transportremark 
@@ -325,22 +328,22 @@ public class Order {
     /**
      * 支付类型 01:银行卡支付 02:余额支付 03:其他       db_column: declare_pay_type 
      */	
-	@NotNull(message = "支付类型不能为空")
+	@NotNull
 	private java.lang.String declarePayType;
     /**
      * 支付公司编码       db_column: pay_company_code 
      */	
-	@NotNull(message = "支付公司编码不能为空")
+	@NotNull
 	private java.lang.String payCompanyCode;
     /**
      * 支付单号       db_column: pay_number 
      */	
-	@NotNull(message = "支付单号不能为空")
+	@NotNull
 	private java.lang.String payNumber;
     /**
      * 订单税款       db_column: order_tax_amount 
      */	
-	@NotNull(message = "订单税款不能为空")
+	@NotNull
 	private java.lang.Double orderTaxAmount;
 	/**
 	 * 报关状态 初始状态 00000 从左到右 
@@ -348,7 +351,7 @@ public class Order {
 	 * 报关状态 0 未开始 1 报关中 2 报关完成 3 报关失败
 	 */
 	private java.lang.String declareStatus;
-	@NotNull(message = "运输类型不能为空")
+	@NotNull
 	private Integer transportationType;
 	//columns END
 	@NotNull
@@ -374,7 +377,6 @@ public class Order {
 	public void setCode(java.lang.String value) {
 		this.code = value;
 	}
-	@NotNull
 	public java.lang.String getCode() {
 		return this.code;
 	}
@@ -524,7 +526,7 @@ public class Order {
 	public java.lang.Long getMember() {
 		return this.member;
 	}
-	@NotNull
+	
 	public Member getMemberObject() {
 		return memberObject;
 	}
@@ -567,7 +569,7 @@ public class Order {
 	public java.lang.Long getOrdertransport() {
 		return this.ordertransport;
 	}
-	@NotNull
+	
 	public OrderTransport getOrderTransportObject() {
 		return orderTransportObject;
 	}
@@ -661,7 +663,6 @@ public class Order {
 	public void setTotalamout(java.lang.Double value) {
 		this.totalamout = value;
 	}
-	@NotNull
 	public java.lang.Double getTotalamout() {
 		return this.totalamout;
 	}
@@ -683,7 +684,6 @@ public class Order {
 	public java.lang.Long getTransportationId() {
 		return this.transportationId;
 	}
-	@NotNull
 	public Transportation getTransportationObject() {
 		return transportationObject;
 	}
@@ -706,7 +706,6 @@ public class Order {
 	public void setTransportnumber(java.lang.String value) {
 		this.transportnumber = value;
 	}
-	@NotNull
 	public java.lang.String getTransportnumber() {
 		return this.transportnumber;
 	}
@@ -734,14 +733,14 @@ public class Order {
 	public java.lang.String getLicensePlateNumber() {
 		return this.licensePlateNumber;
 	}
-	@NotNull
+	
 	public Integer getTotalGoodsCount() {
 		return totalGoodsCount;
 	}
 	public void setTotalGoodsCount(Integer totalGoodsCount) {
 		this.totalGoodsCount = totalGoodsCount;
 	}
-	@NotNull
+	
 	public Double getTotalGoodsWeight() {
 		return totalGoodsWeight;
 	}

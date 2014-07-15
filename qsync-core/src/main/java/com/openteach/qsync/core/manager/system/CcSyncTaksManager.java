@@ -90,11 +90,12 @@ public class CcSyncTaksManager {
 	}
 
 	public boolean updateStatus(String businessNo, TaskStatus status,
-			String message) {
+			String message, boolean appendMessage) {
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("businessNo", businessNo);
 		param.put("status", status.name());
 		param.put("message", message);
+		param.put("appendMessage", appendMessage);
 		
 		return ccSyncTaksDao.updatePlatformStatus(param) > 0;
 	}
