@@ -81,7 +81,6 @@ public class Commodity {
     /**
      * itemcode       db_column: itemcode 
      */	
-	@NotNull
 	private java.lang.String itemcode;
     /**
      * description       db_column: description 
@@ -131,7 +130,7 @@ public class Commodity {
      * categoryId       db_column: category_id 
      */	
 	private java.lang.Long categoryId;
-	@NotNull
+	@NotNull(message="commodity对应的类目category")
 	@Valid
 	private Category categoryObject;
     /**
@@ -273,7 +272,7 @@ public class Commodity {
     /**
      * weight       db_column: weight 
      */	
-	@NotNull
+	@NotNull(message="商品毛重")
 	private java.lang.Integer weight;
     /**
      * 产销国       db_column: sales_country 
@@ -287,8 +286,8 @@ public class Commodity {
 	private java.lang.Long unitId;
 	
 	@Valid
-	@NotNull
-	private Unit UnitObject;
+	@NotNull(message="commodity对应外键unit")
+	private Unit unitObject;
 	//columns END
 
 	public Commodity(){
@@ -619,9 +618,9 @@ public class Commodity {
 		this.unitId = unitId;
 	}
 	public Unit getUnitObject() {
-		return UnitObject;
+		return unitObject;
 	}
 	public void setUnitObject(Unit unitObject) {
-		UnitObject = unitObject;
+		this.unitObject = unitObject;
 	}
 }

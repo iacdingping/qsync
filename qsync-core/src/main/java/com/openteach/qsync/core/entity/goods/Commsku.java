@@ -63,7 +63,7 @@ public class Commsku {
     /**
      * properties       db_column: properties 
      */	
-	@NotNull
+	@NotNull(message="商品规格、型号")
 	private java.lang.String properties;
     /**
      * quantity       db_column: quantity 
@@ -72,7 +72,7 @@ public class Commsku {
     /**
      * name       db_column: name 
      */	
-	@NotNull
+	@NotNull(message="物品名称")
 	private java.lang.String name;
     /**
      * picurl       db_column: picurl 
@@ -127,7 +127,7 @@ public class Commsku {
      */	
 	private java.lang.Long itemId;
 	@Valid
-	@NotNull
+	@NotNull(message="commsku对应的外键commodity")
 	private Commodity commodityObject;
     /**
      * isprice       db_column: isprice 

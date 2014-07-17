@@ -43,6 +43,7 @@ import com.openteach.qsync.api.exception.ApiException;
 import com.openteach.qsync.api.goods.response.secondery.PersonalGoodsSeconderyResponse;
 import com.openteach.qsync.api.utils.JaxbUtils;
 import com.openteach.qsync.util.common.Collections3;
+import com.openteach.qsync.util.common.DateUtil;
 
 /**
  * Over ftp
@@ -511,19 +512,23 @@ public abstract class JkfClientOverFtp implements JkfClient {
 
 				@Override
 				public void run() {
+					boolean isFailed = true;
+					PendingRequest pr = null;
+					InputStream stream = null;
+					
 					while(!Thread.currentThread().isInterrupted()) {
 						//
 						alive();
 						//
-						InputStream stream = null;
+						isFailed = true;
+						pr = null;
 						try {
-							PendingRequest pr = buffer.take();
+							pr = buffer.take();
 							// 
-							if(pr.isRecovered) {
-								System.out.println("isRecovered just throw back to queue");
-								pendingRequests.put(pr.responseKey, pr);
-								continue;
-							}
+//							if(pr.isRecovered) {
+//								pendingRequests.put(pr.responseKey, pr);
+//								continue;
+//							}
 							stream = pr.getInputStream();
 						_retry:
 							if(ftp.storeFile(pr.requestFileName, stream)) {
@@ -531,25 +536,42 @@ public abstract class JkfClientOverFtp implements JkfClient {
 								pendingRequests.put(pr.responseKey, pr);
 								// 
 								pr.commitedTimestamp = System.currentTimeMillis();
+								isFailed = false;
 							} else {
-								// 存储失败
+								// TODO 存储失败
 								pr.failed(new ApiException("Store file to ftp failed"));
 							}
 						} catch (InterruptedException e) {
 							logger.error("Thread interrupted", e);
 							Thread.currentThread().interrupt();
+							if(isFailed && null != pr) {
+								pr.failed(new ApiException(e));
+							}
 						} catch (FTPConnectionClosedException e) {
 							// 重新初始化ftp呗
 							reInitializeFtp();
 							//goto _retry;
+							if(isFailed && null != pr) {
+								pr.failed(new ApiException(e));
+							}
 						} catch (CopyStreamException e) {
 							// 不可能的
+							if(isFailed && null != pr) {
+								pr.failed(new ApiException(e));
+							}
 						} catch (IOException e) {
+							e.printStackTrace();
 							// 重新初始化ftp呗
 							reInitializeFtp();
 							//goto _retry;
+							if(isFailed && null != pr) {
+								pr.failed(new ApiException(e));
+							}
 						} catch (Throwable t) {
 							logger.error("Exception", t);
+							if(isFailed && null != pr) {
+								pr.failed(new ApiException(t));
+							}
 						} finally {
 							if(null != stream) {
 								try {
@@ -675,9 +697,9 @@ public abstract class JkfClientOverFtp implements JkfClient {
 								if(xml.indexOf("approveResult") != -1) {
 									// 海关平台回执
 									PersonalGoodsSeconderyResponse response = JaxbUtils.converyToJavaBean(xml, PersonalGoodsSeconderyResponse.class);
-									ExaminationState state = ExaminationState.getByState(response.getJkfGoodsDeclar().getApproveResult());
+									ExaminationState state = ExaminationState.getByState(response.getBody().getJkfGoodsDeclar().getApproveResult());
 									status = state.getStatus();
-									message = response.getJkfGoodsDeclar().getApproveComment();
+									message = response.getBody().getJkfGoodsDeclar().getApproveComment();
 								} else {
 									// 海关对外平台回执
 									CommonXmlResponse response = JaxbUtils.converyToJavaBean(xml, CommonXmlResponse.class);
@@ -699,11 +721,13 @@ public abstract class JkfClientOverFtp implements JkfClient {
 								
 								//更新数据状态
 								boolean updated = updateStatus(key, status, message, xml);
+								System.out.println(DateUtil.format(f.getTimestamp().getTime()));
 								boolean fileInvalid = (System.currentTimeMillis() - f.getTimestamp().getTimeInMillis()) > DEFAULT_DELETE_FILE_TIME_INTERVAL;
 								if(updated || fileInvalid) {
 									if(fileInvalid) {
-										logger.info("delete Notice file name:" + f.getName() + " businessNo:" + key + " which created " + DEFAULT_DELETE_FILE_INVALID_HOUR + " hour before");
+										logger.info("Notice file name:" + f.getName() + " businessNo:" + key + " which created " + DEFAULT_DELETE_FILE_INVALID_HOUR + " hour before.");
 									}
+									logger.info("[notice response] delete notice file name:" + f.getName() + ", businessNo:" + key + ", response xml: \n" + xml);
 									deleteFile(f.getName());
 								}
 								

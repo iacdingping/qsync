@@ -45,7 +45,7 @@
 	        `status` = #{status},
 	        `gmt_modified` = now(),
 	        <if test="appendMessage">
-				`message` = CONCAT(`message`, #{message})
+				`message` = CONCAT(`message`, ',', #{message})
 			</if>
 			<if test="!appendMessage">
 				`message` = #{message}
@@ -108,6 +108,9 @@
 		   </if>
 		   <if test="gmtModifiedEnd != null">
 				AND `gmt_modified` &lt;= #{gmtModifiedEnd}
+		   </if>
+		   <if test="businessNo">
+				AND `business_no` = #{businessNo}
 		   </if>
 		   <if test="inStatus != null">
 		   		AND `status` IN

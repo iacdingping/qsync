@@ -5,6 +5,9 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import com.openteach.qsync.core.entity.info.City;
+import com.openteach.qsync.core.entity.info.District;
+import com.openteach.qsync.core.entity.info.Province;
 import com.openteach.qsync.core.entity.logistics.TransportCommodity;
 
 
@@ -65,16 +68,17 @@ public class OrderTransport {
     /**
      * congsignee       db_column: congsignee 
      */	
-	@NotNull
+	@NotNull(message="收件人姓名")
 	private java.lang.String congsignee;
     /**
      * place       db_column: place 
      */	
+	@NotNull(message="收件人地址")
 	private java.lang.String place;
     /**
      * waybillnumber       db_column: waybillnumber 
      */	
-	@NotNull
+	@NotNull(message="运单号")
 	private java.lang.String waybillnumber;
     /**
      * postnumber       db_column: postnumber 
@@ -92,14 +96,19 @@ public class OrderTransport {
      * provinceId       db_column: province_id 
      */	
 	private java.lang.Long provinceId;
+	@NotNull(message="收件省份")
+	@Valid
+	private Province provinceObject;
     /**
      * cityId       db_column: city_id 
      */	
 	private java.lang.Long cityId;
+	private City cityObject;
     /**
      * districtId       db_column: district_id 
      */	
 	private java.lang.Long districtId;
+	private District districtObject;
     /**
      * orderId       db_column: order_id 
      */	
@@ -147,7 +156,6 @@ public class OrderTransport {
     /**
      * address1       db_column: address1 
      */	
-	@NotNull
 	private java.lang.String address1;
     /**
      * address2       db_column: address2 
@@ -164,37 +172,65 @@ public class OrderTransport {
     /**
      * phonenumber       db_column: phonenumber 
      */	
-	@NotNull
+	@NotNull(message="收件人联系方式")
 	private java.lang.String phonenumber;
     /**
      * 发件人国别       db_column: addressor_country 
      */	
-	@NotNull
+	@NotNull(message="发件人国别")
 	private java.lang.Long addressorCountry;
     /**
      * 发件人城市       db_column: addressor_city 
      */	
-	@NotNull
+	@NotNull(message="发件人城市")
 	private java.lang.String addressorCity;
     /**
      * 发件人姓名       db_column: addressor_name 
      */	
-	@NotNull
+	@NotNull(message="发件人姓名")
 	private java.lang.String addressorName;
     /**
      * 收件人邮编       db_column: zip_code 
      */	
-	@NotNull
+	@NotNull(message="收件人邮编")
 	private java.lang.String zipCode;
     /**
      * 收件人邮箱       db_column: consignee_email 
      */	
-	@NotNull
+	@NotNull(message="收件人Email")
 	private java.lang.String consigneeEmail;
 	//columns END
-	@NotNull
+	@NotNull(message="订单运输物品")
 	@Valid
 	private List<TransportCommodity> transportCommodityList;
+	
+	/**
+	 * 运输工具航次班号
+	 */
+	private String toolFltNo;
+	/**
+	 * 运输工具名称
+	 */
+	private String toolFltName;
+	/**
+	 * 运输方式代码 
+	 */
+	@NotNull(message="运输方式代码")
+	private String typeCode;
+	@NotNull(message="贸易国别（起运地）")
+	private String fromCountry;
+	@NotNull(message="包装种类")
+	private Integer packType;
+	@NotNull(message="申请单编号保税进口必填，指仓储企业事先在辅助系统申请的分送集报申请单编号")
+	private String applicationFormNo;
+	@NotNull(message="物流企业名称")
+	private String logistics;
+	@NotNull(message="物流企业编号")
+	private String waybillCode;
+	/**
+	 * 物流企业邮编    非必填
+	 */
+	private String waybillZipCode;
 
 	public OrderTransport(){
 	}
@@ -401,9 +437,100 @@ public class OrderTransport {
 	public List<TransportCommodity> getTransportCommodityList() {
 		return transportCommodityList;
 	}
+	public Province getProvinceObject() {
+		return provinceObject;
+	}
+	public void setProvinceObject(Province provinceObject) {
+		this.provinceObject = provinceObject;
+	}
+	public City getCityObject() {
+		return cityObject;
+	}
+	public void setCityObject(City cityObject) {
+		this.cityObject = cityObject;
+	}
+	public District getDistrictObject() {
+		return districtObject;
+	}
+	public void setDistrictObject(District districtObject) {
+		this.districtObject = districtObject;
+	}
 	public void setTransportCommodityList(
 			List<TransportCommodity> transportCommodityList) {
 		this.transportCommodityList = transportCommodityList;
+	}
+
+	public String getToolFltNo() {
+		return toolFltNo;
+	}
+
+	public void setToolFltNo(String toolFltNo) {
+		this.toolFltNo = toolFltNo;
+	}
+
+
+	public String getTypeCode() {
+		return typeCode;
+	}
+
+	public void setTypeCode(String typeCode) {
+		this.typeCode = typeCode;
+	}
+
+	public String getFromCountry() {
+		return fromCountry;
+	}
+
+	public void setFromCountry(String fromCountry) {
+		this.fromCountry = fromCountry;
+	}
+
+	public Integer getPackType() {
+		return packType;
+	}
+
+	public void setPackType(Integer packType) {
+		this.packType = packType;
+	}
+
+	public String getApplicationFormNo() {
+		return applicationFormNo;
+	}
+
+	public void setApplicationFormNo(String applicationFormNo) {
+		this.applicationFormNo = applicationFormNo;
+	}
+
+	public String getToolFltName() {
+		return toolFltName;
+	}
+
+	public void setToolFltName(String toolFltName) {
+		this.toolFltName = toolFltName;
+	}
+
+	public String getLogistics() {
+		return logistics;
+	}
+
+	public void setLogistics(String logistics) {
+		this.logistics = logistics;
+	}
+
+	public String getWaybillCode() {
+		return waybillCode;
+	}
+
+	public void setWaybillCode(String waybillCode) {
+		this.waybillCode = waybillCode;
+	}
+
+	public String getWaybillZipCode() {
+		return waybillZipCode;
+	}
+
+	public void setWaybillZipCode(String waybillZipCode) {
+		this.waybillZipCode = waybillZipCode;
 	}
 }
 

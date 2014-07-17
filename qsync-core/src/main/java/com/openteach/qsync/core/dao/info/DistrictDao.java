@@ -1,9 +1,8 @@
-package com.openteach.qsync.core.dao.logistics;
-
+package com.openteach.qsync.core.dao.info;
 
 import com.openteach.qsync.core.BaseMyBatisRepository;
 import com.openteach.qsync.core.MyBatisRepository;
-import com.openteach.qsync.core.entity.logistics.Transportation;
+import com.openteach.qsync.core.entity.info.District;
 
 
 /**
@@ -13,7 +12,7 @@ import com.openteach.qsync.core.entity.logistics.Transportation;
  * @since 1.0
  * */
 @MyBatisRepository
-public interface TransportationDao extends BaseMyBatisRepository<Transportation,java.lang.Long>{
+public interface DistrictDao extends BaseMyBatisRepository<District,java.lang.Long>{
 
 
 }

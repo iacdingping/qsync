@@ -111,7 +111,7 @@ public class Category {
     /**
      * 行邮税号 必须已备案，且与参数说明文档中的行邮税号中的税号一致       db_column: tariff 
      */	
-	@NotNull
+	@NotNull(message="行邮税号 ")
 	private java.lang.String tariff;
 	//columns END
 

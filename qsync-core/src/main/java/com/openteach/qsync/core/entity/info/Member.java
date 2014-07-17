@@ -94,6 +94,7 @@ public class Member {
     /**
      * id       db_column: id 
      */	
+	@NotNull(message="member表ID列")
 	private java.lang.Long id;
     /**
      * username       db_column: username 
@@ -110,7 +111,7 @@ public class Member {
     /**
      * email       db_column: email 
      */	
-	@NotNull
+	@NotNull(message="注册邮箱")
 	private java.lang.String email;
     /**
      * password       db_column: password 
@@ -131,7 +132,7 @@ public class Member {
     /**
      * truename       db_column: truename 
      */	
-	@NotNull
+	@NotNull(message="姓名")
 	private java.lang.String truename;
     /**
      * handphone       db_column: handphone 
@@ -140,7 +141,6 @@ public class Member {
     /**
      * telephone       db_column: telephone 
      */	
-	@NotNull
 	private java.lang.String telephone;
     /**
      * payamount       db_column: payamount 
@@ -209,7 +209,7 @@ public class Member {
     /**
      * address       db_column: address 
      */	
-	@NotNull
+	@NotNull(message="地址")
 	private java.lang.String address;
     /**
      * company       db_column: company 
@@ -354,7 +354,7 @@ public class Member {
     /**
      * phonenumber       db_column: phonenumber 
      */	
-	@NotNull
+	@NotNull(message="联系电话")
 	private java.lang.String phonenumber;
     /**
      * ccity       db_column: ccity 
@@ -387,12 +387,12 @@ public class Member {
     /**
      * 证件类型 01:身份证（试点期间只能是身份证） 02:护照 03:其他       db_column: certificates_type 
      */	
-	@NotNull
+	@NotNull(message="支付人证件类型")
 	private java.lang.String certificatesType;
     /**
      * 证件号码       db_column: certificates 
      */	
-	@NotNull
+	@NotNull(message="支付人证件号码")
 	private java.lang.String certificates;
 	//columns END
 

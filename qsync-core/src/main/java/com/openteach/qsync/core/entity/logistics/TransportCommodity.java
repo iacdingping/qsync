@@ -45,12 +45,12 @@ public class TransportCommodity {
     /**
      * price       db_column: price 
      */	
-	@NotNull
+	@NotNull(message="申报单价")
 	private java.lang.Double price;
     /**
      * delivernum       db_column: delivernum 
      */	
-	@NotNull
+	@NotNull(message="申报数量")
 	private java.lang.Integer delivernum;
     /**
      * source       db_column: source 
@@ -65,7 +65,7 @@ public class TransportCommodity {
      */	
 	private java.lang.Long skuId;
 	@Valid
-	@NotNull
+	@NotNull(message="commodity表对应的mommsku记录")
 	private Commsku commskuObject;
     /**
      * isreturn       db_column: isreturn 
@@ -74,7 +74,7 @@ public class TransportCommodity {
     /**
      * 商品货号 保税进口业务，货号需与电子账册一致由仓储提供       db_column: goods_item_no 
      */	
-	@NotNull
+	@NotNull(message="商品货号 保税进口业务，货号需与电子账册一致由仓储提供")
 	private java.lang.String goodsItemNo;
 	//columns END
 

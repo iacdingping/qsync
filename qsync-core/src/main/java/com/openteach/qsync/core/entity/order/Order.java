@@ -4,8 +4,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.openteach.qsync.core.entity.info.Member;
-import com.openteach.qsync.core.entity.logistics.Transportation;
-import com.openteach.qsync.core.entity.logistics.Transportationcompany;
 
 
 
@@ -89,7 +87,7 @@ public class Order {
     /**
      * code       db_column: code 
      */	
-	@NotNull
+	@NotNull(message="订单编号")
 	private java.lang.String code;
     /**
      * appraise       db_column: appraise 
@@ -102,7 +100,7 @@ public class Order {
     /**
      * ordertime       db_column: ordertime 
      */	
-	@NotNull
+	@NotNull(message="成交时间")
 	private java.util.Date ordertime;
     /**
      * remark       db_column: remark 
@@ -115,7 +113,7 @@ public class Order {
     /**
      * amount       db_column: amount 
      */	
-	@NotNull
+	@NotNull(message="订单总金额")
 	private java.lang.Double amount;
     /**
      * cutamount       db_column: cutamount 
@@ -156,7 +154,7 @@ public class Order {
     /**
      * transPrice       db_column: trans_price 
      */	
-	@NotNull
+	@NotNull(message="运费")
 	private java.lang.Double transPrice;
     /**
      * isBigOrder       db_column: is_big_order 
@@ -192,7 +190,7 @@ public class Order {
 	private java.lang.Long member;
 	
 	@Valid
-	@NotNull
+	@NotNull(message="订单表对应外键member")
 	private Member memberObject;
     /**
      * shopId       db_column: shop_id 
@@ -219,7 +217,7 @@ public class Order {
      */	
 	private java.lang.Long ordertransport;
 	@Valid
-	@NotNull
+	@NotNull(message="order 对应 order_transport 外键")
 	private OrderTransport orderTransportObject;
     /**
      * isstatemented       db_column: isstatemented 
@@ -294,17 +292,11 @@ public class Order {
      * transportationId       db_column: transportation_id 
      */	
 	private java.lang.Long transportationId;
-	@Valid
-	@NotNull
-	private Transportation transportationObject;
     /**
      * transportationcompanyId       db_column: transportationcompany_id 
      */	
 	private java.lang.Long transportationcompanyId;
 	
-	@Valid
-	@NotNull
-	private Transportationcompany transportationcompanyObject;
     /**
      * transportnumber       db_column: transportnumber 
      */	
@@ -328,22 +320,22 @@ public class Order {
     /**
      * 支付类型 01:银行卡支付 02:余额支付 03:其他       db_column: declare_pay_type 
      */	
-	@NotNull
+	@NotNull(message="支付类型")
 	private java.lang.String declarePayType;
     /**
      * 支付公司编码       db_column: pay_company_code 
      */	
-	@NotNull
+	@NotNull(message="支付公司编码")
 	private java.lang.String payCompanyCode;
     /**
      * 支付单号       db_column: pay_number 
      */	
-	@NotNull
+	@NotNull(message="支付单号")
 	private java.lang.String payNumber;
     /**
      * 订单税款       db_column: order_tax_amount 
      */	
-	@NotNull
+	@NotNull(message="订单税款")
 	private java.lang.Double orderTaxAmount;
 	/**
 	 * 报关状态 初始状态 00000 从左到右 
@@ -351,12 +343,12 @@ public class Order {
 	 * 报关状态 0 未开始 1 报关中 2 报关完成 3 报关失败
 	 */
 	private java.lang.String declareStatus;
-	@NotNull
+	@NotNull(message="发货方式（物流方式）")
 	private Integer transportationType;
 	//columns END
-	@NotNull
+	@NotNull(message="总件数")
 	private Integer totalGoodsCount;
-	@NotNull
+	@NotNull(message="总毛重")
 	private Double totalGoodsWeight;
 	
 	public Order(){
@@ -395,8 +387,6 @@ public class Order {
 	public void setOrdertime(java.util.Date value) {
 		this.ordertime = value;
 	}
-	
-	@NotNull
 	public java.util.Date getOrdertime() {
 		return this.ordertime;
 	}
@@ -684,24 +674,11 @@ public class Order {
 	public java.lang.Long getTransportationId() {
 		return this.transportationId;
 	}
-	public Transportation getTransportationObject() {
-		return transportationObject;
-	}
-	public void setTransportationObject(Transportation transportationObject) {
-		this.transportationObject = transportationObject;
-	}
 	public void setTransportationcompanyId(java.lang.Long value) {
 		this.transportationcompanyId = value;
 	}
 	public java.lang.Long getTransportationcompanyId() {
 		return this.transportationcompanyId;
-	}
-	public Transportationcompany getTransportationcompanyObject() {
-		return transportationcompanyObject;
-	}
-	public void setTransportationcompanyObject(
-			Transportationcompany transportationcompanyObject) {
-		this.transportationcompanyObject = transportationcompanyObject;
 	}
 	public void setTransportnumber(java.lang.String value) {
 		this.transportnumber = value;

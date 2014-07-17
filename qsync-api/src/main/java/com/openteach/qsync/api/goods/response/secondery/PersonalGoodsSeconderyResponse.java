@@ -15,35 +15,48 @@ import com.openteach.qsync.api.XmlResponse;
 public class PersonalGoodsSeconderyResponse extends XmlResponse {
 	@XmlElement(required = true)
 	private CommonXmlResponseHead head;
-	
 	@XmlElement(required = true)
-	private JkfSign jkfSign;
-	
-	@XmlElement(required = true)
-	private JkfGoodsDeclar JkfGoodsDeclar;
-	
+	private GoodsSeconderyResponseBody body;
 	public CommonXmlResponseHead getHead() {
 		return head;
 	}
 	public void setHead(CommonXmlResponseHead head) {
 		this.head = head;
 	}
-	public JkfSign getJkfSign() {
-		return jkfSign;
+	public GoodsSeconderyResponseBody getBody() {
+		return body;
 	}
-	public void setJkfSign(JkfSign jkfSign) {
-		this.jkfSign = jkfSign;
-	}
-	public JkfGoodsDeclar getJkfGoodsDeclar() {
-		return JkfGoodsDeclar;
-	}
-	public void setJkfGoodsDeclar(JkfGoodsDeclar jkfGoodsDeclar) {
-		JkfGoodsDeclar = jkfGoodsDeclar;
+	public void setBody(GoodsSeconderyResponseBody body) {
+		this.body = body;
 	}
 
 	@XmlAccessorType(XmlAccessType.FIELD)
+	@XmlType(name = "body")
+	public static class GoodsSeconderyResponseBody {
+		@XmlElement(required = true)
+		private JkfSign jkfSign;
+		
+		@XmlElement(required = true)
+		private JkfGoodsDeclar jkfGoodsDeclar;
+		
+		public JkfSign getJkfSign() {
+			return jkfSign;
+		}
+		public void setJkfSign(JkfSign jkfSign) {
+			this.jkfSign = jkfSign;
+		}
+		public JkfGoodsDeclar getJkfGoodsDeclar() {
+			return jkfGoodsDeclar;
+		}
+		public void setJkfGoodsDeclar(JkfGoodsDeclar jkfGoodsDeclar) {
+			this.jkfGoodsDeclar = jkfGoodsDeclar;
+		}
+		
+	}
+	
+	@XmlAccessorType(XmlAccessType.FIELD)
 	@XmlType(name = "jkfSign")
-	public class JkfSign {
+	public static class JkfSign {
 		@XmlElement(required = true)
 		private String companyCode;
 		@XmlElement(required = true)
@@ -64,7 +77,7 @@ public class PersonalGoodsSeconderyResponse extends XmlResponse {
 	
 	@XmlAccessorType(XmlAccessType.FIELD)
 	@XmlType(name = "jkfGoodsDeclar")
-	public class JkfGoodsDeclar {
+	public static class JkfGoodsDeclar {
 		@XmlElement(required = true)
 		private String personalGoodsFormNo;
 		@XmlElement(required = true)

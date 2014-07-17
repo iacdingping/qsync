@@ -5,6 +5,16 @@ ALTER TABLE `cc_kata_kplus_order_transport` ADD `zip_code` VARCHAR(20) COMMENT '
 ALTER TABLE `cc_kata_kplus_order_transport` ADD `consignee_email` VARCHAR(50) COMMENT '收件人邮箱';
 
 
+ALTER TABLE `cc_kata_kplus_order_transport` ADD `tool_flt_no` VARCHAR(50) COMMENT '运输工具航次(班)号';
+ALTER TABLE `cc_kata_kplus_order_transport` ADD `tool_flt_name` VARCHAR(50) COMMENT '运输工具名称';
+ALTER TABLE `cc_kata_kplus_order_transport` ADD `type_code` VARCHAR(30) COMMENT '参照运输方式代码表(TRANSF)';
+ALTER TABLE `cc_kata_kplus_order_transport` ADD `from_country` VARCHAR(20) COMMENT '贸易国别（起运地）';
+ALTER TABLE `cc_kata_kplus_order_transport` ADD `pack_type` VARCHAR(20) COMMENT '包装种类 1 木箱 2 纸箱 3 桶装 4 散装 5 托盘 6 包 7 其它';
+ALTER TABLE `cc_kata_kplus_order_transport` ADD `application_form_no` VARCHAR(200) COMMENT '申请单编号 保税进口必填，指仓储企业事先在辅助系统申请的分送集报申请单编号';
+ALTER TABLE `cc_kata_kplus_order_transport` ADD `logistics` VARCHAR(200) COMMENT '物流企业名称';
+ALTER TABLE `cc_kata_kplus_order_transport` ADD `waybill_code` VARCHAR(200) COMMENT '物流企业编号';
+ALTER TABLE `cc_kata_kplus_order_transport` ADD `waybill_zip_code` VARCHAR(200) COMMENT '物流企业邮编';
+
 
 ALTER TABLE `cc_kata_kplus_transportationcompany` ADD `code` VARCHAR(40) COMMENT '物流企业编号';
 ALTER TABLE `cc_kata_kplus_transportationcompany` ADD `zip_code` VARCHAR(10) COMMENT '物流企业邮编';
@@ -63,4 +73,4 @@ ALTER TABLE `cc_kata_kplus_category` ADD `tariff` VARCHAR(20) COMMENT '行邮税
 ALTER TABLE `cc_kata_kplus_commodity` DROP COLUMN `tariff`
 ALTER TABLE `cc_kata_kplus_commodity` ADD `unit_id` BIGINT COMMENT '物品单位ID'
 
-ALTER TABLE `cc_sync_taks` ADD `message` BIGINT COMMENT '海关回执消息'
+ALTER TABLE `cc_sync_taks` ADD `message` varchar(500) COMMENT '海关回执消息'

@@ -35,7 +35,7 @@ public class Unit {
     /**
      * code       db_column: code 
      */	
-	@NotNull
+	@NotNull(message="申报计量单位")
 	private java.lang.String code;
     /**
      * sort       db_column: sort 
