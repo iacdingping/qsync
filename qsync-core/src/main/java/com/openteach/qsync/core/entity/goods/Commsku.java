@@ -55,6 +55,7 @@ public class Commsku {
     /**
      * skucode       db_column: skucode 
      */	
+	@NotNull(message="商品货号 保税进口业务，货号需与电子账册一致")
 	private java.lang.String skucode;
     /**
      * barcode       db_column: barcode 

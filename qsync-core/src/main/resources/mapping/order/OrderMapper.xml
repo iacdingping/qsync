@@ -41,12 +41,13 @@
 	</update>
 	
 	<update id="updateDeclareStatus">
-    <![CDATA[
         UPDATE cc_kata_kplus_order SET
-	         `declare_status` = #{declareStatus}  
+	         `declare_status` = #{declareStatus}
+	         <if test="state != null">
+	         	, `STATUS` = #{state}
+	         </if>
         WHERE 
         	id = #{id}  	        
-    ]]>
 	</update>
 	
 

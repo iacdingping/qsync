@@ -2,6 +2,8 @@ package com.openteach.qsync.core.entity.info;
 
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang.StringUtils;
+
 
 
 /**
@@ -354,7 +356,6 @@ public class Member {
     /**
      * phonenumber       db_column: phonenumber 
      */	
-	@NotNull(message="联系电话")
 	private java.lang.String phonenumber;
     /**
      * ccity       db_column: ccity 
@@ -792,8 +793,9 @@ public class Member {
 	public void setPhonenumber(java.lang.String value) {
 		this.phonenumber = value;
 	}
+	@NotNull(message="or handphone 联系电话")
 	public java.lang.String getPhonenumber() {
-		return this.phonenumber;
+		return StringUtils.defaultIfEmpty(this.handphone, this.phonenumber);
 	}
 	public void setCcity(java.lang.String value) {
 		this.ccity = value;

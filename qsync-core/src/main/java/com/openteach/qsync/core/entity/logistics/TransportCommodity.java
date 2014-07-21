@@ -71,10 +71,6 @@ public class TransportCommodity {
      * isreturn       db_column: isreturn 
      */	
 	private java.lang.Integer isreturn;
-    /**
-     * 商品货号 保税进口业务，货号需与电子账册一致由仓储提供       db_column: goods_item_no 
-     */	
-	@NotNull(message="商品货号 保税进口业务，货号需与电子账册一致由仓储提供")
 	private java.lang.String goodsItemNo;
 	//columns END
 

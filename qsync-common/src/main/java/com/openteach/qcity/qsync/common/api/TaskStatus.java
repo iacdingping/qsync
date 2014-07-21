@@ -11,7 +11,7 @@ public enum TaskStatus {
 	DOING(false),
 	LAUNCH_FAILED(false),
 	DATA_ERROR(true),
-	DECLARE_FAILED(false),
+	DECLARE_FAILED(true),
 	IGNORE(true),
 	DECLARE_SUCCESS(false),
 	NOT_PASS(true),
@@ -24,6 +24,14 @@ public enum TaskStatus {
 		this.endState = endState;
 	}
 
+	public boolean isSuccess() {
+		return this == PASS;
+	}
+	
+	public boolean isFailed() {
+		return this.isEndState() && this != PASS;
+	}
+	
 	public boolean isEndState() {
 		return endState;
 	}

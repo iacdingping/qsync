@@ -1,5 +1,6 @@
 package com.openteach.qsync.core.manager.order;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,9 @@ import com.openteach.qsync.core.OrderDeclareStatus;
 import com.openteach.qsync.core.PageList;
 import com.openteach.qsync.core.PageQuery;
 import com.openteach.qsync.core.dao.order.OrderDao;
+import com.openteach.qsync.core.dao.order.OrderStatusDao;
 import com.openteach.qsync.core.entity.order.Order;
+import com.openteach.qsync.core.entity.order.OrderStatus;
 import com.openteach.qsync.core.query.order.OrderQuery;
 
 
@@ -32,6 +35,9 @@ public class OrderManager {
 
 	@Autowired
 	private OrderDao orderDao;
+	@Autowired
+	private OrderStatusDao orderStatusDao;
+	
 	/**增加setXXXX()方法,spring就可以通过autowire自动设置对象属性,请注意大小写*/
 	public void setOrderDao(OrderDao dao) {
 		this.orderDao = dao;
@@ -93,10 +99,21 @@ public class OrderManager {
 				query.getPage(), query.getPageSize(), count(query));
 	}
 
-	public int updateDeclareStatus(Long id, String declareStatus) {
+	public int updateDeclareStatus(Long id, String declareStatus, Integer state) {
 		Map<String, Object> params = new HashMap<String, Object>(2);
 		params.put("id", id);
 		params.put("declareStatus", declareStatus);
+		params.put("state", state);
+		
+		if(state != null) {
+			//成功或者失败 插入一跳订单报关状态表记录
+			OrderStatus orderStatus = new OrderStatus();
+			orderStatus.setOrderId(id);
+			orderStatus.setStatus(state);
+			orderStatus.setCreatedatetime(new Date());
+			orderStatusDao.save(orderStatus);
+		}
+		
 		return orderDao.updateDeclareStatus(params);
 	}
 	
@@ -124,7 +141,15 @@ public class OrderManager {
 		}
 		char[] status = declareStatus.toCharArray();
 		status[index] = s;
-		return updateDeclareStatus(order.getId(), String.valueOf(status));
+		
+		Integer state = null;
+		
+		if(taskStatus.isSuccess()) {
+			state = 6;
+		} else if(taskStatus.isFailed()) {
+			state = 5;
+		}
+		return updateDeclareStatus(order.getId(), String.valueOf(status), state);
 	}
 	
 }

@@ -314,7 +314,7 @@ public class AssembleService {
 			GoodsDeclarDetail cdd = new GoodsDeclarDetail();
 			cdd.setGoodsOrder(i);
 			cdd.setMailTaxNo(commsku.getCommodityObject().getCategoryObject().getTariff());	//cc_kata_kplus_category.tariff
-			cdd.setGoodsItemNo(tc.getGoodsItemNo()); // 由仓储提供 cc_kata_kplus_transport_commodity.goods_item_no   保税区 出物品   
+			cdd.setGoodsItemNo(commsku.getSkucode()); // 由仓储提供 cc_kata_kplus_transport_commodity.goods_item_no   保税区 出物品   
 			cdd.setGoodsName(commsku.getName());
 			cdd.setGoodsSpecification(commsku.getProperties());	//cc_kata_kplus_commodity.properties
 			Country country = countryManager.getById(commsku.getCommodityObject().getSalesCountry());

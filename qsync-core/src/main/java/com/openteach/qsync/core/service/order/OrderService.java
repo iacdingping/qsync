@@ -55,7 +55,7 @@ public class OrderService {
 	public 	List<Order> listOrders() {
 		List<Order> orders = orderManager.list(orderQuery);
 		for(Order order : orders) {
-			orderManager.updateDeclareStatus(order.getId(), OrderDeclareStatus.INITIALIZE.getValue());
+			orderManager.updateDeclareStatus(order.getId(), OrderDeclareStatus.INITIALIZE.getValue(), null);
 		}
 		return orders;
 	}
