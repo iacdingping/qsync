@@ -41,19 +41,19 @@ public class JkfLogisticsInfo {
 	 * 
 	 */
 	@XmlElement(required = true)
-	private int logisticsTraceState;
+	private Integer logisticsTraceState;
 	
 	/**
 	 * 
 	 */
 	@XmlElement(required = true)
-	private double weight;
+	private Double weight;
 	
 	/**
 	 * 
 	 */
 	@XmlElement(required = true)
-	private int pieceNumber;
+	private Integer pieceNumber;
 	
 	/**
 	 * 
@@ -98,27 +98,27 @@ public class JkfLogisticsInfo {
 		this.logisticsWaybillNo = logisticsWaybillNo;
 	}
 
-	public int getLogisticsTraceState() {
+	public Integer getLogisticsTraceState() {
 		return logisticsTraceState;
 	}
 
-	public void setLogisticsTraceState(int logisticsTraceState) {
+	public void setLogisticsTraceState(Integer logisticsTraceState) {
 		this.logisticsTraceState = logisticsTraceState;
 	}
 
-	public double getWeight() {
+	public Double getWeight() {
 		return weight;
 	}
 
-	public void setWeight(double weight) {
+	public void setWeight(Double weight) {
 		this.weight = weight;
 	}
 
-	public int getPieceNumber() {
+	public Integer getPieceNumber() {
 		return pieceNumber;
 	}
 
-	public void setPieceNumber(int pieceNumber) {
+	public void setPieceNumber(Integer pieceNumber) {
 		this.pieceNumber = pieceNumber;
 	}
 

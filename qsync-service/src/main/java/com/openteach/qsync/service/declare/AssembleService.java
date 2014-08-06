@@ -156,10 +156,10 @@ public class AssembleService {
 			jkfOrderDetail.setGoodsModel(commsku.getProperties());
 			Country country2 = countryManager.getById(commsku.getCommodityObject().getSalesCountry());
 			if(country2 == null) {
-				throw new DataAssembleException("order.orderTransportObject.transportCommodityList[" + i + "] 产销国 不能为空");
+				throw new DataAssembleException("order.orderTransportObject.transportCommodityList[" + i + "].commskuObject.CommodityObject.SalesCountry 产销国 不能为空");
 			}
 			if(StringUtils.isBlank(country2.getCountryCode())) {
-				throw new DataAssembleException("order.orderTransportObject.transportCommodityList[" + i + "].产销国别代码 不能为空");
+				throw new DataAssembleException("order.orderTransportObject.transportCommodityList[" + i + "]commskuObject.CommodityObject.SalesCountry 产销国别代码 不能为空");
 			}
 			jkfOrderDetail.setCountryCode(country2.getCountryCode());	//cc_kata_kplus_commodity.sales_country
 			jkfOrderDetail.setUnitPrice(tc.getPrice());
@@ -205,7 +205,7 @@ public class AssembleService {
 		XmlLogisticsRequestBody body = new XmlLogisticsRequestBody();
 		Logistics logistics = new Logistics();
 		JkfLogisticsInfo jkfLogisticsInfo = new JkfLogisticsInfo();
-		jkfLogisticsInfo.setLogisticsCompanyNo(order.getOrderTransportObject().getWaybillCode());
+//		jkfLogisticsInfo.setLogisticsCompanyNo();
 		jkfLogisticsInfo.setLogisticsCompanyName(order.getOrderTransportObject().getLogistics());
 		jkfLogisticsInfo.setLogisticsWaybillNo(order.getOrderTransportObject().getWaybillnumber());
 		jkfLogisticsInfo.setLogisticsTraceState(order.getLogisticsState());	// cc_kata_kplus_order.logistics_state

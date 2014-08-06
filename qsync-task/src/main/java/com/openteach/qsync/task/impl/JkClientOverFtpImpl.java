@@ -38,7 +38,7 @@ public class JkClientOverFtpImpl extends JkfClientOverFtp{
 			return true;
 		}
 		
-		return storage.updateStatus(businessNo, status, message, task.getOrderId(), TaskType.valueOf(task.getType()));
+		return storage.updateStatus(businessNo, status, message, task.getOrderId(), TaskType.valueOf(task.getType()), xmlResponse);
 	}
 
 }

@@ -44,6 +44,9 @@
         UPDATE cc_sync_taks SET
 	        `status` = #{status},
 	        `gmt_modified` = now(),
+	        <if test="response">
+				xm_response = ${response}
+			</if>
 	        <if test="appendMessage">
 				`message` = CONCAT(`message`, ',', #{message})
 			</if>
