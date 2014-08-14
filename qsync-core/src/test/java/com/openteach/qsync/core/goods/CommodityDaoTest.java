@@ -132,7 +132,7 @@ public class CommodityDaoTest extends SpringTransactionalTestCase{
 		/** width */
 		/** height */
 		/** weight */
-		commodity.setWeight(1);
+		commodity.setWeight(1.0);
 		/** 产销国 */
 		commodity.setSalesCountry(1L);
 		
@@ -291,7 +291,7 @@ public class CommodityDaoTest extends SpringTransactionalTestCase{
 		/** width */
 		/** height */
 		/** weight */
-		commodity.setWeight(2);
+		commodity.setWeight(2.0);
 		/** 产销国 */
 		commodity.setSalesCountry(2L);
 		

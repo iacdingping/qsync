@@ -16,7 +16,7 @@ public class CcSyncTaksManagerTest extends SpringTransactionalTestCase {
 	
 	@Test
 	public void updateStatusTest() {
-		ccSyncTaksManager.updateStatus("-1", TaskStatus.DATA_ERROR, "数据错误", false, "");
+		ccSyncTaksManager.updateStatus("-1", TaskStatus.DATA_ERROR, "数据错误", false, null);
 		ccSyncTaksManager.updateStatus("-1", TaskStatus.DATA_ERROR, "数据错误", true, "");
 	}
 }

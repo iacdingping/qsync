@@ -2,6 +2,7 @@ package com.openteach.qsync.service.declare;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -165,7 +166,7 @@ public class AssembleService {
 			jkfOrderDetail.setUnitPrice(tc.getPrice());
 			jkfOrderDetail.setGoodsCount(tc.getDelivernum().doubleValue());
 			jkfOrderDetail.setGoodsUnit(commsku.getCommodityObject().getUnitObject().getCode());	//cc_kata_kplus_unit.code
-			jkfOrderDetail.setWeight(commsku.getCommodityObject().getWeight().doubleValue());
+			jkfOrderDetail.setWeight(commsku.getCommodityObject().getWeight());
 			jkfOrderDetailList.add(jkfOrderDetail);
 		}
 		orderInfo.setJkfOrderDetailList(jkfOrderDetailList);
@@ -209,7 +210,7 @@ public class AssembleService {
 		jkfLogisticsInfo.setLogisticsCompanyName(order.getOrderTransportObject().getLogistics());
 		jkfLogisticsInfo.setLogisticsWaybillNo(order.getOrderTransportObject().getWaybillnumber());
 		jkfLogisticsInfo.setLogisticsTraceState(order.getLogisticsState());	// cc_kata_kplus_order.logistics_state
-		jkfLogisticsInfo.setWeight(order.getTotalGoodsWeight());
+		jkfLogisticsInfo.setWeight(order.getShippingWeight());
 		jkfLogisticsInfo.setPieceNumber(order.getTotalGoodsCount());
 		jkfLogisticsInfo.setHandleTimeStr(order.getOrdertime());
 		jkfLogisticsInfo.setStationCode(order.getStationCode());//cc_kata_kplus_order.station_code
@@ -251,7 +252,7 @@ public class AssembleService {
 		goodsDeclar.setInOutFlag("I");
 		goodsDeclar.setPreEntryNumber(configService.getDeclareRecordNo().substring(configService.getDeclareRecordNo().length() - 4) + (BASE_ID + order.getId() + System.currentTimeMillis()));	// 4位电商编码只要填后四位就行了
 		goodsDeclar.setImportType(configService.getDeclareType());
-		goodsDeclar.setInOutDateStr(order.getOrdertime());
+		goodsDeclar.setInOutDateStr(new Date());
 		goodsDeclar.setInOutPortNumber(configService.getDeclareInOutPortNumber());
 		goodsDeclar.setArrivedPort(configService.getDeclareArrivedPort());
 		goodsDeclar.setTransportTool(order.getOrderTransportObject().getToolFltName());
@@ -266,8 +267,8 @@ public class AssembleService {
 		goodsDeclar.setSubCarriageNo(order.getOrderTransportObject().getWaybillnumber());	//分运单号与总运单号填一样的数据
 		goodsDeclar.setFromCountry(order.getOrderTransportObject().getFromCountry());	//cc_kata_kplus_order_transport.from_country
 		goodsDeclar.setPieceNumber(order.getTotalGoodsCount());
-		goodsDeclar.setRoughWeight(order.getTotalGoodsWeight());
-		goodsDeclar.setNetWeight(order.getTotalGoodsWeight());
+		goodsDeclar.setRoughWeight(order.getShippingWeight());
+		goodsDeclar.setNetWeight(order.getGrossWeight());
 		goodsDeclar.setPackType(order.getOrderTransportObject().getPackType().toString());	//cc_kata_kplus_transportation.pack_type
 		goodsDeclar.setRemark("");
 		goodsDeclar.setDeclarePortCode(configService.getDeclareInOutPortNumber());
@@ -375,8 +376,8 @@ public class AssembleService {
 		dto.setWayBillNo(order.getOrderTransportObject().getWaybillnumber());
 		dto.setTotalWayBill(order.getOrderTransportObject().getWaybillnumber());
 		dto.setPackageNo(order.getTotalGoodsCount());
-		dto.setWeight(order.getTotalGoodsWeight());
-		dto.setNetWeight(order.getTotalGoodsWeight());
+		dto.setWeight(order.getShippingWeight());
+		dto.setNetWeight(order.getGrossWeight());
 		List<TransportCommodity> transportCommoditiyList = order.getOrderTransportObject().getTransportCommodityList();
 		StringBuilder sb = new StringBuilder();
 		for(int i=0; i<transportCommoditiyList.size() && i<=3; i++) {
@@ -411,7 +412,7 @@ public class AssembleService {
 		dto.setZipCode(order.getOrderTransportObject().getZipCode());	//cc_kata_kplus_order_transport.zip_code
 		dto.setCustomsCode(configService.getDeclareCustomsCode());
 		dto.setWorth(order.getTotalamout());
-		dto.setImportDateString(order.getOrdertime());
+		dto.setImportDateString(new Date());
 		dto.setCurrCode(configService.getDeclareCurrency());
 		
 		JkfSign jkfSign = new JkfSign();

@@ -348,8 +348,10 @@ public class Order {
 	//columns END
 	@NotNull(message="总件数")
 	private Integer totalGoodsCount;
-	@NotNull(message="总毛重")
-	private Double totalGoodsWeight;
+	@NotNull(message="毛重。总重量（ems称重）")
+	private Double shippingWeight;
+	@NotNull(message="总重量（所有物品重量）")
+	private Double grossWeight;
 	
 	public Order(){
 	}
@@ -718,11 +720,20 @@ public class Order {
 		this.totalGoodsCount = totalGoodsCount;
 	}
 	
-	public Double getTotalGoodsWeight() {
-		return totalGoodsWeight;
+	public Double getShippingWeight() {
+		return shippingWeight;
 	}
-	public void setTotalGoodsWeight(Double totalGoodsWeight) {
-		this.totalGoodsWeight = totalGoodsWeight;
+
+	public void setShippingWeight(Double shippingWeight) {
+		this.shippingWeight = shippingWeight;
+	}
+
+	public Double getGrossWeight() {
+		return grossWeight;
+	}
+
+	public void setGrossWeight(Double grossWeight) {
+		this.grossWeight = grossWeight;
 	}
 
 	public java.lang.String getDeclarePayType() {

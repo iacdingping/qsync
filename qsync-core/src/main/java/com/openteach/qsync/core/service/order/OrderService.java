@@ -71,18 +71,17 @@ public class OrderService {
 		
 		List<TransportCommodity> transportCommodityList = transportCommodityManager.listByOrderTransport(order.getOrdertransport());
 		int totalGoodsCount = 0;
-		double totalGoodsWeight = 0.0;
+//		double totalGoodsWeight = 0.0;
 		for(TransportCommodity tc : transportCommodityList) {
 			Commsku commsku = commskuManager.getByIdMappedCommodityAndCategory(tc.getSkuId());
 			tc.setCommskuObject(commsku);
 			//计算总件数与总重量
 			totalGoodsCount += tc.getDelivernum() == null ? 0 : tc.getDelivernum().intValue();
-			Integer weight = tc.getCommskuObject().getCommodityObject().getWeight() == null ?
-					0 : tc.getCommskuObject().getCommodityObject().getWeight();
-			totalGoodsWeight += tc.getDelivernum() == null ? 0 : tc.getDelivernum().intValue() * weight;
+//			double weight = tc.getCommskuObject().getCommodityObject().getWeight() == null ?
+//					0 : tc.getCommskuObject().getCommodityObject().getWeight();
+//			totalGoodsWeight += tc.getDelivernum() == null ? 0 : tc.getDelivernum().intValue() * weight;
 		}
 		order.setTotalGoodsCount(totalGoodsCount);
-		order.setTotalGoodsWeight(totalGoodsWeight);
 		orderTransport.setTransportCommodityList(transportCommodityList);;
 		order.setOrderTransportObject(orderTransport);
 	}

@@ -273,7 +273,7 @@ public class Commodity {
      * weight       db_column: weight 
      */	
 	@NotNull(message="商品毛重")
-	private java.lang.Integer weight;
+	private java.lang.Double weight;
     /**
      * 产销国       db_column: sales_country 
      */	
@@ -599,11 +599,11 @@ public class Commodity {
 	public java.lang.Double getHeight() {
 		return this.height;
 	}
-	public void setWeight(java.lang.Integer value) {
-		this.weight = value;
+	public java.lang.Double getWeight() {
+		return weight;
 	}
-	public java.lang.Integer getWeight() {
-		return this.weight;
+	public void setWeight(java.lang.Double weight) {
+		this.weight = weight;
 	}
 	public java.lang.Long getSalesCountry() {
 		return salesCountry;

@@ -721,7 +721,6 @@ public abstract class JkfClientOverFtp implements JkfClient {
 								
 								//更新数据状态
 								boolean updated = updateStatus(key, status, message, xml);
-								System.out.println(DateUtil.format(f.getTimestamp().getTime()));
 								boolean fileInvalid = (System.currentTimeMillis() - f.getTimestamp().getTimeInMillis()) > DEFAULT_DELETE_FILE_TIME_INTERVAL;
 								if(updated || fileInvalid) {
 									if(fileInvalid) {
