@@ -13,6 +13,7 @@ import org.springframework.util.Assert;
 
 import com.openteach.qcity.qsync.common.api.TaskStatus;
 import com.openteach.qcity.qsync.common.api.TaskType;
+import com.openteach.qsync.api.ExaminationState;
 import com.openteach.qsync.core.OrderDeclareStatus;
 import com.openteach.qsync.core.PageList;
 import com.openteach.qsync.core.PageQuery;
@@ -99,17 +100,28 @@ public class OrderManager {
 				query.getPage(), query.getPageSize(), count(query));
 	}
 
-	public int updateDeclareStatus(Long id, String declareStatus, Integer state) {
+	/**
+	 * 修改订单状态 isSync returnType
+	 * @param id
+	 * @param declareStatus
+	 * @param orderState
+	 * @param examinationState
+	 * @return
+	 */
+	public int updateOrderStatus(Long id, String declareStatus, Integer orderState, ExaminationState examinationState) {
 		Map<String, Object> params = new HashMap<String, Object>(2);
 		params.put("id", id);
 		params.put("declareStatus", declareStatus);
-		params.put("state", state);
+		params.put("state", orderState);
+		if(examinationState != null) {
+			params.put("returnType", examinationState.getState());
+		}
 		
-		if(state != null) {
+		if(orderState != null) {
 			//成功或者失败 插入一跳订单报关状态表记录
 			OrderStatus orderStatus = new OrderStatus();
 			orderStatus.setOrderId(id);
-			orderStatus.setStatus(state);
+			orderStatus.setStatus(orderState);
 			orderStatus.setCreatedatetime(new Date());
 			orderStatusDao.save(orderStatus);
 		}
@@ -117,7 +129,7 @@ public class OrderManager {
 		return orderDao.updateDeclareStatus(params);
 	}
 	
-	public synchronized int updateDeclareStatus(Long orderId, TaskType taskType, TaskStatus taskStatus) {
+	public synchronized int updateDeclareStatus(Long orderId, TaskType taskType, TaskStatus taskStatus, ExaminationState examinationState) {
 		Order order = getById(orderId);
 		String declareStatus = StringUtils.defaultIfEmpty(order.getDeclareStatus(), OrderDeclareStatus.INITIALIZE.getValue());
 		int index = 0;
@@ -142,14 +154,14 @@ public class OrderManager {
 		char[] status = declareStatus.toCharArray();
 		status[index] = s;
 		
-		Integer state = null;
+		Integer orderState = null;
 		
 		if(taskStatus.isSuccess()) {
-			state = 6;
+			orderState = 6;
 		} else if(taskStatus.isFailed()) {
-			state = 5;
+			orderState = 5;
 		}
-		return updateDeclareStatus(order.getId(), String.valueOf(status), state);
+		return updateOrderStatus(order.getId(), String.valueOf(status), orderState, examinationState);
 	}
 	
 }

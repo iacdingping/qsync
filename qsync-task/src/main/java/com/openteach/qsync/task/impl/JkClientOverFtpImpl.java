@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.openteach.qcity.qsync.common.api.TaskStatus;
 import com.openteach.qcity.qsync.common.api.TaskType;
+import com.openteach.qsync.api.ExaminationState;
 import com.openteach.qsync.api.JkfClientOverFtp;
 import com.openteach.qsync.core.entity.system.CcSyncTaks;
 import com.openteach.qsync.core.query.system.CcSyncTaksQuery;
@@ -24,7 +25,7 @@ public class JkClientOverFtpImpl extends JkfClientOverFtp{
 	
 	@Override
 	public boolean updateStatus(String businessNo, TaskStatus status,
-			String message, String xmlResponse) {
+			String message, String xmlResponse, ExaminationState state) {
 		CcSyncTaksQuery query = new CcSyncTaksQuery();
 		query.setBusinessNo(businessNo);
 		List<CcSyncTaks> tasks = storage.query(query);
@@ -38,7 +39,7 @@ public class JkClientOverFtpImpl extends JkfClientOverFtp{
 			return true;
 		}
 		
-		return storage.updateStatus(businessNo, status, message, task.getOrderId(), TaskType.valueOf(task.getType()), xmlResponse);
+		return storage.updateStatus(businessNo, status, message, task.getOrderId(), TaskType.valueOf(task.getType()), xmlResponse, state);
 	}
 
 }

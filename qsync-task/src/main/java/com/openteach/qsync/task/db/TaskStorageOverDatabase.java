@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.openteach.qcity.qsync.common.api.TaskStatus;
 import com.openteach.qcity.qsync.common.api.TaskType;
+import com.openteach.qsync.api.ExaminationState;
 import com.openteach.qsync.core.entity.system.CcSyncTaks;
 import com.openteach.qsync.core.manager.order.OrderManager;
 import com.openteach.qsync.core.manager.system.CcSyncTaksManager;
@@ -37,7 +38,7 @@ public class TaskStorageOverDatabase implements TaskStorage {
 		TaskStatus taskStatus = TaskStatus.valueOf(task.getStatus());
 		TaskType taskType = TaskType.valueOf(task.getType());
 				
-		orderManager.updateDeclareStatus(task.getOrderId(), taskType, taskStatus);
+		orderManager.updateDeclareStatus(task.getOrderId(), taskType, taskStatus, null);
 		ccSyncTaksManager.save(task);
 	}
 
@@ -45,13 +46,13 @@ public class TaskStorageOverDatabase implements TaskStorage {
 	public void update(CcSyncTaks task) {
 		TaskStatus taskStatus = TaskStatus.valueOf(task.getStatus());
 		TaskType taskType = TaskType.valueOf(task.getType());
-		orderManager.updateDeclareStatus(task.getOrderId(), taskType, taskStatus);
+		orderManager.updateDeclareStatus(task.getOrderId(), taskType, taskStatus, null);
 		ccSyncTaksManager.update(task);
 	}
 
 	public boolean updateStatus(String businessNo, TaskStatus status,
-			String message, Long orderId, TaskType taskType, String response) {
-		orderManager.updateDeclareStatus(orderId, taskType, status);
+			String message, Long orderId, TaskType taskType, String response, ExaminationState state) {
+		orderManager.updateDeclareStatus(orderId, taskType, status, state);
 		return ccSyncTaksManager.updateStatus(businessNo, status, message, status == TaskStatus.NOT_PASS, response);
 	}
 }

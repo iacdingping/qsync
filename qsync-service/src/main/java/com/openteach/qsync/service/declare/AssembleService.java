@@ -114,16 +114,16 @@ public class AssembleService {
 		jkfOrderImportHead.setPayType(order.getDeclarePayType());	//cc_kata_kplus_order.declare_pay_type
 		jkfOrderImportHead.setPayCompanyCode(order.getPayCompanyCode());		//cc_kata_kplus_order.pay_company_code
 		jkfOrderImportHead.setPayNumber(order.getPayNumber());	//cc_kata_kplus_order.pay_number
-		jkfOrderImportHead.setOrderTotalAmount(order.getAmount());		//订单总金额
+		jkfOrderImportHead.setOrderTotalAmount(order.getCommskuAmount() + order.getTransPrice() + order.getOrderTaxAmount());		//订单总金额就是货款+运费+税款
 		jkfOrderImportHead.setOrderNo(order.getCode());
 		jkfOrderImportHead.setOrderTaxAmount(order.getOrderTaxAmount());	//cc_kata_kplus_order.order_tax_amount
-		jkfOrderImportHead.setOrderGoodsAmount(order.getAmount());	//订单货款
+		jkfOrderImportHead.setOrderGoodsAmount(order.getCommskuAmount());	//订单货款
 		jkfOrderImportHead.setFeeAmount(order.getTransPrice());
 		jkfOrderImportHead.seteCommerceCode(configService.getDeclareRecordNo());
 		jkfOrderImportHead.seteCommerceName(configService.getDeclareRecordName());
 		jkfOrderImportHead.setTradeTime(DateUtil.format(order.getOrdertime()));
 		jkfOrderImportHead.setCurrCode(configService.getDeclareCurrency());
-		jkfOrderImportHead.setTotalAmount(order.getAmount() + order.getTransPrice() + order.getOrderTaxAmount()); // 成交总价 = 支付价格（订单价格）+ 运费 + 税款
+		jkfOrderImportHead.setTotalAmount(order.getAmount()); // 成交总价 = 支付价格（订单价格）+ 运费 + 税款
 		jkfOrderImportHead.setConsigneeEmail(order.getOrderTransportObject().getConsigneeEmail());	//cc_kata_kplus_order_transport.consignee_email
 		jkfOrderImportHead.setConsigneeTel(order.getOrderTransportObject().getPhonenumber());
 		jkfOrderImportHead.setConsignee(order.getOrderTransportObject().getCongsignee());

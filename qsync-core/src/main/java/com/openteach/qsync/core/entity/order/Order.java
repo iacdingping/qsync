@@ -352,7 +352,20 @@ public class Order {
 	private Double shippingWeight;
 	@NotNull(message="总重量（所有物品重量）")
 	private Double grossWeight;
+	/**
+	 * 报关返回值
+	 */
+	private Integer returnType;
+	/**
+	 * 是否同步标志 Y|N
+	 */
+	private String isSync;
 	
+	/**
+	 * 物品总价
+	 */
+	@NotNull(message="货款")
+	private Double commskuAmount;
 	public Order(){
 	}
 
@@ -782,6 +795,30 @@ public class Order {
 
 	public void setTransportationType(Integer transportationType) {
 		this.transportationType = transportationType;
+	}
+
+	public Integer getReturnType() {
+		return returnType;
+	}
+
+	public void setReturnType(Integer returnType) {
+		this.returnType = returnType;
+	}
+
+	public String getIsSync() {
+		return isSync;
+	}
+
+	public void setIsSync(String isSync) {
+		this.isSync = isSync;
+	}
+
+	public Double getCommskuAmount() {
+		return commskuAmount;
+	}
+
+	public void setCommskuAmount(Double commskuAmount) {
+		this.commskuAmount = commskuAmount;
 	}
 
 }

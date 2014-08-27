@@ -693,11 +693,12 @@ public abstract class JkfClientOverFtp implements JkfClient {
 								
 								TaskStatus status = null;
 								String message = "";
+								ExaminationState state = null;
 								// parse xml file
 								if(xml.indexOf("approveResult") != -1) {
 									// 海关平台回执
 									PersonalGoodsSeconderyResponse response = JaxbUtils.converyToJavaBean(xml, PersonalGoodsSeconderyResponse.class);
-									ExaminationState state = ExaminationState.getByState(response.getBody().getJkfGoodsDeclar().getApproveResult());
+									state = ExaminationState.getByState(response.getBody().getJkfGoodsDeclar().getApproveResult());
 									status = state.getStatus();
 									message = response.getBody().getJkfGoodsDeclar().getApproveComment();
 								} else {
@@ -714,13 +715,11 @@ public abstract class JkfClientOverFtp implements JkfClient {
 									message = Collections3.extractToString(response.getBody().getList().get(0).getResultList(), "resultInfo", ";");
 								}
 								
-								if(status.isEndState()) {
-									//队列里面的数据 用来检测超时
-									pr = pendingRequests.remove(key);
-								}
+								//清空队列里面的数据 用来检测超时
+								pr = pendingRequests.remove(key);
 								
 								//更新数据状态
-								boolean updated = updateStatus(key, status, message, xml);
+								boolean updated = updateStatus(key, status, message, xml, state);
 								boolean fileInvalid = (System.currentTimeMillis() - f.getTimestamp().getTimeInMillis()) > DEFAULT_DELETE_FILE_TIME_INTERVAL;
 								if(updated || fileInvalid) {
 									if(fileInvalid) {
