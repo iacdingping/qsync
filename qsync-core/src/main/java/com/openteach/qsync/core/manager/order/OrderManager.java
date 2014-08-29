@@ -108,7 +108,7 @@ public class OrderManager {
 	 * @param examinationState
 	 * @return
 	 */
-	public int updateOrderStatus(Long id, String declareStatus, Integer orderState, ExaminationState examinationState) {
+	public int updateOrderStatus(Long id, String declareStatus, Integer orderState, ExaminationState examinationState, boolean insertOrderState) {
 		Map<String, Object> params = new HashMap<String, Object>(2);
 		params.put("id", id);
 		params.put("declareStatus", declareStatus);
@@ -117,8 +117,8 @@ public class OrderManager {
 			params.put("returnType", examinationState.getState());
 		}
 		
-		if(orderState != null) {
-			//成功或者失败 插入一跳订单报关状态表记录
+		if(insertOrderState && orderState != null) {
+			//成功或者失败 插入一条订单报关状态表记录
 			OrderStatus orderStatus = new OrderStatus();
 			orderStatus.setOrderId(id);
 			orderStatus.setStatus(orderState);
@@ -161,7 +161,7 @@ public class OrderManager {
 		} else if(taskStatus.isFailed()) {
 			orderState = 5;
 		}
-		return updateOrderStatus(order.getId(), String.valueOf(status), orderState, examinationState);
+		return updateOrderStatus(order.getId(), String.valueOf(status), orderState, examinationState, taskStatus != TaskStatus.DATA_ERROR && taskType ==TaskType.PERSONAL_GOODS_DECLAR);
 	}
 	
 }

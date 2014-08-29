@@ -64,6 +64,7 @@ public class CcSyncTaks {
 	private java.util.Date gmtModified;
 	private String businessNo;
 	private String message;
+	private String preEntryNo;
 	//columns END
 
 	public CcSyncTaks(){
@@ -146,6 +147,12 @@ public class CcSyncTaks {
 	}
 	public void setMessage(String message) {
 		this.message = message;
+	}
+	public String getPreEntryNo() {
+		return preEntryNo;
+	}
+	public void setPreEntryNo(String preEntryNo) {
+		this.preEntryNo = preEntryNo;
 	}
 }
 

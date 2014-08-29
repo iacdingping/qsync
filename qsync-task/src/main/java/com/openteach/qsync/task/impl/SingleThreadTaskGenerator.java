@@ -117,13 +117,15 @@ public class SingleThreadTaskGenerator extends AbstractLifeCycle implements Task
 			try {
 					assembleService.mappingOrder(o);
 					XmlOrderRequest orderRequest = assembleService.getOrderXmlRequest(o);
-					storage.store(newTask(o.getId(), orderRequest, TaskType.ORDER_DECLARE, orderRequest.getBody().getOrderInfoList().get(0).getJkfSign().getBusinessNo()));
+					storage.store(newTask(o.getId(), orderRequest, TaskType.ORDER_DECLARE, orderRequest.getBody().getOrderInfoList().get(0).getJkfSign().getBusinessNo(), null));
 					XmlLogisticsRequest logisticsRequest = assembleService.getLogisticsXmlRequest(o);
-					storage.store(newTask(o.getId(), logisticsRequest, TaskType.LOGISTICS_DECLARE, logisticsRequest.getBody().getLogisticsList().get(0).getJkfSign().getBusinessNo()));
+					storage.store(newTask(o.getId(), logisticsRequest, TaskType.LOGISTICS_DECLARE, logisticsRequest.getBody().getLogisticsList().get(0).getJkfSign().getBusinessNo(), null));
 					XmlWaybillRequest waybillRequest = assembleService.getWaybillXmlRequest(o);
-					storage.store(newTask(o.getId(), waybillRequest, TaskType.WAY_BILL_DECLARE, waybillRequest.getBody().getWayBillList().get(0).getJkfSign().getBusinessNo()));
+					storage.store(newTask(o.getId(), waybillRequest, TaskType.WAY_BILL_DECLARE, waybillRequest.getBody().getWayBillList().get(0).getJkfSign().getBusinessNo(), null));
 					XmlGoodsDeclarRequest goodsDeclarRequest = assembleService.getGoodsXmlRequest(o);
-					storage.store(newTask(o.getId(), goodsDeclarRequest, TaskType.PERSONAL_GOODS_DECLAR, goodsDeclarRequest.getBody().getGoodsDeclarModuleList().get(0).getJkfSign().getBusinessNo()));
+					String businessNo = goodsDeclarRequest.getBody().getGoodsDeclarModuleList().get(0).getJkfSign().getBusinessNo();
+					String preEntryNo = goodsDeclarRequest.getBody().getGoodsDeclarModuleList().get(0).getGoodsDeclar().getPreEntryNumber();
+					storage.store(newTask(o.getId(), goodsDeclarRequest, TaskType.PERSONAL_GOODS_DECLAR, businessNo, preEntryNo));
 			} catch (Throwable t) {
 					storage.store(newErrorTask(o.getId(), Exceptions.getStackTraceAsString(t)));
 			}
@@ -134,11 +136,14 @@ public class SingleThreadTaskGenerator extends AbstractLifeCycle implements Task
 	
 	/**
 	 * 
-	 * @param request
-	 * @param type
+	 * @param orderId	订单ID
+	 * @param request	请求报文
+	 * @param type	任务类型
+	 * @param businessNo	第一次回执匹配根据bisinessNo
+	 * @param preEntryNo	海关回执根据preEntryNo匹配
 	 * @return
 	 */
-	private CcSyncTaks newTask(Long orderId, XmlRequest request, TaskType type, String businessNo) {
+	private CcSyncTaks newTask(Long orderId, XmlRequest request, TaskType type, String businessNo, String preEntryNo) {
 		CcSyncTaks t = new CcSyncTaks();
 		t.setOrderId(orderId);
 		t.setGenerator(HOST_NAME);
@@ -148,6 +153,7 @@ public class SingleThreadTaskGenerator extends AbstractLifeCycle implements Task
 		t.setGmtCreate(new Date());
 		t.setGmtModified(t.getGmtCreate());
 		t.setBusinessNo(businessNo);
+		t.setPreEntryNo(preEntryNo);
 		return t;
 	}
 	

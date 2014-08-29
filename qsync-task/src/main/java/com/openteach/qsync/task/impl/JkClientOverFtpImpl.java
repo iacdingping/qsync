@@ -24,22 +24,23 @@ public class JkClientOverFtpImpl extends JkfClientOverFtp{
 	private TaskStorageOverDatabase storage;
 	
 	@Override
-	public boolean updateStatus(String businessNo, TaskStatus status,
+	public boolean updateStatus(String businessNoOrPreEntryNo, TaskStatus status,
 			String message, String xmlResponse, ExaminationState state) {
 		CcSyncTaksQuery query = new CcSyncTaksQuery();
-		query.setBusinessNo(businessNo);
+		query.setBusinessNoOrPreEntryNo(businessNoOrPreEntryNo);
 		List<CcSyncTaks> tasks = storage.query(query);
-		if(tasks.size() == 0)
+		if(tasks.isEmpty())
 			return false;
+		
 		CcSyncTaks task = tasks.get(0);
 		TaskStatus statusBefore = TaskStatus.valueOf(task.getStatus());
 		if(statusBefore.isEndState() && statusBefore != TaskStatus.NOT_PASS) {
 			logger.info(String.format("order [%s], businessNo [%s] status [%s] is final and not the NOT_PASS status, donot modify the status. to be change status [%s]", 
-					task.getOrderId(), businessNo, task.getStatus(), status.name()));
+					task.getOrderId(), businessNoOrPreEntryNo, task.getStatus(), status.name()));
 			return true;
 		}
 		
-		return storage.updateStatus(businessNo, status, message, task.getOrderId(), TaskType.valueOf(task.getType()), xmlResponse, state);
+		return storage.updateStatus(businessNoOrPreEntryNo, status, message, task.getOrderId(), TaskType.valueOf(task.getType()), xmlResponse, state);
 	}
 
 }

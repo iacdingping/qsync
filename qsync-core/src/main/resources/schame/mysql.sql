@@ -67,6 +67,7 @@ CREATE TABLE `cc_sync_taks` (
 ALTER TABLE `cc_sync_taks` ADD `order_id` BIGINT(22) COMMENT '订单ID';
 ALTER TABLE `cc_sync_taks` MODIFY COLUMN `type` VARCHAR(50);
 ALTER TABLE `cc_sync_taks` ADD `business_no` VARCHAR(50) COMMENT '业务编号';
+ALTER TABLE cc_sync_taks ADD pre_entry_no VARCHAR(50) COMMENT '海关二次回执匹配字段 预录入号码';
 
 -- 行油税号 移动到cc_kata_kplus_category类目表
 ALTER TABLE `cc_kata_kplus_category` ADD `tariff` VARCHAR(20) COMMENT '行邮税号 必须已备案，且与参数说明文档中的行邮税号中的税号一致';

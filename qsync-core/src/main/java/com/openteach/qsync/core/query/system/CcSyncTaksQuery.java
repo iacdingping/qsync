@@ -42,6 +42,7 @@ public class CcSyncTaksQuery extends PageQuery {
 	private java.util.Date gmtModifiedEnd;
 	private String businessNo;
 	private String message;
+	private String businessNoOrPreEntryNo;
 	
 	private Integer mode;
 	
@@ -157,6 +158,14 @@ public class CcSyncTaksQuery extends PageQuery {
 
 	public void setBusinessNo(String businessNo) {
 		this.businessNo = businessNo;
+	}
+
+	public String getBusinessNoOrPreEntryNo() {
+		return businessNoOrPreEntryNo;
+	}
+
+	public void setBusinessNoOrPreEntryNo(String businessNoOrPreEntryNo) {
+		this.businessNoOrPreEntryNo = businessNoOrPreEntryNo;
 	}
 
 	public String getMessage() {
