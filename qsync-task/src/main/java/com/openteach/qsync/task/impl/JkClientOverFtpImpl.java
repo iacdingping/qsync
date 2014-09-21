@@ -23,6 +23,12 @@ public class JkClientOverFtpImpl extends JkfClientOverFtp{
 	@Autowired
 	private TaskStorageOverDatabase storage;
 	
+	/**
+	 * endstate状态 并且未通过的  或者 通过的为99电子审单的
+	 * 海关平台回执有三次  第一次为验证 处理成功 根据businessNo匹配数据
+	 * 第二次为电子放行 preEntryNo 匹配数据
+	 * 第三次为手工放行 
+	 */
 	@Override
 	public boolean updateStatus(String businessNoOrPreEntryNo, TaskStatus status,
 			String message, String xmlResponse, ExaminationState state) {
@@ -34,10 +40,15 @@ public class JkClientOverFtpImpl extends JkfClientOverFtp{
 		
 		CcSyncTaks task = tasks.get(0);
 		TaskStatus statusBefore = TaskStatus.valueOf(task.getStatus());
-		if(statusBefore.isEndState() && statusBefore != TaskStatus.NOT_PASS) {
-			logger.info(String.format("order [%s], businessNo [%s] status [%s] is final and not the NOT_PASS status, donot modify the status. to be change status [%s]", 
-					task.getOrderId(), businessNoOrPreEntryNo, task.getStatus(), status.name()));
-			return true;
+		if(statusBefore.isEndState() && statusBefore != TaskStatus.NOT_PASS ) {
+			
+			if(statusBefore == TaskStatus.PASS && state!= null && state != ExaminationState.EXAMINATION_PASS) {
+				
+			} else {
+				logger.info(String.format("order [%s], businessNo [%s] status [%s] is final and not the NOT_PASS status, donot modify the status. to be change status [%s]", 
+						task.getOrderId(), businessNoOrPreEntryNo, task.getStatus(), status.name()));
+				return true;
+			}
 		}
 		
 		return storage.updateStatus(businessNoOrPreEntryNo, status, message, task.getOrderId(), TaskType.valueOf(task.getType()), xmlResponse, state);

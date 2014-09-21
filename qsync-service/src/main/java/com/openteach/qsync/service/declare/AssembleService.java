@@ -151,7 +151,7 @@ public class AssembleService {
 			TransportCommodity tc = transportCommoditiyList.get(i);
 			Commsku commsku = tc.getCommskuObject();
 			JkfOrderDetail jkfOrderDetail = new JkfOrderDetail();
-			jkfOrderDetail.setGoodsOrder(i);
+			jkfOrderDetail.setGoodsOrder(i + 1);
 			jkfOrderDetail.setGoodsName(commsku.getName());
 			jkfOrderDetail.setGoodsNo(commsku.getCommodityObject().getCategoryObject().getTariff());	//cc_kata_kplus_category.tariff
 			jkfOrderDetail.setGoodsModel(commsku.getProperties());
@@ -265,7 +265,8 @@ public class AssembleService {
 		goodsDeclar.setEeBusinessCompanyName(configService.getDeclareRecordName());
 		goodsDeclar.setOrderNumber(order.getCode());
 		goodsDeclar.setSubCarriageNo(order.getOrderTransportObject().getWaybillnumber());	//分运单号与总运单号填一样的数据
-		goodsDeclar.setFromCountry(order.getOrderTransportObject().getFromCountry());	//cc_kata_kplus_order_transport.from_country
+		
+//		goodsDeclar.setFromCountry(order.getOrderTransportObject().getFromCountry());	//cc_kata_kplus_order_transport.from_country
 		goodsDeclar.setPieceNumber(order.getTotalGoodsCount());
 		goodsDeclar.setRoughWeight(order.getShippingWeight());
 		goodsDeclar.setNetWeight(order.getGrossWeight());
@@ -309,11 +310,11 @@ public class AssembleService {
 		Double worth = 0.0;
 		List<GoodsDeclarDetail> goodsDeclarDetails = new ArrayList<GoodsDeclarDetail>();
 		goodsDeclarModule.setGoodsDeclarDetails(goodsDeclarDetails);
-		for(int i=0; i<transportCommoditiyList.size() && i<=3; i++) {
+		for(int i=0; i<transportCommoditiyList.size(); i++) {
 			TransportCommodity tc = transportCommoditiyList.get(i);
 			Commsku commsku = tc.getCommskuObject();
 			GoodsDeclarDetail cdd = new GoodsDeclarDetail();
-			cdd.setGoodsOrder(i);
+			cdd.setGoodsOrder(i + 1);
 			cdd.setMailTaxNo(commsku.getCommodityObject().getCategoryObject().getTariff());	//cc_kata_kplus_category.tariff
 			cdd.setGoodsItemNo(commsku.getSkucode()); // 由仓储提供 cc_kata_kplus_transport_commodity.goods_item_no   保税区 出物品   
 			cdd.setGoodsName(commsku.getName());
@@ -326,6 +327,7 @@ public class AssembleService {
 				throw new DataAssembleException("order.orderTransportObject.transportCommodityList(i).commsku.commodityObject.salesCountry.countryCode 产销国编码不能为空");
 			}
 			cdd.setProductionMarketingCountry(country.getCountryCode());	//cc_kata_kplus_commodity.sales_country
+			goodsDeclar.setFromCountry(country.getCountryCode());	//cc_kata_kplus_commodity.sales_country  269行 from_country 改成产销国
 			cdd.setBargainCurrency(configService.getDeclareCurrency());
 			cdd.setBargainTotalPrices(tc.getPrice() * tc.getDelivernum());
 			cdd.setDeclarePrice(tc.getPrice());

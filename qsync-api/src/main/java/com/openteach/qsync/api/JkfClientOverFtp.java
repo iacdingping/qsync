@@ -43,7 +43,6 @@ import com.openteach.qsync.api.exception.ApiException;
 import com.openteach.qsync.api.goods.response.secondery.PersonalGoodsSeconderyResponse;
 import com.openteach.qsync.api.utils.JaxbUtils;
 import com.openteach.qsync.util.common.Collections3;
-import com.openteach.qsync.util.common.DateUtil;
 
 /**
  * Over ftp
@@ -712,7 +711,15 @@ public abstract class JkfClientOverFtp implements JkfClient {
 										}
 									}
 									status = success ? TaskStatus.DECLARE_SUCCESS : TaskStatus.DECLARE_FAILED;
-									message = Collections3.extractToString(response.getBody().getList().get(0).getResultList(), "resultInfo", ";");
+									
+									if(response.getBody() == null 
+											|| response.getBody().getList() == null || response.getBody().getList().isEmpty()
+											|| response.getBody().getList().get(0).getResultList() == null 
+											|| response.getBody().getList().get(0).getResultList().isEmpty()) {
+										message = "响应格式错误";
+									} else {
+										message = Collections3.extractToString(response.getBody().getList().get(0).getResultList(), "resultInfo", ";");
+									}
 								}
 								
 								//清空队列里面的数据 用来检测超时
