@@ -531,7 +531,7 @@ public abstract class JkfClientOverFtp implements JkfClient {
 							stream = pr.getInputStream();
 						_retry:
 							if(ftp.storeFile(pr.requestFileName, stream)) {
-								logger.info("stored file to ftp server:" + pr.requestFileName + " businessNo:" + pr.responseKey);
+								logger.info(String.format("stored file to ftp server fileName[%s], businessNo[%s], request[\n%s\n]", pr.requestFileName, pr.responseKey, JaxbUtils.convertToXml(pr.request)));
 								pendingRequests.put(pr.responseKey, pr);
 								// 
 								pr.commitedTimestamp = System.currentTimeMillis();

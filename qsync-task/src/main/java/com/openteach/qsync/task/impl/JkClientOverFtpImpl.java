@@ -40,10 +40,13 @@ public class JkClientOverFtpImpl extends JkfClientOverFtp{
 		
 		CcSyncTaks task = tasks.get(0);
 		TaskStatus statusBefore = TaskStatus.valueOf(task.getStatus());
-		if(statusBefore.isEndState() && statusBefore != TaskStatus.NOT_PASS ) {
+		// 先是申报失败 然后是申报通过
+		// 什么情况下 不修改状态 ？  从TaskStatus.ordinal 后向前修改状态
+		// 防止读取文件时序颠倒 修改状态错误
+		if(statusBefore.isEndState() && statusBefore.ordinal() >= status.ordinal()) {
 			
 			if(statusBefore == TaskStatus.PASS && state!= null && state != ExaminationState.EXAMINATION_PASS) {
-				
+				// 99的电子审单通过  并且 当前的sate 不为99状态的 需要再次修改订单的报关状态
 			} else {
 				logger.info(String.format("order [%s], businessNo [%s] status [%s] is final and not the NOT_PASS status, donot modify the status. to be change status [%s]", 
 						task.getOrderId(), businessNoOrPreEntryNo, task.getStatus(), status.name()));
