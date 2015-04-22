@@ -53,6 +53,7 @@ public class TaskStorageOverDatabase implements TaskStorage {
 	public boolean updateStatus(String businessNo, TaskStatus status,
 			String message, Long orderId, TaskType taskType, String response, ExaminationState state) {
 		orderManager.updateDeclareStatus(orderId, taskType, status, state);
-		return ccSyncTaksManager.updateStatus(businessNo, status, message, status == TaskStatus.NOT_PASS, response);
+//		return ccSyncTaksManager.updateStatus(businessNo, status, message, status == TaskStatus.NOT_PASS, response);
+		return ccSyncTaksManager.updateStatus(businessNo, status, message, false, response);
 	}
 }

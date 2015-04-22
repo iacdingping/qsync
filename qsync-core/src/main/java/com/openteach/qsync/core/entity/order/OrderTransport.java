@@ -172,7 +172,6 @@ public class OrderTransport {
     /**
      * phonenumber       db_column: phonenumber 
      */	
-	@NotNull(message="收件人联系方式")
 	private java.lang.String phonenumber;
     /**
      * 发件人国别       db_column: addressor_country 
@@ -221,7 +220,7 @@ public class OrderTransport {
 	private String fromCountry;
 	@NotNull(message="包装种类")
 	private Integer packType;
-	@NotNull(message="申请单编号保税进口必填，指仓储企业事先在辅助系统申请的分送集报申请单编号")
+//	@NotNull(message="申请单编号保税进口必填，指仓储企业事先在辅助系统申请的分送集报申请单编号")
 	private String applicationFormNo;
 	@NotNull(message="物流企业名称")
 	private String logistics;

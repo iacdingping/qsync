@@ -366,6 +366,9 @@ public class Order {
 	 */
 	@NotNull(message="货款")
 	private Double commskuAmount;
+	@NotNull(message="报关方式")
+	private Integer type;
+	
 	public Order(){
 	}
 
@@ -819,6 +822,14 @@ public class Order {
 
 	public void setCommskuAmount(Double commskuAmount) {
 		this.commskuAmount = commskuAmount;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
 	}
 
 }

@@ -30,6 +30,14 @@ public class Exceptions {
 		return stringWriter.toString();
 	}
 
+	public static String getCurrentStackTrace() {
+		StringBuffer sb = new StringBuffer();
+		for(StackTraceElement ste : Thread.currentThread().getStackTrace()) { 
+			sb.append("at ").append(ste.getClassName()).append(".").append(ste.getMethodName()).append("(").append(ste.getLineNumber()).append(")").append("\n");
+		}
+		return sb.toString();
+	}
+	
 	/**
 	 * 判断异常是否由某些底层的异常引起.
 	 */
@@ -44,5 +52,9 @@ public class Exceptions {
 			cause = cause.getCause();
 		}
 		return false;
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(getCurrentStackTrace());
 	}
 }

@@ -124,11 +124,12 @@ public class AssembleService {
 		jkfOrderImportHead.setTradeTime(DateUtil.format(order.getOrdertime()));
 		jkfOrderImportHead.setCurrCode(configService.getDeclareCurrency());
 		jkfOrderImportHead.setTotalAmount(order.getAmount()); // 成交总价 = 支付价格（订单价格）+ 运费 + 税款
-		jkfOrderImportHead.setConsigneeEmail(order.getOrderTransportObject().getConsigneeEmail());	//cc_kata_kplus_order_transport.consignee_email
-		jkfOrderImportHead.setConsigneeTel(order.getOrderTransportObject().getPhonenumber());
+		jkfOrderImportHead.setConsigneeEmail(StringUtils.defaultIfEmpty(order.getOrderTransportObject().getConsigneeEmail(), order.getMemberObject().getEmail()));	//cc_kata_kplus_order_transport.consignee_email
+		jkfOrderImportHead.setConsigneeTel(StringUtils.defaultIfEmpty(order.getOrderTransportObject().getPhonenumber(), order.getOrderTransportObject().getHandphone()));
 		jkfOrderImportHead.setConsignee(order.getOrderTransportObject().getCongsignee());
 		jkfOrderImportHead.setConsigneeAddress(order.getOrderTransportObject().getPlace());
-		jkfOrderImportHead.setTotalCount(order.getTotalGoodsCount());
+//		jkfOrderImportHead.setTotalCount(order.getTotalGoodsCount());
+		jkfOrderImportHead.setTotalCount(1);
 		jkfOrderImportHead.setPostMode(order.getTransportationType().toString());	//cc_kata_kplus_order transportaion_type
 		Country country = countryManager.getById(order.getOrderTransportObject().getAddressorCountry());
 		if(country == null) {
@@ -178,7 +179,8 @@ public class AssembleService {
 		jkfGoodsPurchaser.setTelNumber(order.getMemberObject().getPhonenumber());
 		jkfGoodsPurchaser.setPaperType(order.getMemberObject().getCertificatesType());	//kata_kplus_member.certificates_type
 		jkfGoodsPurchaser.setPaperNumber(order.getMemberObject().getCertificates());	//kata_kplus_member.certificates
-		jkfGoodsPurchaser.setAddress(order.getMemberObject().getAddress());
+//		jkfGoodsPurchaser.setAddress(order.getMemberObject().getAddress());
+		jkfGoodsPurchaser.setAddress(order.getOrderTransportObject().getPlace());	//购买人地址也改成收货地址
 		orderInfo.setJkfGoodsPurchaser(jkfGoodsPurchaser);
 		body.setOrderInfoList(Arrays.asList(orderInfo));
 		
@@ -212,6 +214,7 @@ public class AssembleService {
 		jkfLogisticsInfo.setLogisticsTraceState(order.getLogisticsState());	// cc_kata_kplus_order.logistics_state
 		jkfLogisticsInfo.setWeight(order.getShippingWeight());
 		jkfLogisticsInfo.setPieceNumber(order.getTotalGoodsCount());
+//		jkfLogisticsInfo.setPieceNumber(1);
 		jkfLogisticsInfo.setHandleTimeStr(order.getOrdertime());
 		jkfLogisticsInfo.setStationCode(order.getStationCode());//cc_kata_kplus_order.station_code
 		jkfLogisticsInfo.setLicensePlateNumber(order.getLicensePlateNumber()); //cc_kata_kplus_order.license_plate_number
@@ -236,6 +239,19 @@ public class AssembleService {
 	
 	private final static long BASE_ID = 10000000000000L;
 	
+	private String generatePreEntryNO(Order order) {
+		return configService.getDeclareRecordNo().substring(configService.getDeclareRecordNo().length() - 4) + (BASE_ID + order.getId());
+	}
+	
+	public static void main(String[] args) {
+		String s = "DS14082701";
+		String orderNo = "2014050311942171";
+		int hashCode = Math.abs(orderNo.hashCode());
+		System.out.println(hashCode);
+		System.out.println(BASE_ID + hashCode);
+		System.out.println(s.substring(s.length() - 4) + (BASE_ID + hashCode));
+	}
+	
 	/**
 	 * 获取个人物品报关报文
 	 * @param order
@@ -250,8 +266,8 @@ public class AssembleService {
 		goodsDeclarModule.setGoodsDeclar(goodsDeclar);
 		goodsDeclar.setAccountBookNo(configService.getDeclareAccountBookNo());	//账册编号 由仓储企业提供
 		goodsDeclar.setInOutFlag("I");
-		goodsDeclar.setPreEntryNumber(configService.getDeclareRecordNo().substring(configService.getDeclareRecordNo().length() - 4) + (BASE_ID + order.getId() + System.currentTimeMillis()));	// 4位电商编码只要填后四位就行了
-		goodsDeclar.setImportType(configService.getDeclareType());
+		goodsDeclar.setPreEntryNumber(generatePreEntryNO(order));	// 4位电商编码只要填后四位就行了
+		goodsDeclar.setImportType(order.getType().intValue() == 1 ? "1" : "0");	// 1 保税区（1） 2直邮（0）
 		goodsDeclar.setInOutDateStr(new Date());
 		goodsDeclar.setInOutPortNumber(configService.getDeclareInOutPortNumber());
 		goodsDeclar.setArrivedPort(configService.getDeclareArrivedPort());
@@ -259,7 +275,11 @@ public class AssembleService {
 		goodsDeclar.setTransportToolFltNo(order.getOrderTransportObject().getToolFltNo());	//cc_kata_kplus_order_transport.tool_flt_no
 		goodsDeclar.setTransportTypeCode(order.getOrderTransportObject().getTypeCode());	//cc_kata_kplus_order_transport.type_code
 		goodsDeclar.setDeclareCompanyType(configService.getDeclareCompanyType());
-		goodsDeclar.setDeclareCompanyCode(configService.getDeclareCompanyCode());
+		
+		// 直邮与保税 企业编码进行区分 2015.4.22
+		goodsDeclar.setDeclareCompanyCode(order.getType().intValue() == 1 ? 
+				configService.getDeclareCompanyCode() : configService.getDeclareDirectCompanyCode());
+		
 		goodsDeclar.setDeclareCompanyName(configService.getDeclareCompanyName());
 		goodsDeclar.setEeBusinessCompanyCode(configService.getDeclareRecordNo());
 		goodsDeclar.setEeBusinessCompanyName(configService.getDeclareRecordName());
@@ -267,7 +287,8 @@ public class AssembleService {
 		goodsDeclar.setSubCarriageNo(order.getOrderTransportObject().getWaybillnumber());	//分运单号与总运单号填一样的数据
 		
 //		goodsDeclar.setFromCountry(order.getOrderTransportObject().getFromCountry());	//cc_kata_kplus_order_transport.from_country
-		goodsDeclar.setPieceNumber(order.getTotalGoodsCount());
+//		goodsDeclar.setPieceNumber(order.getTotalGoodsCount());		//件数用永远固定成1
+		goodsDeclar.setPieceNumber(1);
 		goodsDeclar.setRoughWeight(order.getShippingWeight());
 		goodsDeclar.setNetWeight(order.getGrossWeight());
 		goodsDeclar.setPackType(order.getOrderTransportObject().getPackType().toString());	//cc_kata_kplus_transportation.pack_type
@@ -377,7 +398,8 @@ public class AssembleService {
 		wayBill.setWayBillImportDto(dto);
 		dto.setWayBillNo(order.getOrderTransportObject().getWaybillnumber());
 		dto.setTotalWayBill(order.getOrderTransportObject().getWaybillnumber());
-		dto.setPackageNo(order.getTotalGoodsCount());
+//		dto.setPackageNo(order.getTotalGoodsCount());
+		dto.setPackageNo(1);
 		dto.setWeight(order.getShippingWeight());
 		dto.setNetWeight(order.getGrossWeight());
 		List<TransportCommodity> transportCommoditiyList = order.getOrderTransportObject().getTransportCommodityList();
@@ -410,7 +432,7 @@ public class AssembleService {
 		dto.setConsigneeArea(consigneeArea);
 		dto.setConsignee(order.getOrderTransportObject().getCongsignee());
 		dto.setConsigneeAddress(order.getOrderTransportObject().getPlace());
-		dto.setConsigneeTel(order.getOrderTransportObject().getPhonenumber());
+		dto.setConsigneeTel(StringUtils.defaultIfEmpty(order.getOrderTransportObject().getPhonenumber(), order.getOrderTransportObject().getHandphone()));
 		dto.setZipCode(order.getOrderTransportObject().getZipCode());	//cc_kata_kplus_order_transport.zip_code
 		dto.setCustomsCode(configService.getDeclareCustomsCode());
 		dto.setWorth(order.getTotalamout());

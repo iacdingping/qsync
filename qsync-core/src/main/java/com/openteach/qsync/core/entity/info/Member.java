@@ -211,7 +211,7 @@ public class Member {
     /**
      * address       db_column: address 
      */	
-	@NotNull(message="地址")
+	@NotNull(message="个人地址")
 	private java.lang.String address;
     /**
      * company       db_column: company 

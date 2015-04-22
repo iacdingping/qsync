@@ -8,6 +8,9 @@ public class ConfigService {
 	//企业备案编号
 	@Value("${declare.companyCode}")
 	private String declareCompanyCode;
+	//企业备案编号直邮
+	@Value("${declare.direct.companyCode}")
+	private String declareDirectCompanyCode;
 	//电商平台名称
 	@Value("${declare.companyName}")
 	private String declareCompanyName;
@@ -58,6 +61,12 @@ public class ConfigService {
 	}
 	public void setDeclareCompanyCode(String declareCompanyCode) {
 		this.declareCompanyCode = declareCompanyCode;
+	}
+	public String getDeclareDirectCompanyCode() {
+		return declareDirectCompanyCode;
+	}
+	public void setDeclareDirectCompanyCode(String declareDirectCompanyCode) {
+		this.declareDirectCompanyCode = declareDirectCompanyCode;
 	}
 	public String getDeclareBusinessType() {
 		return declareBusinessType;

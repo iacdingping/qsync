@@ -46,7 +46,6 @@
 		<org.json.version>20090211</org.json.version>
 		<commons-pool.version>1.6</commons-pool.version>
 		<commons-dbcp.version>20030825.184428</commons-dbcp.version>
-		<tomcat-jdbc.version>7.0.53</tomcat-jdbc.version>
 		<mysql-connector-java.version>5.1.24</mysql-connector-java.version>
 		<asm-all.version>3.0</asm-all.version>
 		<cglib.version>3.0</cglib.version>
@@ -189,7 +188,7 @@
 			<dependency>
 				<groupId>commons-dbcp</groupId>
 				<artifactId>commons-dbcp</artifactId>
-				<version>${commons-dbcp.version}</version>
+				<version>1.4</version>
 			</dependency>
 
 			<dependency>

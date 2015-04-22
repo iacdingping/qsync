@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,7 @@ import com.openteach.qsync.core.dao.order.OrderStatusDao;
 import com.openteach.qsync.core.entity.order.Order;
 import com.openteach.qsync.core.entity.order.OrderStatus;
 import com.openteach.qsync.core.query.order.OrderQuery;
+import com.openteach.qsync.util.common.Exceptions;
 
 
 /**
@@ -33,6 +36,8 @@ import com.openteach.qsync.core.query.order.OrderQuery;
 @Service
 @Transactional
 public class OrderManager {
+	
+	private Logger log = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private OrderDao orderDao;
@@ -113,6 +118,9 @@ public class OrderManager {
 		params.put("id", id);
 		params.put("declareStatus", declareStatus);
 		params.put("state", orderState);
+		
+		log.info(String.format("updated order id [%s] to state [%s], declareStatus [%s], stackTrace [%s]", 
+				id, orderState, declareStatus, Exceptions.getCurrentStackTrace()));
 		if(examinationState != null) {
 			params.put("returnType", examinationState.getState());
 		}
