@@ -85,5 +85,9 @@ public class OrderService {
 		orderTransport.setTransportCommodityList(transportCommodityList);;
 		order.setOrderTransportObject(orderTransport);
 	}
+
+	public Order getOrderById(Long id) {
+		return orderManager.getById(id);
+	}
 }
 

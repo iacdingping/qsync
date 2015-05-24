@@ -24,7 +24,6 @@ import com.openteach.qsync.core.dao.order.OrderStatusDao;
 import com.openteach.qsync.core.entity.order.Order;
 import com.openteach.qsync.core.entity.order.OrderStatus;
 import com.openteach.qsync.core.query.order.OrderQuery;
-import com.openteach.qsync.util.common.Exceptions;
 
 
 /**
@@ -119,8 +118,8 @@ public class OrderManager {
 		params.put("declareStatus", declareStatus);
 		params.put("state", orderState);
 		
-		log.info(String.format("updated order id [%s] to state [%s], declareStatus [%s], stackTrace [%s]", 
-				id, orderState, declareStatus, Exceptions.getCurrentStackTrace()));
+		log.info(String.format("updated order id [%s] to state [%s], declareStatus [%s]", 
+				id, orderState, declareStatus));
 		if(examinationState != null) {
 			params.put("returnType", examinationState.getState());
 		}

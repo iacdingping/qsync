@@ -71,6 +71,8 @@ public class SingleThreadTaskGenerator extends AbstractLifeCycle implements Task
 						if(0 == generate()) {
 							Thread.sleep(retryPeriod);
 						}
+						
+						Thread.sleep(5 * 1000);
 					} catch (InterruptedException e) {
 						LOGGER.error("generate task failed", e);
 						Thread.currentThread().interrupt();
@@ -115,21 +117,24 @@ public class SingleThreadTaskGenerator extends AbstractLifeCycle implements Task
 		for(Order o : oList) {
 			
 			try {
-					assembleService.mappingOrder(o);
-					XmlOrderRequest orderRequest = assembleService.getOrderXmlRequest(o);
-					storage.store(newTask(o.getId(), orderRequest, TaskType.ORDER_DECLARE, orderRequest.getBody().getOrderInfoList().get(0).getJkfSign().getBusinessNo(), null));
-					XmlLogisticsRequest logisticsRequest = assembleService.getLogisticsXmlRequest(o);
-					storage.store(newTask(o.getId(), logisticsRequest, TaskType.LOGISTICS_DECLARE, logisticsRequest.getBody().getLogisticsList().get(0).getJkfSign().getBusinessNo(), null));
-					XmlWaybillRequest waybillRequest = assembleService.getWaybillXmlRequest(o);
-					storage.store(newTask(o.getId(), waybillRequest, TaskType.WAY_BILL_DECLARE, waybillRequest.getBody().getWayBillList().get(0).getJkfSign().getBusinessNo(), null));
-					XmlGoodsDeclarRequest goodsDeclarRequest = assembleService.getGoodsXmlRequest(o);
-					String businessNo = goodsDeclarRequest.getBody().getGoodsDeclarModuleList().get(0).getJkfSign().getBusinessNo();
-					String preEntryNo = goodsDeclarRequest.getBody().getGoodsDeclarModuleList().get(0).getGoodsDeclar().getPreEntryNumber();
-					storage.store(newTask(o.getId(), goodsDeclarRequest, TaskType.PERSONAL_GOODS_DECLAR, businessNo, preEntryNo));
+				assembleService.mappingOrder(o);
+				XmlOrderRequest orderRequest = assembleService.getOrderXmlRequest(o);
+				storage.store(newTask(o.getId(), orderRequest, TaskType.ORDER_DECLARE, orderRequest.getBody().getOrderInfoList().get(0).getJkfSign().getBusinessNo(), null));
+				XmlLogisticsRequest logisticsRequest = assembleService.getLogisticsXmlRequest(o);
+				storage.store(newTask(o.getId(), logisticsRequest, TaskType.LOGISTICS_DECLARE, logisticsRequest.getBody().getLogisticsList().get(0).getJkfSign().getBusinessNo(), null));
+				XmlWaybillRequest waybillRequest = assembleService.getWaybillXmlRequest(o);
+				storage.store(newTask(o.getId(), waybillRequest, TaskType.WAY_BILL_DECLARE, waybillRequest.getBody().getWayBillList().get(0).getJkfSign().getBusinessNo(), null));
+				XmlGoodsDeclarRequest goodsDeclarRequest = assembleService.getGoodsXmlRequest(o);
+				String businessNo = goodsDeclarRequest.getBody().getGoodsDeclarModuleList().get(0).getJkfSign().getBusinessNo();
+				String preEntryNo = goodsDeclarRequest.getBody().getGoodsDeclarModuleList().get(0).getGoodsDeclar().getPreEntryNumber();
+				storage.store(newTask(o.getId(), goodsDeclarRequest, TaskType.PERSONAL_GOODS_DECLAR, businessNo, preEntryNo));
 			} catch (Throwable t) {
-					storage.store(newErrorTask(o.getId(), Exceptions.getStackTraceAsString(t)));
+				storage.store(newErrorTask(o.getId(), Exceptions.getStackTraceAsString(t)));
 			}
 			// TODO 标记订单已经被处理，处理中
+			
+			Order queriedObject = assembleService.getOrder(o.getId());
+			LOGGER.info(String.format("取多次BUG 记录信息 取出要报关的order id [%s] status [%s]", queriedObject.getId(), queriedObject.getStatus()));
 		}
 		return oList.size();
 	}

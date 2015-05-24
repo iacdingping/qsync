@@ -453,4 +453,8 @@ public class AssembleService {
 		request.setBody(body);
 		return request;
 	}
+
+	public Order getOrder(Long id) {
+		return orderService.getOrderById(id);
+	}
 }

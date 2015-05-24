@@ -302,7 +302,7 @@ public abstract class JkfClientOverFtp implements JkfClient {
 					PendingRequest pr = pendingRequests.get(key);
 					if(null != pr && System.currentTimeMillis() - pr.commitedTimestamp > timeout) {
 						pendingRequests.remove(key);
-						pr.failed(new ApiException("Timeout"));
+//						pr.failed(new ApiException("Timeout"));  //  just remove it  no needs to recover it again。海关会返回 运单已申报请勿重复申报
 					}
 				}
 			}
