@@ -185,7 +185,8 @@ public class AssembleService {
 		body.setOrderInfoList(Arrays.asList(orderInfo));
 		
 		JkfSign jkfSign = new JkfSign();
-		jkfSign.setBusinessType(configService.getDeclareBusinessType());
+//		jkfSign.setBusinessType(configService.getDeclareBusinessType());
+		jkfSign.setBusinessType(CommonXmlRequestHead.IMPORTORDER);
 		jkfSign.setCompanyCode(configService.getCompanyCode());
 		jkfSign.setDeclareType(configService.getDeclareType());
 		jkfSign.setBusinessNo(generateSequence());
@@ -221,7 +222,8 @@ public class AssembleService {
 		logistics.setJkfLogisticsInfo(jkfLogisticsInfo);
 		
 		JkfSign jkfSign = new JkfSign();
-		jkfSign.setBusinessType(configService.getDeclareBusinessType());
+//		jkfSign.setBusinessType(configService.getDeclareBusinessType());
+		jkfSign.setBusinessType(CommonXmlRequestHead.LOGISTICS_INFO);
 		jkfSign.setCompanyCode(configService.getCompanyCode());
 		jkfSign.setDeclareType(configService.getDeclareType());
 		jkfSign.setBusinessNo(generateSequence());
@@ -369,7 +371,8 @@ public class AssembleService {
 		
 		body.setGoodsDeclarModuleList(Arrays.asList(goodsDeclarModule));
 		JkfSign jkfSign = new JkfSign();
-		jkfSign.setBusinessType(configService.getDeclareBusinessType());
+//		jkfSign.setBusinessType(configService.getDeclareBusinessType());
+		jkfSign.setBusinessType(CommonXmlRequestHead.PERSONAL_GOODS_DECLAR);
 		jkfSign.setCompanyCode(configService.getCompanyCode());
 		jkfSign.setDeclareType(configService.getDeclareType());
 		jkfSign.setBusinessNo(generateSequence());
@@ -440,7 +443,8 @@ public class AssembleService {
 		dto.setCurrCode(configService.getDeclareCurrency());
 		
 		JkfSign jkfSign = new JkfSign();
-		jkfSign.setBusinessType(configService.getDeclareBusinessType());
+		jkfSign.setBusinessType(CommonXmlRequestHead.IMPORTBILL);
+//		jkfSign.setBusinessType(configService.getDeclareBusinessType());
 		jkfSign.setCompanyCode(configService.getCompanyCode());
 		jkfSign.setDeclareType(configService.getDeclareType());
 		jkfSign.setBusinessNo(generateSequence());
