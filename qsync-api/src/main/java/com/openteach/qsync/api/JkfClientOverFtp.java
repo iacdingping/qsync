@@ -404,7 +404,7 @@ public abstract class JkfClientOverFtp implements JkfClient {
 		}
 		ftp.enterLocalPassiveMode();
 		ftp.setDataTimeout(30000);
-		ftp.setFileType(FTP.BINARY_FILE_TYPE);
+//		ftp.setFileType(FTP.BINARY_FILE_TYPE);
 		return ftp;
 	}
 	
