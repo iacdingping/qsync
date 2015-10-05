@@ -245,15 +245,6 @@ public class AssembleService {
 		return configService.getDeclareRecordNo().substring(configService.getDeclareRecordNo().length() - 4) + (BASE_ID + order.getId());
 	}
 	
-	public static void main(String[] args) {
-		String s = "DS14082701";
-		String orderNo = "2014050311942171";
-		int hashCode = Math.abs(orderNo.hashCode());
-		System.out.println(hashCode);
-		System.out.println(BASE_ID + hashCode);
-		System.out.println(s.substring(s.length() - 4) + (BASE_ID + hashCode));
-	}
-	
 	/**
 	 * 获取个人物品报关报文
 	 * @param order
@@ -266,7 +257,7 @@ public class AssembleService {
 		
 		GoodsDeclar goodsDeclar = new GoodsDeclar();
 		goodsDeclarModule.setGoodsDeclar(goodsDeclar);
-		goodsDeclar.setAccountBookNo(configService.getDeclareAccountBookNo());	//账册编号 由仓储企业提供
+		goodsDeclar.setAccountBookNo(order.getType().intValue() == 1 ? configService.getDeclareAccountBookNo() : "");	//账册编号 由仓储企业提供 直邮模式不填写账册编号
 		goodsDeclar.setInOutFlag("I");
 		goodsDeclar.setPreEntryNumber(generatePreEntryNO(order));	// 4位电商编码只要填后四位就行了
 		goodsDeclar.setImportType(order.getType().intValue() == 1 ? "1" : "0");	// 1 保税区（1） 2直邮（0）
@@ -326,9 +317,9 @@ public class AssembleService {
 		if(sb.length() > 0) 
 			sb.deleteCharAt(sb.length() - 1);
 		goodsDeclar.setMajorGoodsName(sb.toString());
-		goodsDeclar.setInternalAreaCompanyName(configService.getDeclareInternalAreaCompanyName());
-		goodsDeclar.setInternalAreaCompanyNo(configService.getDeclareInternalAreaCompanyNo());
-		goodsDeclar.setApplicationFormNo(order.getOrderTransportObject().getApplicationFormNo());	//cc_kata_kplus_order_transport.application_form_no
+		goodsDeclar.setInternalAreaCompanyName(order.getType().intValue() == 1 ? configService.getDeclareInternalAreaCompanyName() : "");	// 区内企业name 直邮模式下为空
+		goodsDeclar.setInternalAreaCompanyNo(order.getType().intValue() == 1 ? configService.getDeclareInternalAreaCompanyNo() : "");	//仓储企业名称  直邮模式下为空
+		goodsDeclar.setApplicationFormNo(order.getType().intValue() == 1 ? order.getOrderTransportObject().getApplicationFormNo() : "");	//cc_kata_kplus_order_transport.application_form_no  分送集单申请编号  直邮模式下为空
 		goodsDeclar.setIsAuthorize((byte)0);
 		Double worth = 0.0;
 		List<GoodsDeclarDetail> goodsDeclarDetails = new ArrayList<GoodsDeclarDetail>();
@@ -339,7 +330,7 @@ public class AssembleService {
 			GoodsDeclarDetail cdd = new GoodsDeclarDetail();
 			cdd.setGoodsOrder(i + 1);
 			cdd.setMailTaxNo(commsku.getCommodityObject().getCategoryObject().getTariff());	//cc_kata_kplus_category.tariff
-			cdd.setGoodsItemNo(commsku.getSkucode()); // 由仓储提供 cc_kata_kplus_transport_commodity.goods_item_no   保税区 出物品   
+			cdd.setGoodsItemNo(commsku.getSkucode()); // 由仓储提供 cc_kata_kplus_transport_commodity.goods_item_no 商品货号 保税区 出物品  直邮模式下为空  
 			cdd.setGoodsName(commsku.getName());
 			cdd.setGoodsSpecification(commsku.getProperties());	//cc_kata_kplus_commodity.properties
 			Country country = countryManager.getById(commsku.getCommodityObject().getSalesCountry());

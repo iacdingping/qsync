@@ -28,10 +28,10 @@ public class NamedThreadFactory implements ThreadFactory {
             tNo = new AtomicInteger(0);
             this.prefix = prefix;
             if(null != group) {
-                    this.group = group;
+                this.group = group;
             } else {
-                    SecurityManager sm = System.getSecurityManager();
-                    group = (sm != null) ? sm.getThreadGroup() : Thread.currentThread().getThreadGroup();
+                SecurityManager sm = System.getSecurityManager();
+                this.group = (sm != null) ? sm.getThreadGroup() : Thread.currentThread().getThreadGroup();
             }
             this.isDaemon = isDaemon;
     }

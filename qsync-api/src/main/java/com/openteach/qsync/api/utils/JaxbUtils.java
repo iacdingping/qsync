@@ -7,12 +7,17 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 
  * @author rqq
  * 
  */
 public class JaxbUtils {
+	
+	private static Logger log = LoggerFactory.getLogger(JaxbUtils.class);
 
 	/**
 	 * JavaBean转换成xml 默认编码UTF-8
@@ -44,6 +49,7 @@ public class JaxbUtils {
 			marshaller.marshal(obj, writer);
 			result = writer.toString();
 		} catch (Exception e) {
+			log.error("format obj : {} to Xml error", obj, e);
 			e.printStackTrace();
 		}
 
@@ -65,9 +71,11 @@ public class JaxbUtils {
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			t = (T) unmarshaller.unmarshal(new StringReader(xml));
 		} catch (Exception e) {
+			log.error("format xml : {} to bean error", xml, e);
 			e.printStackTrace();
 		}
 
 		return t;
 	}
+	
 }

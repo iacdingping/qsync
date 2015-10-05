@@ -20,7 +20,7 @@ import com.openteach.qsync.api.utils.JaxbUtils;
 
 public class JkfClientOverFtpTest {
 
-	private JkfClientOverFtp jkfClient;
+	private JkfClientOverFtp jkfClient = null;
 	
 	@Before
 	public void initialize() {
@@ -41,7 +41,8 @@ public class JkfClientOverFtpTest {
 	
 	@After
 	public void release() {
-		jkfClient.release();
+		if(jkfClient != null)
+			jkfClient.release();
 	}
 	
 	@Test

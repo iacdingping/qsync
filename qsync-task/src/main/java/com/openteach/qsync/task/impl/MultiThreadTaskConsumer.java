@@ -215,8 +215,7 @@ public class MultiThreadTaskConsumer extends AbstractLifeCycle implements TaskCo
 		@Override
 		public void run() {
 			
-			//
-			recover();
+			//recover();	//不recover数据 	
 			latch.countDown();
 			// wait other threads
 			

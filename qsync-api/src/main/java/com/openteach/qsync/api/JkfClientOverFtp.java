@@ -207,7 +207,7 @@ public abstract class JkfClientOverFtp implements JkfClient {
 
 	@Override
 	public void async(XmlRequest request, Callback callback, String responseKey, Class<? extends XmlResponse> responseClass, boolean isRecovered) {
-		async(request, callback, null, responseClass, isRecovered);
+		async(request, callback, null, responseKey, responseClass, isRecovered);
 	}
 	
 	@Override
@@ -528,7 +528,8 @@ public abstract class JkfClientOverFtp implements JkfClient {
 //								pendingRequests.put(pr.responseKey, pr);
 //								continue;
 //							}
-							stream = pr.getInputStream();
+							if(pr != null)
+								stream = pr.getInputStream();
 						_retry:
 							if(ftp.storeFile(pr.requestFileName, stream)) {
 								logger.info(String.format("stored file to ftp server fileName[%s], businessNo[%s], request[\n%s\n]", pr.requestFileName, pr.responseKey, JaxbUtils.convertToXml(pr.request)));
@@ -693,13 +694,21 @@ public abstract class JkfClientOverFtp implements JkfClient {
 								TaskStatus status = null;
 								String message = "";
 								ExaminationState state = null;
+								boolean errorFormat = false;
 								// parse xml file
 								if(xml.indexOf("approveResult") != -1) {
 									// 海关平台回执
 									PersonalGoodsSeconderyResponse response = JaxbUtils.converyToJavaBean(xml, PersonalGoodsSeconderyResponse.class);
-									state = ExaminationState.getByState(response.getBody().getJkfGoodsDeclar().getApproveResult());
-									status = state.getStatus();
-									message = response.getBody().getJkfGoodsDeclar().getApproveComment();
+									if(response == null) {
+										message = "回执报文格式错误";
+										errorFormat = true;
+										state = ExaminationState.UNKNOW;
+										status = state.getStatus();
+									} else {
+										state = ExaminationState.getByState(response.getBody().getJkfGoodsDeclar().getApproveResult());
+										status = state.getStatus();
+										message = response.getBody().getJkfGoodsDeclar().getApproveComment();
+									}
 								} else {
 									// 海关对外平台回执
 									CommonXmlResponse response = JaxbUtils.converyToJavaBean(xml, CommonXmlResponse.class);
@@ -712,23 +721,26 @@ public abstract class JkfClientOverFtp implements JkfClient {
 									}
 									status = success ? TaskStatus.DECLARE_SUCCESS : TaskStatus.DECLARE_FAILED;
 									
-									if(response.getBody() == null 
+									if(response == null || response.getBody() == null 
 											|| response.getBody().getList() == null || response.getBody().getList().isEmpty()
 											|| response.getBody().getList().get(0).getResultList() == null 
 											|| response.getBody().getList().get(0).getResultList().isEmpty()) {
-										message = "响应格式错误";
+										message = "回执报文格式错误";
+										errorFormat = true;
 									} else {
 										message = Collections3.extractToString(response.getBody().getList().get(0).getResultList(), "resultInfo", ";");
 									}
 								}
 								
 								//清空队列里面的数据 用来检测超时
-								pr = pendingRequests.remove(key);
+								if(key != null)
+									pr = pendingRequests.remove(key);
 								
 								//更新数据状态
 								boolean updated = updateStatus(key, status, message, xml, state);
 								boolean fileInvalid = (System.currentTimeMillis() - f.getTimestamp().getTimeInMillis()) > DEFAULT_DELETE_FILE_TIME_INTERVAL;
-								if(updated || fileInvalid) {
+								// 更新到数据 或者 文件超时 或者 格式错误 都删除文件
+								if(updated || fileInvalid || errorFormat) {
 									if(fileInvalid) {
 										logger.info("Notice file name:" + f.getName() + " businessNo:" + key + " which created " + DEFAULT_DELETE_FILE_INVALID_HOUR + " hour before.");
 									}
