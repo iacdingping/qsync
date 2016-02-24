@@ -20,11 +20,11 @@ import org.springframework.stereotype.Service;
 
 import com.openteach.qsync.api.CommonXmlRequestHead;
 import com.openteach.qsync.api.JkfSign;
-import com.openteach.qsync.api.goods.request.GoodsDeclar;
-import com.openteach.qsync.api.goods.request.GoodsDeclarDetail;
-import com.openteach.qsync.api.goods.request.GoodsDeclarModule;
+import com.openteach.qsync.api.goods.request.GoodsDeclare;
+import com.openteach.qsync.api.goods.request.GoodsDeclareDetail;
+import com.openteach.qsync.api.goods.request.GoodsDeclareModule;
 import com.openteach.qsync.api.goods.request.XmlGoodsDeclarRequest;
-import com.openteach.qsync.api.goods.request.XmlGoodsDeclarRequestBody;
+import com.openteach.qsync.api.goods.request.XmlGoodsDeclareRequestBody;
 import com.openteach.qsync.api.logistics.request.JkfLogisticsInfo;
 import com.openteach.qsync.api.logistics.request.Logistics;
 import com.openteach.qsync.api.logistics.request.XmlLogisticsRequest;
@@ -123,7 +123,7 @@ public class AssembleService {
 		jkfOrderImportHead.seteCommerceName(configService.getDeclareRecordName());
 		jkfOrderImportHead.setTradeTime(DateUtil.format(order.getOrdertime()));
 		jkfOrderImportHead.setCurrCode(configService.getDeclareCurrency());
-		jkfOrderImportHead.setTotalAmount(order.getAmount()); // 成交总价 = 支付价格（订单价格）+ 运费 + 税款
+		jkfOrderImportHead.setTotalAmount(order.getCommskuAmount()); // 成交总价 = 支付价格（订单价格）+ 运费 + 税款
 		jkfOrderImportHead.setConsigneeEmail(StringUtils.defaultIfEmpty(order.getOrderTransportObject().getConsigneeEmail(), order.getMemberObject().getEmail()));	//cc_kata_kplus_order_transport.consignee_email
 		jkfOrderImportHead.setConsigneeTel(StringUtils.defaultIfEmpty(order.getOrderTransportObject().getPhonenumber(), order.getOrderTransportObject().getHandphone()));
 		jkfOrderImportHead.setConsignee(order.getOrderTransportObject().getCongsignee());
@@ -138,12 +138,13 @@ public class AssembleService {
 		if(StringUtils.isBlank(country.getCountryCode())) {
 			throw new DataAssembleException("order.orderTransportObject.addressorCountry.countryCode 国别码不能为空");
 		}
-		jkfOrderImportHead.setSalerCountry(country.getCountryCode());		//order_transport.addressorCountry
-		jkfOrderImportHead.setAddressorName(order.getOrderTransportObject().getAddressorName());	//order_transport.addressorName
+		jkfOrderImportHead.setSenderCountry(country.getCountryCode());		//order_transport.addressorCountry
+		jkfOrderImportHead.setSenderName(order.getOrderTransportObject().getAddressorName());	//order_transport.addressorName
 		jkfOrderImportHead.setPurchaserId(order.getMemberObject().getId().toString());
 		jkfOrderImportHead.setLogisCompanyName(order.getOrderTransportObject().getLogistics());	//order_transport.logistics
 		jkfOrderImportHead.setLogisCompanyCode(order.getOrderTransportObject().getWaybillCode());	//cc_kata_kplus_transportationcompany.waybillcode
-		jkfOrderImportHead.setZipCode(order.getOrderTransportObject().getWaybillZipCode());	//??? cc_kata_kplus_transportationcompany.waybill_zip_code 
+		jkfOrderImportHead.setZipCode(order.getOrderTransportObject().getWaybillZipCode());	//??? cc_kata_kplus_transportationcompany.waybill_zip_code
+		jkfOrderImportHead.setUserProcotol(configService.getUserProtocal());
 		orderInfo.setJkfOrderImportHead(jkfOrderImportHead);
 		
 		List<JkfOrderDetail> jkfOrderDetailList = new ArrayList<JkfOrderDetail>();
@@ -153,8 +154,10 @@ public class AssembleService {
 			Commsku commsku = tc.getCommskuObject();
 			JkfOrderDetail jkfOrderDetail = new JkfOrderDetail();
 			jkfOrderDetail.setGoodsOrder(i + 1);
+			//jkfOrderDetail.setItemNo("");				//TODO: 新增 项号 2015.11.12
+			jkfOrderDetail.setSourceNo(commsku.getSkucode());				//TODO: 新增 料号 2015.11.12
 			jkfOrderDetail.setGoodsName(commsku.getName());
-			jkfOrderDetail.setGoodsNo(commsku.getCommodityObject().getCategoryObject().getTariff());	//cc_kata_kplus_category.tariff
+			jkfOrderDetail.setCodeTs(commsku.getCommodityObject().getCategoryObject().getTariff());	//cc_kata_kplus_category.tariff
 			jkfOrderDetail.setGoodsModel(commsku.getProperties());
 			Country country2 = countryManager.getById(commsku.getCommodityObject().getSalesCountry());
 			if(country2 == null) {
@@ -163,11 +166,11 @@ public class AssembleService {
 			if(StringUtils.isBlank(country2.getCountryCode())) {
 				throw new DataAssembleException("order.orderTransportObject.transportCommodityList[" + i + "]commskuObject.CommodityObject.SalesCountry 产销国别代码 不能为空");
 			}
-			jkfOrderDetail.setCountryCode(country2.getCountryCode());	//cc_kata_kplus_commodity.sales_country
+			jkfOrderDetail.setOriginCountry(country2.getCountryCode());	//cc_kata_kplus_commodity.sales_country
 			jkfOrderDetail.setUnitPrice(tc.getPrice());
 			jkfOrderDetail.setGoodsCount(tc.getDelivernum().doubleValue());
 			jkfOrderDetail.setGoodsUnit(commsku.getCommodityObject().getUnitObject().getCode());	//cc_kata_kplus_unit.code
-			jkfOrderDetail.setWeight(commsku.getCommodityObject().getWeight());
+			jkfOrderDetail.setGrossWeight(commsku.getCommodityObject().getWeight());
 			jkfOrderDetailList.add(jkfOrderDetail);
 		}
 		orderInfo.setJkfOrderDetailList(jkfOrderDetailList);
@@ -252,21 +255,21 @@ public class AssembleService {
 	 */
 	public XmlGoodsDeclarRequest getGoodsXmlRequest(Order order) {
 		XmlGoodsDeclarRequest request = new XmlGoodsDeclarRequest();
-		XmlGoodsDeclarRequestBody body = new XmlGoodsDeclarRequestBody();
-		GoodsDeclarModule goodsDeclarModule = new GoodsDeclarModule();
+		XmlGoodsDeclareRequestBody body = new XmlGoodsDeclareRequestBody();
+		GoodsDeclareModule goodsDeclarModule = new GoodsDeclareModule();
 		
-		GoodsDeclar goodsDeclar = new GoodsDeclar();
-		goodsDeclarModule.setGoodsDeclar(goodsDeclar);
+		GoodsDeclare goodsDeclar = new GoodsDeclare();
+		goodsDeclarModule.setGoodsDeclare(goodsDeclar);
 		goodsDeclar.setAccountBookNo(order.getType().intValue() == 1 ? configService.getDeclareAccountBookNo() : "");	//账册编号 由仓储企业提供 直邮模式不填写账册编号
-		goodsDeclar.setInOutFlag("I");
+		goodsDeclar.setIeFlag("I");
 		goodsDeclar.setPreEntryNumber(generatePreEntryNO(order));	// 4位电商编码只要填后四位就行了
 		goodsDeclar.setImportType(order.getType().intValue() == 1 ? "1" : "0");	// 1 保税区（1） 2直邮（0）
 		goodsDeclar.setInOutDateStr(new Date());
-		goodsDeclar.setInOutPortNumber(configService.getDeclareInOutPortNumber());
-		goodsDeclar.setArrivedPort(configService.getDeclareArrivedPort());
-		goodsDeclar.setTransportTool(order.getOrderTransportObject().getToolFltName());
-		goodsDeclar.setTransportToolFltNo(order.getOrderTransportObject().getToolFltNo());	//cc_kata_kplus_order_transport.tool_flt_no
-		goodsDeclar.setTransportTypeCode(order.getOrderTransportObject().getTypeCode());	//cc_kata_kplus_order_transport.type_code
+		goodsDeclar.setIePort(configService.getDeclareInOutPortNumber());
+		goodsDeclar.setDestinationPort(configService.getDeclareArrivedPort());
+		goodsDeclar.setTrafName(order.getOrderTransportObject().getToolFltName());
+		goodsDeclar.setVoyageNo(order.getOrderTransportObject().getToolFltNo());	//cc_kata_kplus_order_transport.tool_flt_no
+		goodsDeclar.setTrafMode(order.getOrderTransportObject().getTypeCode());	//cc_kata_kplus_order_transport.type_code
 		goodsDeclar.setDeclareCompanyType(configService.getDeclareCompanyType());
 		
 		// 直邮与保税 企业编码进行区分 2015.4.22
@@ -274,25 +277,25 @@ public class AssembleService {
 				configService.getDeclareCompanyCode() : configService.getDeclareDirectCompanyCode());
 		
 		goodsDeclar.setDeclareCompanyName(configService.getDeclareCompanyName());
-		goodsDeclar.setEeBusinessCompanyCode(configService.getDeclareRecordNo());
-		goodsDeclar.setEeBusinessCompanyName(configService.getDeclareRecordName());
-		goodsDeclar.setOrderNumber(order.getCode());
-		goodsDeclar.setSubCarriageNo(order.getOrderTransportObject().getWaybillnumber());	//分运单号与总运单号填一样的数据
+		goodsDeclar.seteCommerceCode(configService.getDeclareRecordNo());
+		goodsDeclar.seteCommerceName(configService.getDeclareRecordName());
+		goodsDeclar.setOrderNo(order.getCode());
+		goodsDeclar.setWayBill(order.getOrderTransportObject().getWaybillnumber());	//分运单号与总运单号填一样的数据
 		
 //		goodsDeclar.setFromCountry(order.getOrderTransportObject().getFromCountry());	//cc_kata_kplus_order_transport.from_country
 //		goodsDeclar.setPieceNumber(order.getTotalGoodsCount());		//件数用永远固定成1
-		goodsDeclar.setPieceNumber(1);
-		goodsDeclar.setRoughWeight(order.getShippingWeight());
+		goodsDeclar.setPackNo(1);
+		goodsDeclar.setGrossWeight(order.getShippingWeight());
 		goodsDeclar.setNetWeight(order.getGrossWeight());
-		goodsDeclar.setPackType(order.getOrderTransportObject().getPackType().toString());	//cc_kata_kplus_transportation.pack_type
+		goodsDeclar.setWarpType(order.getOrderTransportObject().getPackType().toString());	//cc_kata_kplus_transportation.pack_type
 		goodsDeclar.setRemark("");
-		goodsDeclar.setDeclarePortCode(configService.getDeclareInOutPortNumber());
+		goodsDeclar.setDeclPort(configService.getDeclareInOutPortNumber());
 		goodsDeclar.setEnteringPerson("9999");
 		goodsDeclar.setEnteringCompanyName("9999");
-		goodsDeclar.setDeclarantCode("");
-		goodsDeclar.setGoodsYardCode(configService.getDeclareGoodsYardCode());
-		goodsDeclar.setSender(order.getOrderTransportObject().getAddressorName());	// cc_kata_kplus_order_transport.addressor_name
-		goodsDeclar.setReceiver(order.getOrderTransportObject().getCongsignee());
+		goodsDeclar.setDeclarantNo("");
+		goodsDeclar.setCustomsField(configService.getDeclareGoodsYardCode());
+		goodsDeclar.setSenderName(order.getOrderTransportObject().getAddressorName());	// cc_kata_kplus_order_transport.addressor_name
+		goodsDeclar.setConsignee(order.getOrderTransportObject().getCongsignee());
 		Country senderCountry = countryManager.getById(order.getOrderTransportObject().getAddressorCountry());
 		if(senderCountry == null) {
 			throw new DataAssembleException("order.orderTransportObject.addressorCountry 发件人国别不能为空");
@@ -302,10 +305,10 @@ public class AssembleService {
 		}
 		goodsDeclar.setSenderCountry(senderCountry.getCountryCode());  //cc_kata_kplus_order_transport.addressor_country
 		goodsDeclar.setSenderCity(order.getOrderTransportObject().getAddressorCity());	//cc_kata_kplus_order_transport.addressor_city
-		goodsDeclar.setReceiverPapersType(order.getMemberObject().getCertificatesType().substring(1));	//kata_kplus_member.certificates_type 
-		goodsDeclar.setReceiverPapersNo(order.getMemberObject().getCertificates());	//kata_kplus_member.certificates
+		goodsDeclar.setPaperType(order.getMemberObject().getCertificatesType().substring(1));	//kata_kplus_member.certificates_type 
+		goodsDeclar.setPaperNumber(order.getMemberObject().getCertificates());	//kata_kplus_member.certificates
 		//worth见302
-		goodsDeclar.setCurrency(configService.getDeclareCurrency());
+		goodsDeclar.setCurrCode(configService.getDeclareCurrency());
 		
 		List<TransportCommodity> transportCommoditiyList = order.getOrderTransportObject().getTransportCommodityList();
 		StringBuilder sb = new StringBuilder();
@@ -316,23 +319,23 @@ public class AssembleService {
 		}
 		if(sb.length() > 0) 
 			sb.deleteCharAt(sb.length() - 1);
-		goodsDeclar.setMajorGoodsName(sb.toString());
+		goodsDeclar.setMainGName(sb.toString());
 		goodsDeclar.setInternalAreaCompanyName(order.getType().intValue() == 1 ? configService.getDeclareInternalAreaCompanyName() : "");	// 区内企业name 直邮模式下为空
 		goodsDeclar.setInternalAreaCompanyNo(order.getType().intValue() == 1 ? configService.getDeclareInternalAreaCompanyNo() : "");	//仓储企业名称  直邮模式下为空
 		goodsDeclar.setApplicationFormNo(order.getType().intValue() == 1 ? order.getOrderTransportObject().getApplicationFormNo() : "");	//cc_kata_kplus_order_transport.application_form_no  分送集单申请编号  直邮模式下为空
 		goodsDeclar.setIsAuthorize((byte)0);
 		Double worth = 0.0;
-		List<GoodsDeclarDetail> goodsDeclarDetails = new ArrayList<GoodsDeclarDetail>();
-		goodsDeclarModule.setGoodsDeclarDetails(goodsDeclarDetails);
+		List<GoodsDeclareDetail> goodsDeclarDetails = new ArrayList<GoodsDeclareDetail>();
+		goodsDeclarModule.setGoodsDeclareDetails(goodsDeclarDetails);
 		for(int i=0; i<transportCommoditiyList.size(); i++) {
 			TransportCommodity tc = transportCommoditiyList.get(i);
 			Commsku commsku = tc.getCommskuObject();
-			GoodsDeclarDetail cdd = new GoodsDeclarDetail();
+			GoodsDeclareDetail cdd = new GoodsDeclareDetail();
 			cdd.setGoodsOrder(i + 1);
-			cdd.setMailTaxNo(commsku.getCommodityObject().getCategoryObject().getTariff());	//cc_kata_kplus_category.tariff
+			cdd.setCodeTs(commsku.getCommodityObject().getCategoryObject().getTariff());	//cc_kata_kplus_category.tariff
 			cdd.setGoodsItemNo(commsku.getSkucode()); // 由仓储提供 cc_kata_kplus_transport_commodity.goods_item_no 商品货号 保税区 出物品  直邮模式下为空  
 			cdd.setGoodsName(commsku.getName());
-			cdd.setGoodsSpecification(commsku.getProperties());	//cc_kata_kplus_commodity.properties
+			cdd.setGoodsModel(commsku.getProperties());	//cc_kata_kplus_commodity.properties
 			Country country = countryManager.getById(commsku.getCommodityObject().getSalesCountry());
 			if(country == null) {
 				throw new DataAssembleException("order.orderTransportObject.transportCommodityList(i).commsku.commodityObject.salesCountry 产销国不能为空");
@@ -340,27 +343,29 @@ public class AssembleService {
 			if(StringUtils.isBlank(country.getCountryCode())) {
 				throw new DataAssembleException("order.orderTransportObject.transportCommodityList(i).commsku.commodityObject.salesCountry.countryCode 产销国编码不能为空");
 			}
-			cdd.setProductionMarketingCountry(country.getCountryCode());	//cc_kata_kplus_commodity.sales_country
-			goodsDeclar.setFromCountry(country.getCountryCode());	//cc_kata_kplus_commodity.sales_country  269行 from_country 改成产销国
-			cdd.setBargainCurrency(configService.getDeclareCurrency());
-			cdd.setBargainTotalPrices(tc.getPrice() * tc.getDelivernum());
-			cdd.setDeclarePrice(tc.getPrice());
-			cdd.setDeclareTotalPrices(tc.getPrice() * tc.getDelivernum());
-			worth += cdd.getDeclareTotalPrices();
-			cdd.setPurpose("");
+			cdd.setOriginCountry(country.getCountryCode());	//cc_kata_kplus_commodity.sales_country
+			goodsDeclar.setTradeCountry(country.getCountryCode());	//cc_kata_kplus_commodity.sales_country  269行 from_country 改成产销国
+			cdd.setTradeCurr(configService.getDeclareCurrency());
+			cdd.setTradeTotal(tc.getPrice() * tc.getDelivernum());
+			cdd.setDeclPrice(tc.getPrice());
+			cdd.setDeclTotalPrice(tc.getPrice() * tc.getDelivernum());
+			worth += cdd.getDeclTotalPrice();
+			cdd.setUseTo("");
 			cdd.setDeclareCount(tc.getDelivernum());
-			cdd.setDeclareMeasureUnit(commsku.getCommodityObject().getUnitObject().getCode());	//cc_kata_kplus_unit.code
-			cdd.setGoodsRoughWeight(commsku.getCommodityObject().getWeight());
+			cdd.setGoodsUnit(commsku.getCommodityObject().getUnitObject().getCode());	//cc_kata_kplus_unit.code
+			cdd.setGoodsGrossWeight(commsku.getCommodityObject().getWeight());
 			cdd.setFirstUnit(commsku.getCommodityObject().getUnitObject().getCode());	//cc_kata_kplus_unit.code
 			cdd.setFirstCount(tc.getDelivernum());
 			
 			cdd.setSecondUnit(commsku.getCommodityObject().getUnitObject().getCode());	// 第一单位与第二单位一样???
 			cdd.setSecondCount(tc.getDelivernum());			//同上 ???
+			cdd.setProductRecordNo("");						//TODO: 产品国检备案编号 新增 2015.11.12
+			cdd.setWebSite("");								//TODO: 商品网址 新增 2015.11.12
 			goodsDeclarDetails.add(cdd);
 		}
 		goodsDeclar.setWorth(worth);
 		
-		body.setGoodsDeclarModuleList(Arrays.asList(goodsDeclarModule));
+		body.setGoodsDeclareModuleList(Arrays.asList(goodsDeclarModule));
 		JkfSign jkfSign = new JkfSign();
 //		jkfSign.setBusinessType(configService.getDeclareBusinessType());
 		jkfSign.setBusinessType(CommonXmlRequestHead.PERSONAL_GOODS_DECLAR);
@@ -429,7 +434,7 @@ public class AssembleService {
 		dto.setConsigneeTel(StringUtils.defaultIfEmpty(order.getOrderTransportObject().getPhonenumber(), order.getOrderTransportObject().getHandphone()));
 		dto.setZipCode(order.getOrderTransportObject().getZipCode());	//cc_kata_kplus_order_transport.zip_code
 		dto.setCustomsCode(configService.getDeclareCustomsCode());
-		dto.setWorth(order.getTotalamout());
+		dto.setWorth(order.getCommskuAmount());
 		dto.setImportDateString(new Date());
 		dto.setCurrCode(configService.getDeclareCurrency());
 		

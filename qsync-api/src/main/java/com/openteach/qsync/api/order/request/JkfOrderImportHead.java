@@ -14,15 +14,16 @@ import javax.xml.bind.annotation.XmlType;
 public class JkfOrderImportHead {
 
 	/**
-	 * 电商平台名称
+	 * 电商企业编码
 	 */
 	@XmlElement(required = true)
-	private String companyName;
+	private String eCommerceCode;
 	/**
-	 * 电商平台编号
+	 * 电商企业名称
 	 */
 	@XmlElement(required = true)
-	private String companyCode;
+	private String eCommerceName;
+	
 	/**
 	 * 进出口标志 I:进口E:出口
 	 */
@@ -71,15 +72,15 @@ public class JkfOrderImportHead {
 	@Deprecated
 	private Double feeAmount;
 	/**
-	 * 电商企业编码
+	 * 电商平台名称
 	 */
 	@XmlElement(required = true)
-	private String eCommerceCode;
+	private String companyName;
 	/**
-	 * 电商企业名称
+	 * 电商平台编号
 	 */
 	@XmlElement(required = true)
-	private String eCommerceName;
+	private String companyCode;
 	/**
 	 * 成交时间 format : yyyy-mm-dd HH:MM:SS
 	 */
@@ -129,12 +130,12 @@ public class JkfOrderImportHead {
 	 * 发件人国别
 	 */
 	@XmlElement(required = true)
-	private String salerCountry;
+	private String senderCountry;
 	/**
 	 * 发件人姓名
 	 */
 	@XmlElement(required = true)
-	private String addressorName;
+	private String senderName;
 	/**
 	 * 购买人ID
 	 */
@@ -167,7 +168,12 @@ public class JkfOrderImportHead {
 	 */
 	@XmlElement(required = false)
 	@Deprecated
-	private String willBills;
+	private String wayBills;
+	@XmlElement(required = false)
+	@Deprecated
+	private Double rate;
+	@XmlElement
+	private String userProcotol;
 	public String getCompanyName() {
 		return companyName;
 	}
@@ -300,17 +306,17 @@ public class JkfOrderImportHead {
 	public void setPostMode(String postMode) {
 		this.postMode = postMode;
 	}
-	public String getSalerCountry() {
-		return salerCountry;
+	public String getSenderCountry() {
+		return senderCountry;
 	}
-	public void setSalerCountry(String salerCountry) {
-		this.salerCountry = salerCountry;
+	public void setSenderCountry(String senderCountry) {
+		this.senderCountry = senderCountry;
 	}
-	public String getAddressorName() {
-		return addressorName;
+	public String getSenderName() {
+		return senderName;
 	}
-	public void setAddressorName(String addressorName) {
-		this.addressorName = addressorName;
+	public void setSenderName(String senderName) {
+		this.senderName = senderName;
 	}
 	public String getPurchaserId() {
 		return purchaserId;
@@ -342,10 +348,22 @@ public class JkfOrderImportHead {
 	public void setNote(String note) {
 		this.note = note;
 	}
-	public String getWillBills() {
-		return willBills;
+	public String getWayBills() {
+		return wayBills;
 	}
-	public void setWillBills(String willBills) {
-		this.willBills = willBills;
+	public void setWayBills(String wayBills) {
+		this.wayBills = wayBills;
+	}
+	public Double getRate() {
+		return rate;
+	}
+	public void setRate(Double rate) {
+		this.rate = rate;
+	}
+	public String getUserProcotol() {
+		return userProcotol;
+	}
+	public void setUserProcotol(String userProcotol) {
+		this.userProcotol = userProcotol;
 	}
 }

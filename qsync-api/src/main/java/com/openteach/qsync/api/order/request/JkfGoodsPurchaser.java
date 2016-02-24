@@ -20,12 +20,12 @@ public class JkfGoodsPurchaser {
 	@XmlElement(required = true)
 	private String id;
 	/**
-	 * 姓名
+	 * 购买人名称
 	 */
 	@XmlElement(required = true)
 	private String name;
 	/**
-	 * 注册邮箱
+	 * 购买人邮箱
 	 */
 	@XmlElement(required = true)
 	private String email;
@@ -34,6 +34,11 @@ public class JkfGoodsPurchaser {
 	 */
 	@XmlElement(required = true)
 	private String telNumber;
+	/**
+	 * 地址
+	 */
+	@XmlElement(required = true)
+	private String address;
 	/**
 	 * 证件类型01:身份证（试点期间只能是身份证） 02:护照 03:其他
 	 */
@@ -44,11 +49,7 @@ public class JkfGoodsPurchaser {
 	 */
 	@XmlElement(required = true)
 	private String paperNumber;
-	/**
-	 * 地址
-	 */
-	@XmlElement(required = true)
-	private String address;
+	
 	public String getId() {
 		return id;
 	}

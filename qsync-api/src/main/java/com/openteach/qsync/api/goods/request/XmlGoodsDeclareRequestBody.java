@@ -15,21 +15,21 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType (name="body")
-public class XmlGoodsDeclarRequestBody {
+public class XmlGoodsDeclareRequestBody {
 
 	/**
 	 * 
 	 */
 	@XmlElementWrapper
-	@XmlElement(required = true, name="goodsDeclarModule")
-	private List<GoodsDeclarModule> goodsDeclarModuleList;
+	@XmlElement(required = true, name="goodsDeclareModule")
+	private List<GoodsDeclareModule> goodsDeclareModuleList;
 
-	public List<GoodsDeclarModule> getGoodsDeclarModuleList() {
-		return goodsDeclarModuleList;
+	public List<GoodsDeclareModule> getGoodsDeclareModuleList() {
+		return goodsDeclareModuleList;
+	}
+	public void setGoodsDeclareModuleList(
+			List<GoodsDeclareModule> goodsDeclareModuleList) {
+		this.goodsDeclareModuleList = goodsDeclareModuleList;
 	}
 
-	public void setGoodsDeclarModuleList(
-			List<GoodsDeclarModule> goodsDeclarModuleList) {
-		this.goodsDeclarModuleList = goodsDeclarModuleList;
-	}
 }

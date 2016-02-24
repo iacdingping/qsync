@@ -17,460 +17,457 @@ import com.openteach.qsync.api.utils.JaxbDateSerializer;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "goodsDeclar")
-public class GoodsDeclar {
+public class GoodsDeclare {
 
 	/**
-	 * 
+	 * 账册编号
 	 */
 	@XmlElement(required = true)
 	private String accountBookNo;
-	
+	/**
+	 * 进出口标志
+	 */
 	@XmlElement(required = true)
-	private String inOutFlag;
-	
+	private String ieFlag;
+	/**
+	 * 预录入号码
+	 */
 	@XmlElement(required = true)
 	private String preEntryNumber;
-	
+	/**
+	 * 进口类型
+	 */
 	@XmlElement(required = true)
 	private String importType;
-	
+	/**
+	 * 进出口日期
+	 */
 	@XmlElement(required = true)
 	@XmlJavaTypeAdapter(JaxbDateSerializer.class)
 	private Date inOutDateStr;
-	
+	/**
+	 * 进出口岸代码
+	 */
 	@XmlElement(required = true)
-	private String inOutPortNumber;
-	
+	private String iePort;
+	/**
+	 * 指运港(抵运港)
+	 */
 	@XmlElement(required = true)
-	private String arrivedPort;
-	
+	private String destinationPort;
+	/**
+	 * 运输工具名称
+	 */
 	@XmlElement(required = true)
-	private String transportTool;
-	
+	private String trafName;
+	/**
+	 * 运输工具航次(班)号
+	 */
 	@XmlElement(required = true)
-	private String transportToolFltNo;
-	
+	private String voyageNo;
+	/**
+	 * 运输方式代码
+	 */
 	@XmlElement(required = true)
-	private String transportTypeCode;
-	
+	private String trafMode;
+	/**
+	 * 申报单位类别
+	 */
 	@XmlElement(required = true)
 	private String declareCompanyType;
-	
+	/**
+	 * 申报单位代码
+	 */
 	@XmlElement(required = true)
 	private String declareCompanyCode;
-	
+	/**
+	 * 申报单位名称
+	 */
 	@XmlElement(required = true)
 	private String declareCompanyName;
-	
+	/**
+	 * 电商企业代码
+	 */
 	@XmlElement(required = true)
-	private String eeBusinessCompanyCode;
-	
+	private String eCommerceCode;
+	/**
+	 * 电商企业名称
+	 */
 	@XmlElement(required = true)
-	private String eeBusinessCompanyName;
-	
+	private String eCommerceName;
+	/**
+	 * 订单编号
+	 */
 	@XmlElement(required = true)
-	private String orderNumber;
-	
+	private String orderNo;
+	/**
+	 * 分运单号
+	 */
 	@XmlElement(required = true)
-	private String subCarriageNo;
-	
+	private String wayBill;
+	/**
+	 * 贸易国别（起运地）
+	 */
 	@XmlElement(required = true)
-	private String fromCountry;
-	
+	private String tradeCountry;
+	/**
+	 * 件数
+	 */
 	@XmlElement(required = true)
-	private int pieceNumber;
-	
+	private int packNo;
+	/**
+	 * 毛重（公斤）
+	 */
 	@XmlElement(required = true)
-	private double roughWeight;
-	
+	private double grossWeight;
+	/**
+	 * 净重（公斤）
+	 */
 	@XmlElement(required = true)
 	private double netWeight;
-	
+	/**
+	 * 包装种类
+	 */
 	@XmlElement(required = true)
-	private String packType;
-	
+	private String warpType;
+	/**
+	 * 备注
+	 */
 	@XmlElement(required = true)
 	private String remark;
-	
+	/**
+	 * 申报口岸代码
+	 */
 	@XmlElement(required = true)
-	private String declarePortCode;
-	
+	private String declPort;
+	/**
+	 * 录入人
+	 */
 	@XmlElement(required = true)
 	private String enteringPerson;
-	
+	/**
+	 * 录入单位名称
+	 */
 	@XmlElement(required = true)
 	private String enteringCompanyName;
-	
+	/**
+	 * 报关员代码
+	 */
 	@XmlElement(required = true)
-	private String declarantCode;
-	
+	private String declarantNo;
+	/**
+	 * 码头/货场代码
+	 */
 	@XmlElement(required = true)
-	private String goodsYardCode;
-	
+	private String customsField;
+	/**
+	 * 发件人
+	 */
 	@XmlElement(required = true)
-	private String sender;
-	
+	private String senderName;
+	/**
+	 * 收件人
+	 */
 	@XmlElement(required = true)
-	private String receiver;
-	
+	private String consignee;
+	/**
+	 * 发件人国别
+	 */
 	@XmlElement(required = true)
 	private String senderCountry;
-	
+	/**
+	 * 发件人城市
+	 */
 	@XmlElement(required = true)
 	private String senderCity;
-	
+	/**
+	 * 支付人证件类型
+	 */
 	@XmlElement(required = true)
-	private String receiverPapersType;
-	
+	private String paperType;
+	/**
+	 * 支付人证件号
+	 */
 	@XmlElement(required = true)
-	private String receiverPapersNo;
+	private String paperNumber;
 	
 	@XmlElement(required = true)
 	private double worth;
-	
+	/**
+	 * 币制
+	 */
 	@XmlElement(required = true)
-	private String currency;
-	
+	private String currCode;
+	/**
+	 * 主要货物名称
+	 */
 	@XmlElement(required = true)
-	private String majorGoodsName;
-	
+	private String mainGName;
+	/**
+	 * 区内企业编码
+	 */
 	@XmlElement(required = true)
 	private String internalAreaCompanyNo;
-	
+	/**
+	 * 区内企业名称
+	 */
 	@XmlElement(required = true)
 	private String internalAreaCompanyName;
-	
+	/**
+	 * 申请单编号
+	 */
 	@XmlElement(required = true)
 	private String applicationFormNo;
-	
+	/**
+	 * 是否授权
+	 */
 	@XmlElement(required = true)
 	private byte isAuthorize;
-
 	public String getAccountBookNo() {
 		return accountBookNo;
 	}
-
 	public void setAccountBookNo(String accountBookNo) {
 		this.accountBookNo = accountBookNo;
 	}
-
-	public String getInOutFlag() {
-		return inOutFlag;
+	public String getIeFlag() {
+		return ieFlag;
 	}
-
-	public void setInOutFlag(String inOutFlag) {
-		this.inOutFlag = inOutFlag;
+	public void setIeFlag(String ieFlag) {
+		this.ieFlag = ieFlag;
 	}
-
 	public String getPreEntryNumber() {
 		return preEntryNumber;
 	}
-
 	public void setPreEntryNumber(String preEntryNumber) {
 		this.preEntryNumber = preEntryNumber;
 	}
-
 	public String getImportType() {
 		return importType;
 	}
-
 	public void setImportType(String importType) {
 		this.importType = importType;
 	}
-
 	public Date getInOutDateStr() {
 		return inOutDateStr;
 	}
-
 	public void setInOutDateStr(Date inOutDateStr) {
 		this.inOutDateStr = inOutDateStr;
 	}
-
-	public String getInOutPortNumber() {
-		return inOutPortNumber;
+	public String getIePort() {
+		return iePort;
 	}
-
-	public void setInOutPortNumber(String inOutPortNumber) {
-		this.inOutPortNumber = inOutPortNumber;
+	public void setIePort(String iePort) {
+		this.iePort = iePort;
 	}
-
-	public String getArrivedPort() {
-		return arrivedPort;
+	public String getDestinationPort() {
+		return destinationPort;
 	}
-
-	public void setArrivedPort(String arrivedPort) {
-		this.arrivedPort = arrivedPort;
+	public void setDestinationPort(String destinationPort) {
+		this.destinationPort = destinationPort;
 	}
-
-	public String getTransportTool() {
-		return transportTool;
+	public String getTrafName() {
+		return trafName;
 	}
-
-	public void setTransportTool(String transportTool) {
-		this.transportTool = transportTool;
+	public void setTrafName(String trafName) {
+		this.trafName = trafName;
 	}
-
-	public String getTransportToolFltNo() {
-		return transportToolFltNo;
+	public String getVoyageNo() {
+		return voyageNo;
 	}
-
-	public void setTransportToolFltNo(String transportToolFltNo) {
-		this.transportToolFltNo = transportToolFltNo;
+	public void setVoyageNo(String voyageNo) {
+		this.voyageNo = voyageNo;
 	}
-
-	public String getTransportTypeCode() {
-		return transportTypeCode;
+	public String getTrafMode() {
+		return trafMode;
 	}
-
-	public void setTransportTypeCode(String transportTypeCode) {
-		this.transportTypeCode = transportTypeCode;
+	public void setTrafMode(String trafMode) {
+		this.trafMode = trafMode;
 	}
-
 	public String getDeclareCompanyType() {
 		return declareCompanyType;
 	}
-
 	public void setDeclareCompanyType(String declareCompanyType) {
 		this.declareCompanyType = declareCompanyType;
 	}
-
 	public String getDeclareCompanyCode() {
 		return declareCompanyCode;
 	}
-
 	public void setDeclareCompanyCode(String declareCompanyCode) {
 		this.declareCompanyCode = declareCompanyCode;
 	}
-
 	public String getDeclareCompanyName() {
 		return declareCompanyName;
 	}
-
 	public void setDeclareCompanyName(String declareCompanyName) {
 		this.declareCompanyName = declareCompanyName;
 	}
-
-	public String getEeBusinessCompanyCode() {
-		return eeBusinessCompanyCode;
+	public String geteCommerceCode() {
+		return eCommerceCode;
 	}
-
-	public void setEeBusinessCompanyCode(String eeBusinessCompanyCode) {
-		this.eeBusinessCompanyCode = eeBusinessCompanyCode;
+	public void seteCommerceCode(String eCommerceCode) {
+		this.eCommerceCode = eCommerceCode;
 	}
-
-	public String getEeBusinessCompanyName() {
-		return eeBusinessCompanyName;
+	public String geteCommerceName() {
+		return eCommerceName;
 	}
-
-	public void setEeBusinessCompanyName(String eeBusinessCompanyName) {
-		this.eeBusinessCompanyName = eeBusinessCompanyName;
+	public void seteCommerceName(String eCommerceName) {
+		this.eCommerceName = eCommerceName;
 	}
-
-	public String getOrderNumber() {
-		return orderNumber;
+	public String getOrderNo() {
+		return orderNo;
 	}
-
-	public void setOrderNumber(String orderNumber) {
-		this.orderNumber = orderNumber;
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
 	}
-
-	public String getSubCarriageNo() {
-		return subCarriageNo;
+	public String getWayBill() {
+		return wayBill;
 	}
-
-	public void setSubCarriageNo(String subCarriageNo) {
-		this.subCarriageNo = subCarriageNo;
+	public void setWayBill(String wayBill) {
+		this.wayBill = wayBill;
 	}
-
-	public String getFromCountry() {
-		return fromCountry;
+	public String getTradeCountry() {
+		return tradeCountry;
 	}
-
-	public void setFromCountry(String fromCountry) {
-		this.fromCountry = fromCountry;
+	public void setTradeCountry(String tradeCountry) {
+		this.tradeCountry = tradeCountry;
 	}
-
-	public int getPieceNumber() {
-		return pieceNumber;
+	public int getPackNo() {
+		return packNo;
 	}
-
-	public void setPieceNumber(int pieceNumber) {
-		this.pieceNumber = pieceNumber;
+	public void setPackNo(int packNo) {
+		this.packNo = packNo;
 	}
-
-	public double getRoughWeight() {
-		return roughWeight;
+	public double getGrossWeight() {
+		return grossWeight;
 	}
-
-	public void setRoughWeight(double roughWeight) {
-		this.roughWeight = roughWeight;
+	public void setGrossWeight(double grossWeight) {
+		this.grossWeight = grossWeight;
 	}
-
 	public double getNetWeight() {
 		return netWeight;
 	}
-
 	public void setNetWeight(double netWeight) {
 		this.netWeight = netWeight;
 	}
-
-	public String getPackType() {
-		return packType;
+	public String getWarpType() {
+		return warpType;
 	}
-
-	public void setPackType(String packType) {
-		this.packType = packType;
+	public void setWarpType(String warpType) {
+		this.warpType = warpType;
 	}
-
 	public String getRemark() {
 		return remark;
 	}
-
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-
-	public String getDeclarePortCode() {
-		return declarePortCode;
+	public String getDeclPort() {
+		return declPort;
 	}
-
-	public void setDeclarePortCode(String declarePortCode) {
-		this.declarePortCode = declarePortCode;
+	public void setDeclPort(String declPort) {
+		this.declPort = declPort;
 	}
-
 	public String getEnteringPerson() {
 		return enteringPerson;
 	}
-
 	public void setEnteringPerson(String enteringPerson) {
 		this.enteringPerson = enteringPerson;
 	}
-
 	public String getEnteringCompanyName() {
 		return enteringCompanyName;
 	}
-
 	public void setEnteringCompanyName(String enteringCompanyName) {
 		this.enteringCompanyName = enteringCompanyName;
 	}
-
-	public String getDeclarantCode() {
-		return declarantCode;
+	public String getDeclarantNo() {
+		return declarantNo;
 	}
-
-	public void setDeclarantCode(String declarantCode) {
-		this.declarantCode = declarantCode;
+	public void setDeclarantNo(String declarantNo) {
+		this.declarantNo = declarantNo;
 	}
-
-	public String getGoodsYardCode() {
-		return goodsYardCode;
+	public String getCustomsField() {
+		return customsField;
 	}
-
-	public void setGoodsYardCode(String goodsYardCode) {
-		this.goodsYardCode = goodsYardCode;
+	public void setCustomsField(String customsField) {
+		this.customsField = customsField;
 	}
-
-	public String getSender() {
-		return sender;
+	public String getSenderName() {
+		return senderName;
 	}
-
-	public void setSender(String sender) {
-		this.sender = sender;
+	public void setSenderName(String senderName) {
+		this.senderName = senderName;
 	}
-
-	public String getReceiver() {
-		return receiver;
+	public String getConsignee() {
+		return consignee;
 	}
-
-	public void setReceiver(String receiver) {
-		this.receiver = receiver;
+	public void setConsignee(String consignee) {
+		this.consignee = consignee;
 	}
-
 	public String getSenderCountry() {
 		return senderCountry;
 	}
-
 	public void setSenderCountry(String senderCountry) {
 		this.senderCountry = senderCountry;
 	}
-
 	public String getSenderCity() {
 		return senderCity;
 	}
-
 	public void setSenderCity(String senderCity) {
 		this.senderCity = senderCity;
 	}
-
-	public String getReceiverPapersType() {
-		return receiverPapersType;
+	public String getPaperType() {
+		return paperType;
 	}
-
-	public void setReceiverPapersType(String receiverPapersType) {
-		this.receiverPapersType = receiverPapersType;
+	public void setPaperType(String paperType) {
+		this.paperType = paperType;
 	}
-
-	public String getReceiverPapersNo() {
-		return receiverPapersNo;
+	public String getPaperNumber() {
+		return paperNumber;
 	}
-
-	public void setReceiverPapersNo(String receiverPapersNo) {
-		this.receiverPapersNo = receiverPapersNo;
+	public void setPaperNumber(String paperNumber) {
+		this.paperNumber = paperNumber;
 	}
-
 	public double getWorth() {
 		return worth;
 	}
-
 	public void setWorth(double worth) {
 		this.worth = worth;
 	}
-
-	public String getCurrency() {
-		return currency;
+	public String getCurrCode() {
+		return currCode;
 	}
-
-	public void setCurrency(String currency) {
-		this.currency = currency;
+	public void setCurrCode(String currCode) {
+		this.currCode = currCode;
 	}
-
-	public String getMajorGoodsName() {
-		return majorGoodsName;
+	public String getMainGName() {
+		return mainGName;
 	}
-
-	public void setMajorGoodsName(String majorGoodsName) {
-		this.majorGoodsName = majorGoodsName;
+	public void setMainGName(String mainGName) {
+		this.mainGName = mainGName;
 	}
-
 	public String getInternalAreaCompanyNo() {
 		return internalAreaCompanyNo;
 	}
-
 	public void setInternalAreaCompanyNo(String internalAreaCompanyNo) {
 		this.internalAreaCompanyNo = internalAreaCompanyNo;
 	}
-
 	public String getInternalAreaCompanyName() {
 		return internalAreaCompanyName;
 	}
-
 	public void setInternalAreaCompanyName(String internalAreaCompanyName) {
 		this.internalAreaCompanyName = internalAreaCompanyName;
 	}
-
 	public String getApplicationFormNo() {
 		return applicationFormNo;
 	}
-
 	public void setApplicationFormNo(String applicationFormNo) {
 		this.applicationFormNo = applicationFormNo;
 	}
-
 	public byte getIsAuthorize() {
 		return isAuthorize;
 	}
-
 	public void setIsAuthorize(byte isAuthorize) {
 		this.isAuthorize = isAuthorize;
 	}
+
 }

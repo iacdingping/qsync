@@ -17,26 +17,17 @@ import com.openteach.qsync.api.JkfSign;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "goodsDeclarModule")
-public class GoodsDeclarModule {
+public class GoodsDeclareModule {
 	
-	/**
-	 * 
-	 */
 	@XmlElement(required = true)
 	private JkfSign jkfSign;
 	
-	/**
-	 * 
-	 */
 	@XmlElement(required = true)
-	private GoodsDeclar goodsDeclar;
+	private GoodsDeclare goodsDeclare;
 	
-	/**
-	 * 
-	 */
 	@XmlElementWrapper
-	@XmlElement(required = true, name="goodsDeclarDetail")
-	private List<GoodsDeclarDetail> goodsDeclarDetails;
+	@XmlElement(required = true, name="goodsDeclareDetail")
+	private List<GoodsDeclareDetail> goodsDeclareDetails;
 
 	public JkfSign getJkfSign() {
 		return jkfSign;
@@ -46,20 +37,20 @@ public class GoodsDeclarModule {
 		this.jkfSign = jkfSign;
 	}
 
-	public GoodsDeclar getGoodsDeclar() {
-		return goodsDeclar;
+	public GoodsDeclare getGoodsDeclare() {
+		return goodsDeclare;
 	}
 
-	public void setGoodsDeclar(GoodsDeclar goodsDeclar) {
-		this.goodsDeclar = goodsDeclar;
+	public void setGoodsDeclare(GoodsDeclare goodsDeclare) {
+		this.goodsDeclare = goodsDeclare;
 	}
 
-	public List<GoodsDeclarDetail> getGoodsDeclarDetails() {
-		return goodsDeclarDetails;
+	public List<GoodsDeclareDetail> getGoodsDeclareDetails() {
+		return goodsDeclareDetails;
 	}
 
-	public void setGoodsDeclarDetails(List<GoodsDeclarDetail> goodsDeclarDetails) {
-		this.goodsDeclarDetails = goodsDeclarDetails;
+	public void setGoodsDeclareDetails(List<GoodsDeclareDetail> goodsDeclareDetails) {
+		this.goodsDeclareDetails = goodsDeclareDetails;
 	}
 
 }

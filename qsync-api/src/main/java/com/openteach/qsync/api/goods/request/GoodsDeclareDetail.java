@@ -12,257 +12,244 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "goodsDeclarDetail")
-public class GoodsDeclarDetail {
+public class GoodsDeclareDetail {
 	
 	/**
-	 * 
+	 * 商品序号
 	 */
 	@XmlElement(required = true)
 	private int goodsOrder;
 	
 	/**
-	 * 
+	 * 行邮税号
 	 */
 	@XmlElement(required = true)
-	private String mailTaxNo;
+	private String codeTs;
 	
 	/**
-	 * 
+	 * 商品货号
 	 */
 	@XmlElement(required = true)
 	private String goodsItemNo;
 	
 	/**
-	 * 
+	 * 物品名称
 	 */
 	@XmlElement(required = true)
 	private String goodsName;
 	
 	/**
-	 * 
+	 * 商品规格、型号
 	 */
 	@XmlElement(required = true)
-	private String goodsSpecification;
+	private String goodsModel;
 	
 	/**
-	 * 
+	 * 产销国
 	 */
 	@XmlElement(required = true)
-	private String productionMarketingCountry;
+	private String originCountry;
 	
 	/**
-	 * 
+	 * 成交币制
 	 */
 	@XmlElement(required = true)
-	private String bargainCurrency;
+	private String tradeCurr;
 	
 	/**
-	 * 
+	 * 成交总价
 	 */
 	@XmlElement(required = true)
-	private double bargainTotalPrices;
+	private double tradeTotal;
 	
 	/**
-	 * 
+	 * 申报单价
 	 */
 	@XmlElement(required = true)
-	private double declarePrice;
+	private double declPrice;
 	
 	/**
-	 * 
+	 * 申报总价
 	 */
 	@XmlElement(required = true)
-	private double declareTotalPrices;
+	private double declTotalPrice;
 	
 	/**
-	 * 
+	 * 用途
 	 */
 	@XmlElement(required = true)
-	private String purpose;
+	private String useTo;
 	
 	/**
-	 * 
+	 * 申报数量
 	 */
 	@XmlElement(required = true)
 	private int declareCount;
 	
 	/**
-	 * 
+	 * 申报计量单位
 	 */
 	@XmlElement(required = true)
-	private String declareMeasureUnit;
+	private String goodsUnit;
 	
 	/**
-	 * 
+	 * 商品毛重
 	 */
 	@XmlElement(required = true)
-	private double goodsRoughWeight;
+	private double goodsGrossWeight;
 	
 	/**
-	 * 
+	 * 第一单位
 	 */
 	@XmlElement(required = true)
 	private String firstUnit;
 	
 	/**
-	 * 
+	 * 第一数量
 	 */
 	@XmlElement(required = true)
 	private int firstCount;
 	
 	/**
-	 * 
+	 * 第二单位
 	 */
 	@XmlElement(required = true)
 	private String secondUnit;
 	
 	/**
-	 * 
+	 * 第二数量
 	 */
 	@XmlElement(required = true)
 	private int secondCount;
-
+	/**
+	 * 产品国检备案编号
+	 * 新增 2015.11.12
+	 */
+	private String productRecordNo;
+	/**
+	 * 商品网址
+	 * 新增 2015.11.12
+	 */
+	private String webSite;
 	public int getGoodsOrder() {
 		return goodsOrder;
 	}
-
 	public void setGoodsOrder(int goodsOrder) {
 		this.goodsOrder = goodsOrder;
 	}
-
-	public String getMailTaxNo() {
-		return mailTaxNo;
+	public String getCodeTs() {
+		return codeTs;
 	}
-
-	public void setMailTaxNo(String mailTaxNo) {
-		this.mailTaxNo = mailTaxNo;
+	public void setCodeTs(String codeTs) {
+		this.codeTs = codeTs;
 	}
-
 	public String getGoodsItemNo() {
 		return goodsItemNo;
 	}
-
 	public void setGoodsItemNo(String goodsItemNo) {
 		this.goodsItemNo = goodsItemNo;
 	}
-
 	public String getGoodsName() {
 		return goodsName;
 	}
-
 	public void setGoodsName(String goodsName) {
 		this.goodsName = goodsName;
 	}
-
-	public String getGoodsSpecification() {
-		return goodsSpecification;
+	public String getGoodsModel() {
+		return goodsModel;
 	}
-
-	public void setGoodsSpecification(String goodsSpecification) {
-		this.goodsSpecification = goodsSpecification;
+	public void setGoodsModel(String goodsModel) {
+		this.goodsModel = goodsModel;
 	}
-
-	public String getProductionMarketingCountry() {
-		return productionMarketingCountry;
+	public String getOriginCountry() {
+		return originCountry;
 	}
-
-	public void setProductionMarketingCountry(String productionMarketingCountry) {
-		this.productionMarketingCountry = productionMarketingCountry;
+	public void setOriginCountry(String originCountry) {
+		this.originCountry = originCountry;
 	}
-
-	public String getBargainCurrency() {
-		return bargainCurrency;
+	public String getTradeCurr() {
+		return tradeCurr;
 	}
-
-	public void setBargainCurrency(String bargainCurrency) {
-		this.bargainCurrency = bargainCurrency;
+	public void setTradeCurr(String tradeCurr) {
+		this.tradeCurr = tradeCurr;
 	}
-
-	public double getBargainTotalPrices() {
-		return bargainTotalPrices;
+	public double getTradeTotal() {
+		return tradeTotal;
 	}
-
-	public void setBargainTotalPrices(double bargainTotalPrices) {
-		this.bargainTotalPrices = bargainTotalPrices;
+	public void setTradeTotal(double tradeTotal) {
+		this.tradeTotal = tradeTotal;
 	}
-
-	public double getDeclarePrice() {
-		return declarePrice;
+	public double getDeclPrice() {
+		return declPrice;
 	}
-
-	public void setDeclarePrice(double declarePrice) {
-		this.declarePrice = declarePrice;
+	public void setDeclPrice(double declPrice) {
+		this.declPrice = declPrice;
 	}
-
-	public double getDeclareTotalPrices() {
-		return declareTotalPrices;
+	public double getDeclTotalPrice() {
+		return declTotalPrice;
 	}
-
-	public void setDeclareTotalPrices(double declareTotalPrices) {
-		this.declareTotalPrices = declareTotalPrices;
+	public void setDeclTotalPrice(double declTotalPrice) {
+		this.declTotalPrice = declTotalPrice;
 	}
-
-	public String getPurpose() {
-		return purpose;
+	public String getUseTo() {
+		return useTo;
 	}
-
-	public void setPurpose(String purpose) {
-		this.purpose = purpose;
+	public void setUseTo(String useTo) {
+		this.useTo = useTo;
 	}
-
 	public int getDeclareCount() {
 		return declareCount;
 	}
-
 	public void setDeclareCount(int declareCount) {
 		this.declareCount = declareCount;
 	}
-
-	public String getDeclareMeasureUnit() {
-		return declareMeasureUnit;
+	public String getGoodsUnit() {
+		return goodsUnit;
 	}
-
-	public void setDeclareMeasureUnit(String declareMeasureUnit) {
-		this.declareMeasureUnit = declareMeasureUnit;
+	public void setGoodsUnit(String goodsUnit) {
+		this.goodsUnit = goodsUnit;
 	}
-
-	public double getGoodsRoughWeight() {
-		return goodsRoughWeight;
+	public double getGoodsGrossWeight() {
+		return goodsGrossWeight;
 	}
-
-	public void setGoodsRoughWeight(double goodsRoughWeight) {
-		this.goodsRoughWeight = goodsRoughWeight;
+	public void setGoodsGrossWeight(double goodsGrossWeight) {
+		this.goodsGrossWeight = goodsGrossWeight;
 	}
-
 	public String getFirstUnit() {
 		return firstUnit;
 	}
-
 	public void setFirstUnit(String firstUnit) {
 		this.firstUnit = firstUnit;
 	}
-
 	public int getFirstCount() {
 		return firstCount;
 	}
-
 	public void setFirstCount(int firstCount) {
 		this.firstCount = firstCount;
 	}
-
 	public String getSecondUnit() {
 		return secondUnit;
 	}
-
 	public void setSecondUnit(String secondUnit) {
 		this.secondUnit = secondUnit;
 	}
-
 	public int getSecondCount() {
 		return secondCount;
 	}
-
 	public void setSecondCount(int secondCount) {
 		this.secondCount = secondCount;
 	}
+	public String getProductRecordNo() {
+		return productRecordNo;
+	}
+	public void setProductRecordNo(String productRecordNo) {
+		this.productRecordNo = productRecordNo;
+	}
+	public String getWebSite() {
+		return webSite;
+	}
+	public void setWebSite(String webSite) {
+		this.webSite = webSite;
+	}
+
 }

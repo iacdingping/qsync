@@ -16,7 +16,7 @@ public class ConfigService {
 	private String declareCompanyName;
 	@Value("${companyCode}")
 	private String companyCode;
-	@Value("companyName")
+	@Value("${companyName}")
 	private String companyName;
 	//业务类型
 	@Value("${declare.businessType}")
@@ -56,6 +56,8 @@ public class ConfigService {
 	private String declareCustomsCode;
 	@Value("${declare.goodsYardCode}")
 	private String declareGoodsYardCode;
+	@Value("${declare.user.protocal}")
+	private String userProtocal;
 	public String getDeclareCompanyCode() {
 		return declareCompanyCode;
 	}
@@ -164,5 +166,11 @@ public class ConfigService {
 	}
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
+	}
+	public String getUserProtocal() {
+		return userProtocal;
+	}
+	public void setUserProtocal(String userProtocal) {
+		this.userProtocal = userProtocal;
 	}
 }
